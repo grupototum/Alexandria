@@ -1,6 +1,12 @@
 node_modules/
 dist/
+.env
 .env.local
 .env*.local
+*.raw
 *.log
 .DS_Store
+coverage/
+credentials-*.json
+cloudflared/config.yml
+cloudflared/*.json

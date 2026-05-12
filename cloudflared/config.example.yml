@@ -1,0 +1,7 @@
+tunnel: <replace_with_tunnel_uuid>
+credentials-file: /etc/cloudflared/<replace_with_tunnel_uuid>.json
+
+ingress:
+  - hostname: alexandria.grupototum.com
+    service: http://127.0.0.1:5000
+  - service: http_status:404

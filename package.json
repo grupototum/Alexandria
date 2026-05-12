@@ -1,21 +1,16 @@
 {
-  "name": "alexandria",
-  "version": "0.1.0",
-  "type": "module",
+  "name": "alexandria-api",
+  "version": "1.0.0",
+  "description": "Alexandria Knowledge Base API — Totum 3.0",
+  "main": "server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@supabase/supabase-js": "^2.38.0",
-    "tailwindcss": "^3.3.0"
-  },
-  "devDependencies": {
-    "vite": "^5.0.0",
-    "typescript": "^5.2.0",
-    "@vitejs/plugin-react": "^4.1.0"
+    "@google/generative-ai": "^0.21.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
   }
 }
