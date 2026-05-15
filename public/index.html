@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f4ef">
+    <title>Alexandria | Totum Knowledge OS</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="Navegação Alexandria">
+        <a class="brand" href="#dashboard" aria-label="Alexandria">
+          <span class="brand-mark">A</span>
+          <span>
+            <strong>Alexandria</strong>
+            <small>Totum Knowledge OS</small>
+          </span>
+        </a>
+
+        <nav class="nav-list">
+          <a href="#dashboard" class="nav-item active" data-view-link="dashboard">Dashboard</a>
+          <a href="#hermione" class="nav-item" data-view-link="hermione">Hermione</a>
+          <a href="#documents" class="nav-item" data-view-link="documents">Documentos</a>
+          <a href="#pops" class="nav-item" data-view-link="pops">POPs & SLAs</a>
+          <a href="#skills" class="nav-item" data-view-link="skills">Skills</a>
+          <a href="#bridges" class="nav-item" data-view-link="bridges">Conexões</a>
+          <a href="#exports" class="nav-item" data-view-link="exports">Exports IA</a>
+          <a href="#tutorial" class="nav-item" data-view-link="tutorial">Tutorial</a>
+        </nav>
+
+        <div class="side-panel">
+          <p class="eyebrow">Status</p>
+          <strong id="api-status">Verificando API</strong>
+          <small id="api-status-detail">Aguardando resposta de /health</small>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Knowledge First</p>
+            <h1>Alexandria</h1>
+          </div>
+          <div class="top-actions">
+            <button class="icon-button" id="refresh-button" title="Atualizar dados" aria-label="Atualizar dados">↻</button>
+            <button class="primary-button" data-jump="hermione">Consultar Hermione</button>
+          </div>
+        </header>
+
+        <section class="view active" data-view="dashboard">
+          <div class="hero-band">
+            <div>
+              <p class="eyebrow">Second Brain Operacional</p>
+              <h2>Conhecimento rastreável para humanos, agentes e IAs externas.</h2>
+              <p>A Alexandria centraliza fontes, POPs, skills, decisões, contexto e pacotes exportáveis. A Hermione consulta, assimila e transforma conteúdo bruto em artefatos úteis.</p>
+              <div class="hero-actions">
+                <button class="primary-button" data-jump="hermione">Perguntar agora</button>
+                <button class="secondary-button" data-jump="bridges">Conectar fontes</button>
+              </div>
+            </div>
+            <div class="knowledge-map" aria-label="Mapa visual da Alexandria">
+              <span>Hermione</span>
+              <span>POPs</span>
+              <span>Skills</span>
+              <span>Contexto</span>
+              <span>Exports</span>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <article class="metric"><span>Documentos</span><strong id="metric-documents">0</strong></article>
+            <article class="metric"><span>Skills</span><strong id="metric-skills">0</strong></article>
+            <article class="metric"><span>POPs</span><strong id="metric-pops">0</strong></article>
+            <article class="metric"><span>Atualização</span><strong id="metric-updated">--</strong></article>
+          </div>
+
+          <div class="split-grid">
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Recentes</p>
+                  <h3>Entradas da biblioteca</h3>
+                </div>
+                <button class="secondary-button small" data-jump="documents">Ver tudo</button>
+              </div>
+              <div id="recent-list" class="list-stack"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Fluxo recomendado</p>
+                  <h3>Assimilar conhecimento</h3>
+                </div>
+              </div>
+              <ol class="flow-list">
+                <li><strong>Capturar</strong><span>Enviar MDs, textos, POPs ou decisões.</span></li>
+                <li><strong>Classificar</strong><span>Separar skill, POP, documento e revisão.</span></li>
+                <li><strong>Consultar</strong><span>Usar busca semântica pela Hermione.</span></li>
+                <li><strong>Exportar</strong><span>Gerar pacote para Claude, ChatGPT, Gemini ou Kimi.</span></li>
+              </ol>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view="hermione">
+          <div class="section-heading">
+            <p class="eyebrow">Hermione</p>
+            <h2>Cientista da Informação e guardiã da Alexandria.</h2>
+            <p>Faça perguntas, consulte fontes e envie novos documentos quando tiver o token operacional.</p>
+          </div>
+
+          <div class="chat-layout">
+            <section class="panel chat-panel">
+              <div id="chat-log" class="chat-log">
+                <div class="message assistant">
+                  <strong>Hermione</strong>
+                  <p>Olá. Posso buscar skills, POPs, documentos e contexto na Alexandria. Pergunte algo ou use uma sugestão.</p>
+                </div>
+              </div>
+              <form id="question-form" class="composer">
+                <input id="question-input" type="search" placeholder="Ex.: Qual o POP de deploy?" autocomplete="off">
+                <button class="primary-button" type="submit">Enviar</button>
+              </form>
+              <div class="suggestions">
+                <button data-question="Qual o POP de deploy?">POP de deploy</button>
+                <button data-question="Como funciona a Alexandria?">Como funciona</button>
+                <button data-question="Quais skills existem?">Skills existentes</button>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Ingestão protegida</p>
+                  <h3>Adicionar fonte</h3>
+                </div>
+              </div>
+              <form id="ingest-form" class="form-stack">
+                <label>Token operacional<input id="token-input" type="password" placeholder="x-alexandria-token"></label>
+                <label>Título<input id="doc-title" type="text" placeholder="POP - Onboarding"></label>
+                <label>Tipo<select id="doc-type"><option value="doc">Documento</option><option value="skill">Skill</option><option value="pop">POP</option></select></label>
+                <label>Caminho<input id="doc-path" type="text" placeholder="pops/onboarding.md"></label>
+                <label>Conteúdo<textarea id="doc-content" rows="9" placeholder="Cole o conteúdo aqui"></textarea></label>
+                <button class="primary-button" type="submit">Assimilar fonte</button>
+              </form>
+              <p id="ingest-feedback" class="feedback"></p>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" data-view="documents">
+          <div class="section-heading">
+            <p class="eyebrow">Biblioteca</p>
+            <h2>Documentos, POPs e skills em um só lugar.</h2>
+          </div>
+          <div class="toolbar">
+            <input id="library-query" type="search" placeholder="Buscar na biblioteca">
+            <select id="library-type"><option value="">Todos</option><option value="doc">Documentos</option><option value="pop">POPs</option><option value="skill">Skills</option></select>
+            <button class="secondary-button" id="library-search">Buscar</button>
+          </div>
+          <div id="library-list" class="card-grid"></div>
+        </section>
+
+        <section class="view" data-view="pops">
+          <div class="section-heading">
+            <p class="eyebrow">Operação</p>
+            <h2>Portal POPs & SLAs</h2>
+            <p>Procedimentos claros, critérios de qualidade e acordos de serviço para manter a operação previsível.</p>
+          </div>
+          <div id="pops-list" class="card-grid"></div>
+        </section>
+
+        <section class="view" data-view="skills">
+          <div class="section-heading">
+            <p class="eyebrow">Capacidades</p>
+            <h2>Skills Central</h2>
+            <p>Skills reutilizáveis para agentes e fluxos externos, com foco em roteamento e continuidade entre IAs.</p>
+          </div>
+          <div id="skills-list" class="card-grid"></div>
+        </section>
+
+        <section class="view" data-view="bridges">
+          <div class="section-heading">
+            <p class="eyebrow">Conexões</p>
+            <h2>Entrar conhecimento sem misturar ruído.</h2>
+            <p>Use a política verde, amarelo e vermelho para decidir o que pode virar fonte rastreável na Alexandria.</p>
+          </div>
+          <div class="bridge-grid">
+            <article class="policy green"><strong>Verde</strong><span>Totum, skills, POPs, prompts, decisões e contexto empresarial.</span></article>
+            <article class="policy yellow"><strong>Amarelo</strong><span>Preferências e rotina de trabalho somente como resumo sanitizado.</span></article>
+            <article class="policy red"><strong>Vermelho</strong><span>Senhas, tokens, saúde, finanças pessoais, família e journals brutos.</span></article>
+          </div>
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Pré-análise local</p>
+                <h3>Classificar arquivos antes da ingestão</h3>
+              </div>
+            </div>
+            <input id="bridge-files" type="file" multiple accept=".md,.markdown,.txt,.json">
+            <div id="bridge-results" class="list-stack"></div>
+          </section>
+        </section>
+
+        <section class="view" data-view="exports">
+          <div class="section-heading">
+            <p class="eyebrow">Continuidade</p>
+            <h2>Pacotes para outras IAs.</h2>
+            <p>Exporte contexto em Markdown ou JSON para continuar uma tarefa no Claude, ChatGPT, Gemini, Kimi ou fluxos locais.</p>
+          </div>
+          <div class="export-grid">
+            <a class="export-card" href="/alexandria/export?format=markdown" target="_blank"><strong>Markdown</strong><span>Contexto longo com fontes e conteúdo.</span></a>
+            <a class="export-card" href="/alexandria/export?format=json" target="_blank"><strong>JSON</strong><span>Dados estruturados para automações.</span></a>
+            <button class="export-card" id="copy-pack"><strong>Prompt pack</strong><span>Copiar instrução de uso da Alexandria.</span></button>
+          </div>
+        </section>
+
+        <section class="view" data-view="tutorial">
+          <div class="section-heading">
+            <p class="eyebrow">Onboarding guiado</p>
+            <h2>Como cada área se conecta.</h2>
+          </div>
+          <div id="tutorial-list" class="tutorial-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>

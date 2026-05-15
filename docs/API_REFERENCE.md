@@ -18,6 +18,29 @@ Example:
 }
 ```
 
+## GET `/alexandria/overview`
+
+Returns recent documents and dashboard counters for the web app.
+
+## GET `/alexandria/documents`
+
+Lists documents from `alexandria_documents`.
+
+Query params:
+
+- `query`: optional full-text filter over title/content
+- `doc_type`: optional `doc`, `pop` or `skill`
+- `limit`: optional positive integer, capped at 200
+
+## GET `/alexandria/export`
+
+Exports recent Alexandria documents.
+
+Query params:
+
+- `format`: `markdown` or `json`
+- `limit`: optional positive integer, capped at 500
+
 ## POST `/alexandria/discover`
 
 Discovers relevant skills, POPs and documents for a query.
@@ -63,6 +86,10 @@ Request:
 
 Ingests or updates one document in `alexandria_documents`.
 
+Required header:
+
+`x-alexandria-token: <ALEXANDRIA_API_TOKEN>`
+
 Request:
 
 ```json
@@ -80,6 +107,10 @@ Request:
 ## POST `/alexandria/ingest/batch`
 
 Batch variant of `/alexandria/ingest`.
+
+Required header:
+
+`x-alexandria-token: <ALEXANDRIA_API_TOKEN>`
 
 Request:
 
