@@ -1,40 +1,105 @@
-# Alexandria
+# Totum OS
 
-Standalone Alexandria app for `alexandria.grupototum.com`.
+Sistema operacional de agência com AI Command Center, Alexandria como second brain, agentes, fluxos e ferramentas operacionais.
 
-This service exposes the Alexandria knowledge interface and API currently running on the Hostinger VPS at `/home/totum/alexandria-api`. It is separate from the Supabase Edge Functions versioned in Totum-OS (`alexandria-proxy`, `alexandria-mcp`, `skills-sync`).
+## Direção do Produto
 
-## Production Snapshot
+- **AI Command Center:** chat único para chamar agentes, trocar motor/IA, enviar contexto ou skill em Markdown e acompanhar um log resumido do que o agente está fazendo.
+- **Alexandria:** central Knowledge First para fontes, artefatos, skills, POPs, decisões e pacotes de contexto exportáveis para Claude, Kimi, ChatGPT, Gemini e apps locais via MCP/exportadores futuros.
+- **Agentes Input -> Output:** formulários guiados para gerar planejamento social, copy de ads, posts, SEO/growth, atendimento e carrosséis em Markdown revisável.
+- **Fluxos:** área inspirada em Flowise/OpenClaw/Suna para automações e infraestrutura de agentes.
 
-- URL: `https://alexandria.grupototum.com`
-- App: `GET /`
-- Health: `GET /health`
-- Runtime: Node.js 20 + Express
-- Container: `alexandria-api`
-- VPS source path at inventory time: `/home/totum/alexandria-api`
-- Supabase project: `cgpkfhrqprqptvehatad`
+## 📁 Estrutura
 
-## Local Run
+```
+.
+├── api/                    # Backend Node.js
+│   ├── routes/            # Scripts de processamento
+│   ├── services/          # Serviços API
+│   ├── outputs/           # Dados processados
+│   ├── server.js          # Express server
+│   └── package.json
+├── src/                   # Frontend React
+├── dist/                  # Build do frontend
+├── ecosystem.config.js    # PM2 config
+├── nginx.conf            # Configuração Nginx
+└── deploy.sh             # Script de deploy
+```
+
+## Quick Start
+
+### Desenvolvimento Local
 
 ```bash
-cp .env.example .env
-npm install
+# Terminal 1 - Frontend
 npm run dev
+
+# Terminal 2 - Backend
+cd api && npm install && npm run dev
 ```
 
-Local runs load `.env` automatically. Fill `ALEXANDRIA_API_TOKEN` and send it as
-`x-alexandria-token` when using ingestion endpoints.
-
-## Docker Run
+### Produção (VPS)
 
 ```bash
-cp .env.example .env
-docker compose up -d --build
-curl http://127.0.0.1:5000/health
+# Clone
+git clone https://github.com/grupototum/Totum-OS.git
+cd Totum-OS
+
+# Deploy
+./deploy.sh
 ```
 
-## Docs
+## AnythingLLM como serviço interno
 
-- [Deploy](docs/DEPLOY.md)
-- [Backup](docs/BACKUP.md)
-- [API Reference](docs/API_REFERENCE.md)
+O AnythingLLM deve ficar fora deste repositório, em diretório irmão:
+
+```bash
+cd "/Users/israellemos/Documents/Pixel Systems"
+git clone https://github.com/mintplex-labs/anything-llm anything-llm
+```
+
+O Totum OS conversa com ele pela Supabase Edge Function `agent-chat`, sem expor token no frontend.
+
+Variáveis da função:
+
+```env
+ANYTHINGLLM_API_BASE=http://127.0.0.1:3001/api
+ANYTHINGLLM_API_KEY=sua-chave-developer-api
+ANYTHINGLLM_DEFAULT_WORKSPACE=totum-agents
+ANYTHINGLLM_DEFAULT_MODE=chat
+DISABLE_TELEMETRY=true
+```
+
+## URLs
+
+- **Local:** http://localhost:5173 (frontend), http://localhost:3003 (api)
+- **Produção:** http://apps.grupototum.com
+
+## API Endpoints
+
+| Endpoint | Método | Descrição |
+|----------|--------|-----------|
+| `/api/health` | GET | Health check |
+| `/api/transcribe` | POST | Processar transcrições |
+| `/api/ingest` | POST | Ingerir no Supabase |
+| `/api/webhook/:agent` | POST | Chamar agente |
+| `/api/outputs` | GET | Listar outputs |
+
+## Variáveis de Ambiente
+
+Crie `.env` na pasta `api/`:
+
+```env
+SUPABASE_URL=https://cgpkfhrqprqptvehatad.supabase.co
+SUPABASE_KEY=sua-chave-aqui
+OLLAMA_URL=http://localhost:11434
+MOCK_MODE=false
+```
+
+## Stack
+
+- **Frontend:** React + Vite + TypeScript + Tailwind
+- **Backend:** Node.js + Express
+- **Processamento:** Ollama (IA local)
+- **Database:** Supabase (PostgreSQL)
+- **Deploy:** PM2 + Nginx

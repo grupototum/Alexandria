@@ -1,0 +1,743 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 6% 12%;
+    --surface: 0 0% 100%;
+    --surface-container: 240 14% 97%;
+    --surface-container-high: 240 16% 99%;
+    --surface-inverted: 240 6% 12%;
+
+    --card: 240 14% 97%;
+    --card-foreground: 240 6% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 6% 12%;
+
+    --primary: 210 100% 44%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 14% 97%;
+    --secondary-foreground: 240 6% 12%;
+
+    --muted: 240 14% 97%;
+    --muted-foreground: 240 4% 45%;
+
+    --accent: 210 100% 44%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 22 100% 36%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 11% 85%;
+    --input: 240 11% 85%;
+    --ring: 210 100% 44%;
+
+    --radius: 0.75rem;
+    --radius-card: 1.125rem;
+    --radius-panel: 1.5rem;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 240 6% 12%;
+    --sidebar-primary: 210 100% 44%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 14% 97%;
+    --sidebar-accent-foreground: 240 6% 12%;
+    --sidebar-border: 240 11% 90%;
+    --sidebar-ring: 210 100% 44%;
+
+    --pillar-agents: linear-gradient(135deg, #0071e3, #0077ed);
+    --pillar-knowledge: linear-gradient(135deg, #1d1d1f, #424245);
+    --pillar-content: linear-gradient(135deg, #f5f5f7, #e8e8ed);
+    --pillar-operations: linear-gradient(135deg, #0066cc, #0071e3);
+  }
+
+  .dark {
+    --background: 240 10% 6%;
+    --foreground: 0 0% 96%;
+    --surface: 240 10% 6%;
+    --surface-container: 240 6% 13%;
+    --surface-container-high: 240 5% 17%;
+    --surface-inverted: 0 0% 96%;
+
+    --card: 240 6% 13%;
+    --card-foreground: 0 0% 96%;
+    --popover: 240 6% 13%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 210 100% 44%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 17%;
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 240 5% 17%;
+    --muted-foreground: 240 6% 75%;
+
+    --accent: 210 100% 44%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 22 100% 36%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 22%;
+    --input: 240 6% 22%;
+    --ring: 210 100% 44%;
+
+    --sidebar-background: 240 10% 8%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 210 100% 44%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 17%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 240 6% 19%;
+    --sidebar-ring: 210 100% 44%;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    background-color: hsl(var(--background));
+  }
+
+  body {
+    background:
+      radial-gradient(circle at top, hsl(210 100% 44% / 0.05), transparent 28%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--surface-container-high)));
+    color: hsl(var(--foreground));
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4285914286;
+    letter-spacing: -0.016em;
+    overflow-x: hidden;
+  }
+
+  h1, .h1 {
+    font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 1.0834933333;
+    letter-spacing: -0.003em;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  h2, .h2 {
+    font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: 0;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  h3, .h3 {
+    font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: clamp(1.875rem, 3vw, 2.4rem);
+    line-height: 1.125;
+    letter-spacing: 0.004em;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  h4, .h4 {
+    font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    line-height: 1.1666666667;
+    letter-spacing: 0.009em;
+    font-weight: 600;
+    color: hsl(var(--foreground));
+  }
+
+  .paragraph-lg {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.1764805882;
+    letter-spacing: -0.022em;
+    font-weight: 400;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .paragraph {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.4285914286;
+    letter-spacing: -0.016em;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Label helpers (kept as class names used across the app) */
+  .label-bold-lg {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+    color: hsl(var(--foreground));
+  }
+
+  .label-bold-md {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: hsl(var(--foreground));
+  }
+
+  .label-bold-sm {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: hsl(var(--foreground));
+  }
+
+  .label-mono {
+    font-family: "SF Mono", Menlo, Monaco, Consolas, monospace;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: hsl(var(--accent) / 0.25);
+    color: hsl(var(--foreground));
+  }
+
+  /* Scrollbar — pill, subtle */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.5);
+  }
+}
+
+@layer components {
+  /* ==========================================================
+     TRANSITIONS — reusable easing presets
+     ========================================================== */
+  .transition-smooth {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .transition-reveal {
+    transition: all 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .transition-fast {
+    @apply transition-all duration-150 ease-in-out;
+  }
+
+  .ds-container {
+    width: 100%;
+    max-width: 1320px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .ds-panel {
+    @apply bg-surface-container ring-1 ring-border/80 overflow-hidden;
+    border-radius: var(--radius-panel);
+    box-shadow: 0 18px 50px -32px rgba(29, 29, 31, 0.22);
+  }
+
+  /* ==========================================================
+     NAVIGATION — translucent editorial bar
+     ========================================================== */
+  .nav-glass {
+    background-color: hsl(var(--surface) / 0.82);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(var(--border) / 0.7);
+  }
+
+  /* ==========================================================
+     BUTTONS — Editorial primitives
+     The canonical button lives in `src/components/ui/button.tsx`.
+     The classes below are escape hatches for plain HTML and for
+     legacy call sites that still use `btn-glow` / `btn-beam`
+     utility names — both resolve to the new editorial style.
+     ========================================================== */
+
+  /* Primary pill — inverted ink on light, white on dark */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 9px 22px;
+    border-radius: 9999px;
+    background-color: #0071e3;
+    color: hsl(var(--primary-foreground));
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+    line-height: 1;
+    transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), background-color 300ms ease, box-shadow 300ms ease;
+    box-shadow: none;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    background-color: #0077ed;
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    background-color: #006edb;
+  }
+
+  /* Outline pill — editorial border */
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 9px 0;
+    border-radius: 9999px;
+    background-color: transparent;
+    color: #0066cc;
+    border: 1px solid transparent;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.022em;
+    transition: all 300ms ease;
+  }
+
+  .btn-outline:hover {
+    background-color: hsl(var(--secondary));
+    color: #0066cc;
+    border-color: transparent;
+  }
+
+  /* Legacy aliases — keep existing markup working visually. */
+  .btn-glow,
+  .btn-beam {
+    @apply btn-primary;
+  }
+
+  .btn-outline-red {
+    @apply btn-outline;
+  }
+
+  /* ==========================================================
+     CARDS — Editorial
+     ========================================================== */
+  .card-editorial {
+    background-color: #f5f5f7;
+    color: hsl(var(--card-foreground));
+    border: 1px solid hsl(var(--border) / 0.75);
+    border-radius: var(--radius-card);
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 500ms ease, border-color 500ms ease;
+    box-shadow: 0 18px 44px -34px rgba(29, 29, 31, 0.18);
+  }
+
+  .card-editorial:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 60px -30px rgba(29, 29, 31, 0.22);
+  }
+
+  /* Legacy alias — the sharp black-on-red card becomes the soft
+     editorial card. Call sites that render the 4 corner spans
+     simply won't see them (corners are transparent). */
+  .card-corner-accent {
+    @apply card-editorial;
+  }
+
+  .card-corner-accent .corner-tl,
+  .card-corner-accent .corner-tr,
+  .card-corner-accent .corner-bl,
+  .card-corner-accent .corner-br {
+    display: none;
+  }
+
+  .card-list-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    background-color: transparent;
+    border-bottom: 1px solid hsl(var(--border));
+    border-radius: 0;
+    overflow: hidden;
+    transition: background-color 300ms ease;
+  }
+
+  .card-list-item:hover {
+    background-color: hsl(var(--muted) / 0.6);
+  }
+
+  .card-list-item .accent-bar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background-color: hsl(var(--accent));
+    transform: translateX(-100%);
+    transition: transform 220ms ease;
+  }
+
+  .card-list-item:hover .accent-bar {
+    transform: translateX(0);
+  }
+
+  .card-list-item .content {
+    transition: transform 300ms ease;
+  }
+
+  .card-list-item:hover .content {
+    transform: translateX(6px);
+  }
+
+  /* ==========================================================
+     BADGES
+     ========================================================== */
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background-color: hsl(var(--surface-container));
+    color: hsl(var(--foreground));
+    border: 1px solid hsl(var(--border));
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  .badge-bold {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Legacy aliases */
+  .badge-glass {
+    @apply badge-pill;
+  }
+
+  .badge-tag {
+    display: inline-flex;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background-color: transparent;
+    border: 1px solid hsl(var(--border));
+    color: #0066cc;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    transition: all 300ms ease;
+  }
+
+  .badge-tag:hover {
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--foreground) / 0.3);
+    background-color: hsl(var(--muted) / 0.5);
+  }
+
+  .badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #0066cc;
+  }
+
+  .badge-status .indicator {
+    width: 6px;
+    height: 6px;
+    background-color: #0066cc;
+    border-radius: 9999px;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* ==========================================================
+     FORMS — editorial inputs
+     ========================================================== */
+  .input-ds {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: #ffffff;
+    border: 1px solid hsl(var(--border));
+    border-radius: 12px;
+    color: hsl(var(--foreground));
+    font-size: 14px;
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    letter-spacing: -0.016em;
+    outline: none;
+    transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+  }
+
+  .input-ds:focus {
+    border-color: hsl(var(--accent));
+    box-shadow: 0 0 0 3px hsl(var(--accent) / 0.15);
+  }
+
+  .input-ds::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+
+  .input-label {
+    font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* ==========================================================
+     TYPOGRAPHY UTILITIES
+     ========================================================== */
+  .text-gradient-ink {
+    background: linear-gradient(180deg, hsl(var(--foreground)), hsl(var(--foreground) / 0.55));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Legacy alias: `text-gradient-white` (used on dark hero) now
+     adapts to theme instead of hard-coding white. */
+  .text-gradient-white,
+  .text-gradient-white-60 {
+    @apply text-gradient-ink;
+  }
+
+  /* ==========================================================
+     ANIMATION DELAYS
+     ========================================================== */
+  .delay-100 { animation-delay: 0.1s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
+  .delay-400 { animation-delay: 0.4s; }
+  .delay-500 { animation-delay: 0.5s; }
+  .delay-600 { animation-delay: 0.6s; }
+  .delay-700 { animation-delay: 0.7s; }
+  .delay-800 { animation-delay: 0.8s; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition: all 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .text-reveal-wrapper {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  .text-reveal-content {
+    transform: translateY(110%);
+    opacity: 0;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+    display: block;
+  }
+
+  .reveal-active .text-reveal-content {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .transition-delay-100 { transition-delay: 0.1s; }
+  .transition-delay-200 { transition-delay: 0.2s; }
+  .transition-delay-300 { transition-delay: 0.3s; }
+  .transition-delay-400 { transition-delay: 0.4s; }
+  .transition-delay-500 { transition-delay: 0.5s; }
+  .transition-delay-600 { transition-delay: 0.6s; }
+  .transition-delay-700 { transition-delay: 0.7s; }
+  .transition-delay-800 { transition-delay: 0.8s; }
+
+  /* ==========================================================
+     UTILITY CLASSES
+     ========================================================== */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Editorial border gradient (replaces the red-heavy original) */
+  .border-gradient {
+    position: relative;
+    border: 1px solid transparent;
+    background: linear-gradient(hsl(var(--card)), hsl(var(--card))) padding-box,
+                linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent) / 0.3)) border-box;
+  }
+
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, hsl(var(--foreground) / 0.15), transparent, hsl(var(--foreground) / 0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Editorial dashboard background — soft accent wash */
+  .bg-dashboard-gradient {
+    background:
+      radial-gradient(circle at 18% 0%, hsl(var(--accent) / 0.08) 0%, transparent 55%),
+      hsl(var(--background));
+  }
+
+  .bg-card-gradient {
+    background: linear-gradient(135deg, hsl(var(--accent) / 0.06), transparent);
+  }
+
+  .noise-texture {
+    background-image:
+      url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise"/><feColorMatrix in="noise" type="saturate" values="0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.03"/></svg>');
+    pointer-events: none;
+  }
+
+  .link-animated {
+    position: relative;
+    color: hsl(var(--muted-foreground));
+    transition: color 300ms ease;
+  }
+
+  .link-animated:hover {
+    color: hsl(var(--foreground));
+  }
+
+  .link-animated::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, hsl(var(--accent)), transparent);
+    transform: translateX(-50%);
+    transition: width 300ms ease, opacity 300ms ease;
+    opacity: 0;
+  }
+
+  .link-animated:hover::after {
+    width: 100%;
+    opacity: 1;
+  }
+
+  /* Grayscale hover — matches the reference "press-team" pattern */
+  .grayscale-hover {
+    filter: grayscale(1);
+    transition: filter 700ms ease, transform 700ms ease, opacity 700ms ease;
+    opacity: 0.9;
+  }
+
+  .grayscale-hover:hover {
+    filter: grayscale(0);
+    transform: scale(1.03);
+    opacity: 1;
+  }
+
+  .ken-burns {
+    animation: kenBurns 10s ease-out forwards;
+  }
+
+  iconify-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+  }
+}
+
+@layer utilities {
+  /* Legacy alias kept so old `max-w-container` class still works */
+  .max-w-container {
+    max-width: 1400px;
+  }
+}
+
+/* ============================================================
+   KEYFRAMES — decorative, not covered by tailwind.config.ts
+   ============================================================ */
+
+@keyframes shimmer {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes grid-line-pulse {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

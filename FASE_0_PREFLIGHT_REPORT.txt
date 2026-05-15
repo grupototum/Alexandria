@@ -1,0 +1,175 @@
+┌─────────────────────────────────────────────────────────────┐
+│  FASE 0 PRÉ-FLIGHT CHECK — TOTUM 3.0                        │
+│  Data: 2026-05-02                                           │
+│  Status: ⚠️  PRONTO COM 1 BLOQUEADOR CRÍTICO               │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────┬──────────────────────────┐
+│ SEÇÃO                           │ STATUS                   │
+├─────────────────────────────────┼──────────────────────────┤
+│ Máquina Local                   │ ✅ OK                    │
+│ GitHub & Repos                  │ ✅ OK                    │
+│ Supabase                        │ ✅ OK                    │
+│ Totum-OS repo                   │ ⚠️  AVISO               │
+│ VPS Alibaba (187.127.4.140)     │ ❌ BLOQUEADOR CRÍTICO    │
+│ Credenciais externas            │ ℹ️  MANUAL (ver nota)    │
+└─────────────────────────────────┴──────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ MÁQUINA LOCAL
+  ✅ Node.js  v25.8.2
+  ✅ npm      v11.11.1
+  ✅ Git      v2.50.1 (Apple Git-155)
+  ✅ SSH      OpenSSH_10.2p1, LibreSSL 3.3.6
+  ✅ Disco /  228 GB total | 42 GB livres (22% usado)
+             ⚠️  42 GB disponíveis — mínimo recomendado para workspace: 50 GB
+             → Libere espaço antes de baixar Docker images/modelos Ollama
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ GITHUB & REPOS
+  ✅ Organização grupototum acessível
+  ✅ grupototum/Alexandria → NÃO existe (pronto para criar)
+  ✅ grupototum/Totum-Chat → NÃO existe (pronto para criar)
+  ℹ️  Confirme GITHUB_TOKEN com escopo "repo" antes de criar os repos:
+       export GITHUB_TOKEN=ghp_...
+       curl -H "Authorization: token $GITHUB_TOKEN" \
+            https://api.github.com/user | grep login
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ SUPABASE (cgpkfhrqprqptvehatad)
+  ✅ Projeto acessível via MCP
+  ✅ agents               — existe
+  ✅ agents_config        — existe
+  ✅ agent_channels       — existe
+  ✅ agent_knowledge_access — existe
+  ✅ rag_documents        — existe
+  ✅ skills               — existe
+  → Todas as tabelas críticas presentes. Nenhuma migration necessária.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  TOTUM-OS REPO (main)
+  ✅ Repositório local existe
+  ✅ Em git, branch main, sincronizado com origin/main
+  ✅ Último commit: e0cc19ca feat(alexandria): add skill router sync workflow
+  ⚠️  3 arquivos staged não commitados:
+       new file:  src/lib/directoryPicker.ts
+       modified:  src/pages/HermioneChat.tsx
+       modified:  src/pages/alexandria/KnowledgeBridges.tsx
+
+  SOLUÇÃO (2 min):
+    git add src/lib/directoryPicker.ts \
+            src/pages/HermioneChat.tsx \
+            src/pages/alexandria/KnowledgeBridges.tsx
+    git commit -m "chore: save WIP before Fase 0 migration"
+    git push
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ VPS ALIBABA (187.127.4.140) — BLOQUEADOR CRÍTICO
+
+  DIAGNÓSTICO COMPLETO:
+  ❌ Ping        → 100% packet loss (3/3 pacotes perdidos)
+  ❌ Porta 22    → Connection refused  (SSH bloqueado ativamente)
+  ❌ Porta 2222  → Timeout
+  ❌ Porta 22222 → Timeout
+  ❌ Porta 2200  → Timeout
+
+  INTERPRETAÇÃO:
+  O servidor está INACESSÍVEL da rede atual. Possíveis causas:
+
+  1. 🔴 INSTÂNCIA DESLIGADA — A ECS está parada no Alibaba Cloud
+     Solução: Alibaba Cloud Console → ECS → Iniciar instância
+
+  2. 🔴 SECURITY GROUP bloqueando tráfego de entrada
+     Solução: Alibaba ECS → Security Groups → Adicionar regra:
+       - Protocolo: TCP
+       - Porta: 22 (ou a porta SSH configurada)
+       - Origem: 0.0.0.0/0 (ou seu IP atual)
+
+  3. 🟡 IP MUDOU — O IP elástico pode ter sido realocado
+     Solução: Alibaba Console → ECS → Network Interfaces
+     Verificar o IP público atual da instância
+
+  4. 🟡 FIREWALL INTERNO (iptables/ufw) bloqueando porta 22
+     Solução: Precisa de acesso ao console VNC do Alibaba
+       Alibaba ECS → Connect → VNC Console
+       Depois: sudo ufw allow 22 ou sudo iptables -I INPUT -p tcp --dport 22 -j ACCEPT
+
+  CHAVES SSH ENCONTRADAS LOCALMENTE (disponíveis para usar):
+  → ~/.ssh/claude_analyzer_187_127_4_140  (nome sugere ser desta VPS)
+  → ~/.ssh/claude_vps
+  → ~/.ssh/id_ed25519_totum
+  → ~/.ssh/totum_vps_ed25519
+  → ~/.ssh/id_ed25519_nopass
+
+  NÃO VERIFICADO (aguardando VPS online):
+  ⬜ Docker instalado e versão
+  ⬜ RAM disponível (precisa ≥ 4 GB livres)
+  ⬜ Disco / (precisa ≥ 20 GB)
+  ⬜ Nginx rodando
+  ⬜ Portas 3210 (LobeHub) e 11434 (Ollama) livres
+
+  URGÊNCIA: CRÍTICA para Fase 1 (deploy LobeHub + Ollama)
+  Fase 0 Steps 1–3 podem ser executados sem o VPS.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ℹ️  CREDENCIAIS EXTERNAS (verificação manual)
+  [ ] Groq API key      → https://console.groq.com/keys
+  [ ] Google AI Studio  → https://aistudio.google.com/apikey
+  [ ] GitHub Token      → https://github.com/settings/tokens (escopo: repo)
+  [ ] Supabase keys     → já em uso no projeto (OK)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 RESUMO EXECUTIVO
+  ✅  3/5 seções totalmente OK
+  ⚠️  1 aviso não-bloqueador (changes staged no repo)
+  ⚠️  1 aviso de espaço (42 GB livres, recomendado 50 GB)
+  ❌  1 BLOQUEADOR CRÍTICO: VPS completamente inacessível
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 PLANO DE AÇÃO — ORDEM RECOMENDADA
+
+  AGORA (pode fazer em paralelo com resolução do VPS):
+
+  PASSO 1 — Commit WIP no repo (2 min)
+    cd ~/Documents/Pixel\ Systems/Totum-OS
+    git add src/lib/directoryPicker.ts \
+            src/pages/HermioneChat.tsx \
+            src/pages/alexandria/KnowledgeBridges.tsx
+    git commit -m "chore: save WIP before Fase 0 migration"
+    git push
+
+  PASSO 2 — Resolver VPS (10–30 min) ← CRÍTICO
+    a) Acessar: https://account.alibabacloud.com → ECS
+    b) Verificar se instância está RUNNING
+    c) Se parada → Iniciar
+    d) Verificar Security Group: porta 22 aberta para 0.0.0.0/0
+    e) Confirmar IP público atual
+    f) Testar: ssh -i ~/.ssh/claude_analyzer_187_127_4_140 root@<IP_ATUAL> "echo OK"
+
+  PASSO 3 — Confirmar GITHUB_TOKEN (2 min)
+    curl -H "Authorization: token $GITHUB_TOKEN" \
+         https://api.github.com/user | grep login
+
+  PASSO 4 — Confirmar Groq + Google AI Studio keys (5 min)
+
+  APÓS VPS ACESSÍVEL — Re-verificar:
+    ssh user@<IP> "docker --version && free -h && df -h / && systemctl is-active nginx"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 SINAL VERDE
+  → Resolva os 4 passos acima (~30–40 min no total)
+  → Re-execute este check: todas as seções devem ficar ✅
+  → Então execute FASE_0_CHECKLIST (2 horas)
+  → Resultado: 2 repos criados + todas credenciais configuradas
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Gerado por: Claude Code (claude-sonnet-4-6) em 2026-05-02

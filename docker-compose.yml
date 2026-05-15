@@ -1,11 +1,25 @@
 services:
-  alexandria-api:
-    build: .
+  alexandria:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_SUPABASE_URL: https://cgpkfhrqprqptvehatad.supabase.co
+        VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNncGtmaHJxcHJxcHR2ZWhhdGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjQyNjIsImV4cCI6MjA5MDgwMDI2Mn0.fXMvQhyLQXLgD_rK-slcHO4Jd_XF8mR_kYFTDHCsoxw
     container_name: alexandria-api
     restart: unless-stopped
     ports:
-      - "127.0.0.1:5000:5000"
-    env_file:
-      - .env
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "127.0.0.1:5000:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - SUPABASE_URL=https://cgpkfhrqprqptvehatad.supabase.co
+      - SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNncGtmaHJxcHJxcHR2ZWhhdGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjQyNjIsImV4cCI6MjA5MDgwMDI2Mn0.fXMvQhyLQXLgD_rK-slcHO4Jd_XF8mR_kYFTDHCsoxw
+    labels:
+      - "traefik.enable=false"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

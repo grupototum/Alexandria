@@ -1,0 +1,4 @@
+project_id = "cgpkfhrqprqptvehatad"
+
+[functions.alexandria-proxy]
+verify_jwt = false

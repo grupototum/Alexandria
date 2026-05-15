@@ -1,0 +1,48 @@
+{
+  "name": "Totum OS",
+  "short_name": "Totum OS",
+  "description": "Sistema operacional de agência com AI Command Center, Alexandria e agentes de IA",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f6f3",
+  "theme_color": "#ef233c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/x-icon",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AI Command Center",
+      "url": "/ai-command-center",
+      "description": "Conversar com agentes e IAs"
+    },
+    {
+      "name": "Hermione",
+      "url": "/hermione",
+      "description": "Chat com a base de conhecimento"
+    },
+    {
+      "name": "Tarefas",
+      "url": "/tasks",
+      "description": "Quadro de tarefas"
+    }
+  ],
+  "categories": ["productivity", "business"]
+}

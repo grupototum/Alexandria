@@ -1,0 +1,124 @@
+{
+  "id": "alexandria-capture-intake",
+  "name": "Alexandria Capture Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alexandria-capture",
+        "responseMode": "responseNode"
+      },
+      "id": "webhook-alexandria-capture",
+      "name": "Capture Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ],
+      "webhookId": "alexandria-capture"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://cgpkfhrqprqptvehatad.supabase.co/functions/v1/alexandria-proxy/capture",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.ALEXANDRIA_CAPTURE_TOKEN }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "sourceName",
+              "value": "={{ $json.body.sourceName || $json.body.title || 'captura-manual.md' }}"
+            },
+            {
+              "name": "title",
+              "value": "={{ $json.body.title || $json.body.sourceName || 'Captura Alexandria' }}"
+            },
+            {
+              "name": "content",
+              "value": "={{ $json.body.content || $json.body.text || $json.body.output || '' }}"
+            },
+            {
+              "name": "sourceUrl",
+              "value": "={{ $json.body.sourceUrl || $json.body.url || '' }}"
+            },
+            {
+              "name": "artifactType",
+              "value": "={{ $json.body.artifactType || 'document' }}"
+            },
+            {
+              "name": "author",
+              "value": "={{ $json.body.author || 'n8n-capture' }}"
+            },
+            {
+              "name": "metadata",
+              "value": "={{ { intake: 'manual-webhook', clientName: $json.body.clientName || null, category: $json.body.category || null, receivedAt: new Date().toISOString() } }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000
+        }
+      },
+      "id": "post-to-alexandria-proxy",
+      "name": "Save in Alexandria",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        540,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, artifact: $json.artifact, source: $json.source } }}"
+      },
+      "id": "respond-capture-result",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Capture Webhook": {
+      "main": [
+        [
+          {
+            "node": "Save in Alexandria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save in Alexandria": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1"
+}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Alexandria · Totum OS</title>
+    <script>
+      (function() {
+        try {
+          const stored = localStorage.getItem('totum-theme');
+          const mode = stored === 'dark' || stored === 'light' ? stored : 'system';
+          const resolved = mode === 'system'
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : mode;
+          document.documentElement.classList.add(resolved);
+        } catch (e) {}
+      })();
+    </script>
+    <meta name="description" content="Alexandria no Totum OS: base de conhecimento, agentes, fluxos e ferramentas integradas.">
+    <meta name="author" content="Grupo Totum" />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Alexandria" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Alexandria · Totum OS" />
+    <meta property="og:description" content="Base de conhecimento, agentes, fluxos e ferramentas integradas." />
+    <meta property="og:url" content="https://alexandria.grupototum.com" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Alexandria · Totum OS" />
+    <meta name="twitter:description" content="Base de conhecimento, agentes e fluxos integrados." />
+</head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
