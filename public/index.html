@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#ffffff">
     <title>Alexandria | Totum Knowledge OS</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css?v=apple-20260515">
   </head>
   <body>
     <div class="shell">
@@ -43,41 +43,29 @@
             <h1>Alexandria</h1>
           </div>
           <div class="top-actions">
-            <button class="icon-button" id="refresh-button" title="Atualizar dados" aria-label="Atualizar dados">↻</button>
-            <button class="secondary-button signup-pill" data-jump="documents">Biblioteca</button>
-            <button class="primary-button login-pill" data-jump="hermione">Consultar Hermione</button>
+            <button class="link-button" id="refresh-button" title="Atualizar dados" aria-label="Atualizar dados">Atualizar</button>
+            <button class="link-button" data-jump="documents">Biblioteca</button>
+            <button class="primary-button" data-jump="hermione">Consultar Hermione</button>
           </div>
         </header>
 
         <section class="view active" data-view="dashboard">
           <div class="hero-band">
             <div>
-              <p class="eyebrow">Second Brain Operacional</p>
+              <p class="eyebrow">Biblioteca operacional</p>
               <h2>Conhecimento rastreável para humanos, agentes e IAs externas.</h2>
               <p>A Alexandria centraliza fontes, POPs, skills, decisões, contexto e pacotes exportáveis. A Hermione consulta, assimila e transforma conteúdo bruto em artefatos úteis.</p>
-              <form class="hero-prompt" data-jump="hermione">
-                <span>Ask Alexandria anything</span>
-                <button class="glass-button" type="button" data-jump="hermione">Launch Hermione</button>
-              </form>
               <div class="hero-actions">
-                <button class="primary-button" data-jump="hermione">Perguntar agora</button>
-                <button class="secondary-button" data-jump="bridges">Conectar fontes</button>
+                <button class="primary-button button-super" data-jump="hermione">Perguntar à Hermione</button>
+                <button class="link-button chevron" data-jump="documents">Explorar biblioteca</button>
               </div>
             </div>
-            <div class="creative-preview" aria-label="Prévia da suíte Alexandria">
-              <div class="generator-nav">
-                <span class="active">Knowledge</span>
-                <span>Prompt</span>
-                <span>Video</span>
-                <span>Upscaler</span>
-              </div>
-              <div class="media-stage">
-                <div class="stage-window">
-                  <span>Hermione</span>
-                  <strong>POP-001 Criacao de Agentes</strong>
-                  <small>80% match · read_skill_as_context</small>
-                </div>
-                <div class="stage-grid">
+            <div class="product-preview" aria-label="Prévia da Alexandria">
+              <div class="preview-screen">
+                <span class="badge">Fonte sugerida</span>
+                <strong>POP-001 Criacao de Agentes</strong>
+                <small>80% de relevância · read_skill_as_context</small>
+                <div class="preview-actions">
                   <span>POPs</span>
                   <span>Skills</span>
                   <span>Contexto</span>
