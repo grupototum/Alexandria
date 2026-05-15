@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f7f4ef">
+    <meta name="theme-color" content="#ffffff">
     <title>Alexandria | Totum Knowledge OS</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
@@ -44,7 +44,8 @@
           </div>
           <div class="top-actions">
             <button class="icon-button" id="refresh-button" title="Atualizar dados" aria-label="Atualizar dados">↻</button>
-            <button class="primary-button" data-jump="hermione">Consultar Hermione</button>
+            <button class="secondary-button signup-pill" data-jump="documents">Biblioteca</button>
+            <button class="primary-button login-pill" data-jump="hermione">Consultar Hermione</button>
           </div>
         </header>
 
@@ -54,17 +55,35 @@
               <p class="eyebrow">Second Brain Operacional</p>
               <h2>Conhecimento rastreável para humanos, agentes e IAs externas.</h2>
               <p>A Alexandria centraliza fontes, POPs, skills, decisões, contexto e pacotes exportáveis. A Hermione consulta, assimila e transforma conteúdo bruto em artefatos úteis.</p>
+              <form class="hero-prompt" data-jump="hermione">
+                <span>Ask Alexandria anything</span>
+                <button class="glass-button" type="button" data-jump="hermione">Launch Hermione</button>
+              </form>
               <div class="hero-actions">
                 <button class="primary-button" data-jump="hermione">Perguntar agora</button>
                 <button class="secondary-button" data-jump="bridges">Conectar fontes</button>
               </div>
             </div>
-            <div class="knowledge-map" aria-label="Mapa visual da Alexandria">
-              <span>Hermione</span>
-              <span>POPs</span>
-              <span>Skills</span>
-              <span>Contexto</span>
-              <span>Exports</span>
+            <div class="creative-preview" aria-label="Prévia da suíte Alexandria">
+              <div class="generator-nav">
+                <span class="active">Knowledge</span>
+                <span>Prompt</span>
+                <span>Video</span>
+                <span>Upscaler</span>
+              </div>
+              <div class="media-stage">
+                <div class="stage-window">
+                  <span>Hermione</span>
+                  <strong>POP-001 Criacao de Agentes</strong>
+                  <small>80% match · read_skill_as_context</small>
+                </div>
+                <div class="stage-grid">
+                  <span>POPs</span>
+                  <span>Skills</span>
+                  <span>Contexto</span>
+                  <span>Exports</span>
+                </div>
+              </div>
             </div>
           </div>
 
