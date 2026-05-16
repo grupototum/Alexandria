@@ -1,10 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   buildKnowledgeSyncPreview,
   detectSkillCandidate,
   summarizeKnowledgeSyncHealth,
   normalizeGoogleDriveFolderId,
 } from "./alexandriaKnowledgeSync";
+
+vi.mock("@/integrations/supabase/client", () => ({
+  supabase: {},
+}));
 
 describe("alexandriaKnowledgeSync", () => {
   it("detecta skill por caminho e estrutura", () => {

@@ -31,6 +31,7 @@ export interface GithubFile {
   name: string;
   content: string;
   path: string;
+  branch: string;
 }
 
 // ─── Markdown Chunker ─────────────────────────────────────────────────────────
@@ -327,6 +328,7 @@ export async function fetchGithubMarkdownFiles(repoUrl: string): Promise<GithubF
   // Try main, then master if main fails
   const branches = branch !== 'master' ? [branch, 'master'] : ['master', 'main'];
   let treeData: any = null;
+  let activeBranch = branch;
 
   for (const b of branches) {
     try {
@@ -336,6 +338,7 @@ export async function fetchGithubMarkdownFiles(repoUrl: string): Promise<GithubF
       );
       if (treeRes.ok) {
         treeData = await treeRes.json();
+        activeBranch = b;
         break;
       }
     } catch {
@@ -355,7 +358,6 @@ export async function fetchGithubMarkdownFiles(repoUrl: string): Promise<GithubF
   if (mdFiles.length === 0) throw new Error('Nenhum arquivo .md encontrado no repositório.');
 
   // Fetch content for each file
-  const activeBranch = treeData.sha ? branches[0] : 'main';
   const files: GithubFile[] = [];
 
   for (const file of mdFiles) {
@@ -368,6 +370,7 @@ export async function fetchGithubMarkdownFiles(repoUrl: string): Promise<GithubF
           name: file.path.split('/').pop() || file.path,
           content,
           path: `${owner}/${repo}/${file.path}`,
+          branch: activeBranch,
         });
       }
       // Small delay
@@ -390,7 +393,7 @@ export async function ingestGithubRepo(
   const files = await fetchGithubMarkdownFiles(repoUrl);
 
   return ingestBatch(
-    files.map(f => ({ name: f.name, content: f.content, source: `${repoUrl}/blob/main/${f.path}` })),
+    files.map(f => ({ name: f.name, content: f.content, source: `${repoUrl}/blob/${f.branch}/${f.path}` })),
     onProgress
   );
 }
