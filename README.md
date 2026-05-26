@@ -1,6 +1,20 @@
-# Totum OS
+# Alexandria / Totum OS Knowledge Layer
 
-Sistema operacional de agência com AI Command Center, Alexandria como second brain, agentes, fluxos e ferramentas operacionais.
+Sistema operacional de agência com AI Command Center e Alexandria como camada central de conhecimento.
+
+> Nota canônica, 2026-05-23: este repositório contém hoje o app Totum OS com a Alexandria como seção central de conhecimento, backend Express mínimo, Supabase Edge Functions e MCP próprio. A documentação antiga que descreve elizaOS/57 agentes deve ser tratada como legado/aspiracional quando não houver evidência no código.
+
+Documentos canônicos atuais:
+
+- `ARCHITECTURE.md` — arquitetura real do repo.
+- `OPERATIONS.md` — operação real, deploy e governança.
+- `ALEXANDRIA_KNOWLEDGE_CANON.md` — modelo de fusão Pepper + Alexandria + Hermione.
+- `ALEXANDRIA_UNIVERSAL_PLUGIN.md` — contrato da Alexandria como plugin universal para IAs, apps e terminais.
+- `ALEXANDRIA_MEMORY_ASSIMILATION_PROTOCOL.md` — super protocolo para importar, deduplicar, revisar e assimilar memórias de IAs conectadas.
+- `ALEXANDRIA_GITHUB_BENCHMARK_MEMORY_SYSTEMS.md` — benchmark de projetos open source similares e recomendações para Alexandria.
+- `ALEXANDRIA_V1_TRUSTED_SOURCE_PLAN.md` — plano para virar fonte confiável.
+- `VALIDATION_PENDING.md` — comandos de validação pendentes antes de deploy.
+
 
 ## Direção do Produto
 

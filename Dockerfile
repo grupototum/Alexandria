@@ -6,9 +6,10 @@ WORKDIR /app
 # Instalar curl para healthcheck
 RUN apk add --no-cache curl
 
-# Argumentos de build para variáveis de ambiente do frontend
-ARG VITE_SUPABASE_URL=https://cgpkfhrqprqptvehatad.supabase.co
-ARG VITE_SUPABASE_PUBLISHABLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNncGtmaHJxcHJxcHR2ZWhhdGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUyMjQyNjIsImV4cCI6MjA5MDgwMDI2Mn0.fXMvQhyLQXLgD_rK-slcHO4Jd_XF8mR_kYFTDHCsoxw
+# Argumentos de build para variáveis de ambiente públicas do frontend.
+# Não definir valores reais aqui. Use docker-compose/.env ou secrets do ambiente.
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_PUBLISHABLE_KEY
 
 # Variáveis de ambiente para o build
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
@@ -27,7 +28,7 @@ RUN cd api && npm ci
 # Copiar código da aplicação
 COPY . .
 
-# Build do frontend (agora com variáveis de ambiente disponíveis)
+# Build do frontend (com variáveis de ambiente fornecidas no build)
 RUN npm run build
 
 # Expor porta

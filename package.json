@@ -6,12 +6,18 @@
   "scripts": {
     "dev": "vite",
     "generate:skills-sync": "node scripts/generate-skills-sync.mjs",
+    "migrate:giles:dry-run": "node scripts/migrate-giles-to-hermione.mjs --limit 20",
+    "migrate:giles:apply": "node scripts/migrate-giles-to-hermione.mjs --apply",
     "build": "npm run generate:skills-sync && vite build",
     "build:dev": "npm run generate:skills-sync && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "curate:hermione:dry-run": "node scripts/curate-hermione-artifacts.mjs --dry-run",
+    "curate:hermione:apply": "node scripts/curate-hermione-artifacts.mjs --apply",
+    "import:hermione-governance:dry-run": "node scripts/import-hermione-governance-artifacts.mjs --dry-run --file /root/.openclaw/workspace/operations/alexandria-governanca-hermione-artifacts-v1.json",
+    "import:hermione-governance:apply": "node scripts/import-hermione-governance-artifacts.mjs --apply --file /root/.openclaw/workspace/operations/alexandria-governanca-hermione-artifacts-v1.json"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",

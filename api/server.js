@@ -36,10 +36,35 @@ const healthPayload = () => ({
   services: ['transcribe', 'ingest', 'webhooks', 'agents', 'frontend']
 });
 
+const ADMIN_API_TOKEN = process.env.ADMIN_API_TOKEN || '';
+
+function bearerToken(value = '') {
+  return value.toLowerCase().startsWith('bearer ') ? value.slice(7).trim() : value.trim();
+}
+
+function requireAdminToken(req, res, next) {
+  if (!ADMIN_API_TOKEN) {
+    return res.status(503).json({
+      success: false,
+      error: 'Admin endpoints disabled. Configure ADMIN_API_TOKEN to enable.'
+    });
+  }
+
+  const providedToken = req.get('x-admin-token') || bearerToken(req.get('authorization') || '');
+  if (providedToken !== ADMIN_API_TOKEN) {
+    return res.status(401).json({
+      success: false,
+      error: 'Unauthorized admin request'
+    });
+  }
+
+  return next();
+}
+
 // ============================================================
 // SETUP ENDPOINT
 // ============================================================
-app.post('/api/setup', async (req, res) => {
+app.post('/api/setup', requireAdminToken, async (req, res) => {
   const result = await setupMasterUser();
   res.json(result);
 });
@@ -190,7 +215,7 @@ app.get('/api/outputs', (req, res) => {
 });
 
 // Confirm User (Admin - confirma email de usuário automaticamente)
-app.post('/api/admin/confirm-user', async (req, res) => {
+app.post('/api/admin/confirm-user', requireAdminToken, async (req, res) => {
   try {
     const { email } = req.body;
     
@@ -214,7 +239,7 @@ app.post('/api/admin/confirm-user', async (req, res) => {
 });
 
 // Confirm Email (Admin - confirmar email sem enviar link)
-app.post('/api/admin/confirm-email', async (req, res) => {
+app.post('/api/admin/confirm-email', requireAdminToken, async (req, res) => {
   try {
     const { email } = req.body;
     
@@ -248,7 +273,7 @@ app.post('/api/admin/confirm-email', async (req, res) => {
 });
 
 // Reset Password (Admin - sem enviar e-mail)
-app.post('/api/admin/reset-password', async (req, res) => {
+app.post('/api/admin/reset-password', requireAdminToken, async (req, res) => {
   try {
     const { email, newPassword } = req.body;
     

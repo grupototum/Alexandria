@@ -1,755 +1,366 @@
-# 📐 Architecture — elizaOS Agent Orchestration System
+# Alexandria — Arquitetura Real
 
-**Complete technical overview and design documentation**
+Status: documento canônico atualizado em 2026-05-23.
+Objetivo: substituir a documentação divergente/aspiracional por uma visão fiel ao código atual.
 
----
+## 1. O que a Alexandria é hoje
 
-## System Overview
+A Alexandria é uma infraestrutura de conhecimento em construção dentro do ecossistema Totum OS.
 
-elizaOS is an enterprise agent orchestration platform that manages 57 specialized autonomous agents organized across 7 functional divisions, orchestrating 20+ workflows with real-time monitoring and SLA validation.
+Na prática, o repositório atual contém:
 
-```
-┌─────────────────────────────────────────────────────┐
-│              User Interface Layer                    │
-│  (Dashboard, API, CLI, Webhooks)                    │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌─────────────────────────────────────────────────────┐
-│          Request Router & Intent Parser             │
-│  (Analyze objective, select division & agents)      │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌─────────────────────────────────────────────────────┐
-│     Autonomous Agent Orchestration Engine           │
-│  (57 agents × 7 divisions)                         │
-│  ├─ Planner: Decompose into tasks                 │
-│  ├─ Executor: Parallel/sequential execution        │
-│  └─ Reporter: Consolidate results                 │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌─────────────────────────────────────────────────────┐
-│        Workflow Orchestration (n8n Integration)    │
-│  (20 workflows, 50+ daily executions)              │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌─────────────────────────────────────────────────────┐
-│     Monitoring, Alerting, SLA Validation           │
-│  (Real-time metrics, health checks, notifications) │
-└────────────────┬────────────────────────────────────┘
-                 │
-┌─────────────────────────────────────────────────────┐
-│         Data Persistence & Caching                  │
-│  (Supabase PostgreSQL + Redis)                     │
-└─────────────────────────────────────────────────────┘
-```
+1. Um app React/Vite/TypeScript com várias telas do Totum OS.
+2. Uma seção Alexandria dentro do app.
+3. Um backend Express mínimo em `api/`.
+4. Supabase como banco, autenticação, edge functions e storage.
+5. Um MCP local em `tools/alexandria-claude-mcp` para conectar agentes/Claude à Alexandria via edge function.
+6. Pipelines de ingestão ainda fragmentados.
 
----
+A Alexandria não está pronta como fonte única confiável ainda. Ela tem peças importantes funcionando, mas precisa de consolidação.
 
-## PASSO 6: Agent Division Mapping
-
-### Overview
-57 agents organized into 7 specialized divisions for domain expertise and parallel execution.
-
-### Divisions & Agents
-
-#### DIV-001: Sales & Lead Management (6 agents)
-- **LOKI**: Lead qualification and scoring
-- **APOLLO**: Deal sizing and revenue forecasting
-- **ATHENA**: Sales strategy and positioning
-- **HERMES**: Follow-up sequence management
-- **ARTEMIS**: Competitive intelligence
-- **ARES**: Negotiation support and objection handling
-
-**Daily Executions**: 15-20
-**SLA**: 95% success rate, < 5 min execution
-
-#### DIV-002: Marketing & Campaigns (8 agents)
-- Content creation and optimization
-- Campaign management
-- Email sequencing
-- Analytics and attribution
-- Social media management
-- Landing page optimization
-- A/B testing and experimentation
-- Lead nurturing campaigns
-
-**Daily Executions**: 25-30
-**SLA**: 94% success rate, < 3 min execution
-
-#### DIV-003: Data & Integration (7 agents)
-- Data ingestion from APIs
-- Data cleaning and validation
-- Data enrichment
-- Database operations
-- File processing (CSV, PDF, Excel)
-- Data quality checks
-- Archive and backup management
-
-**Daily Executions**: 40-50
-**SLA**: 99% success rate, < 2 min execution
-
-#### DIV-004: Automation & Orchestration (12+ agents)
-- Workflow coordination
-- Task scheduling
-- Dependency resolution
-- Error recovery
-- State management
-- Parallel execution orchestration
-- (+ more specialized agents)
-
-**Daily Executions**: 30-40
-**SLA**: 98% success rate, < 1 min execution
-
-#### DIV-005: Engineering & Analytics (6 agents)
-- Code analysis and optimization
-- Performance monitoring
-- System diagnostics
-- Technical debt analysis
-- Architecture review
-- Testing automation
-
-**Daily Executions**: 10-15
-**SLA**: 96% success rate, < 8 min execution
-
-#### DIV-006: Support & Customer Service (5+ agents)
-- Ticket classification
-- Knowledge base management
-- Escalation routing
-- Customer sentiment analysis
-- FAQ generation
-- (+ more as needed)
-
-**Daily Executions**: 20-25
-**SLA**: 97% success rate, < 2 min execution
-
-#### DIV-007: Business Intelligence (5+ agents)
-- Report generation
-- Trend analysis
-- Forecasting
-- Anomaly detection
-- Dashboard creation
-- (+ custom agents)
-
-**Daily Executions**: 10-15
-**SLA**: 95% success rate, < 5 min execution
-
-**TOTAL: 57 agents, 50+ daily executions**
-
----
-
-## PASSO 7: elizaOS Agent Orchestration System
-
-### Phase 1: Agent Runtime Environment
-
-**Purpose**: Manage execution context, state, logging, and error recovery for autonomous agents
-
-**Files**:
-```
-src/agents/core/
-├── context-manager.ts (445 lines)
-├── error-handler.ts (420 lines)
-└── logger.ts (480 lines)
-```
-
-**Context Manager (`context-manager.ts`)**
-
-Manages execution context for each agent run:
-
-```typescript
-interface ExecutionContext {
-  agentId: string;              // Which agent
-  executionId: string;          // Unique execution ID
-  objective: string;            // What to do
-  division: string;             // Division membership
-  startTime: Date;              // When started
-  shortTermMemory: Map;         // Working memory
-  longTermMemory: MemoryEntry[]; // Historical context
-  currentPhase: Phase;          // Planning/Executing/Reporting/Completed
-  completedTasks: Task[];       // What's done
-  failedTasks: Task[];          // What failed
-  pendingTasks: Task[];         // What's next
-}
-```
-
-**Key Methods**:
-- `create()`: Initialize new execution context
-- `addTask()`: Queue tasks
-- `completeTask()`: Mark task done
-- `setMemory()`: Store working context
-- `getLongTermMemory()`: Historical recall
-- `save()`: Persist to database
-
-**Error Handler (`error-handler.ts`)**
-
-Comprehensive error handling with 10 error categories:
-
-```typescript
-enum ErrorType {
-  TIMEOUT,              // Agent took too long
-  NETWORK,              // Network/API failure
-  RATE_LIMIT,          // API rate limited
-  INVALID_INPUT,       // Bad input data
-  AUTHENTICATION,      // Auth failed
-  AUTHORIZATION,       // Permission denied
-  RESOURCE_EXHAUSTED,  // Out of resources
-  AGENT_ERROR,         // Agent logic error
-  DEPENDENCY_FAILURE,  // External service failed
-  UNKNOWN              // Other errors
-}
-```
-
-**Retry Strategy**: Exponential backoff with jitter
-```
-delay = baseDelay × (multiplier ^ attempts) + jitter
-max: 32 seconds
-jitter: ±10%
-```
-
-**Fallback Agents**: Automatically select alternative agent if primary fails
-
-**Logger (`logger.ts`)**
-
-Multi-destination logging system:
-- Console (development)
-- Supabase (production persistence)
-- Redis (caching)
-- File (archive)
-
-**Log Levels**: DEBUG, INFO, WARN, ERROR, CRITICAL
-
----
-
-### Phase 2: Workflow Engine
-
-**Purpose**: Orchestrate multi-step workflows with dependencies, state management, and event handling
-
-**Files**:
-```
-src/agents/core/
-├── scheduler.ts (350 lines)
-├── state-manager.ts (480 lines)
-└── event-emitter.ts (350 lines)
-```
-
-**Scheduler (`scheduler.ts`)**
-
-Priority-based task queue:
-
-```typescript
-interface Task {
-  id: string;
-  executionId: string;
-  agentId: string;
-  priority: 'critical' | 'high' | 'normal' | 'low';
-  scheduledTime: Date;
-  dependencies: string[];        // Task IDs that must complete first
-  retryPolicy: RetryPolicy;
-  timeout: number;               // Max execution time
-}
-```
-
-**Execution Flow**:
-1. Task queued (respects priority and dependencies)
-2. Wait for dependencies to complete
-3. Execute task
-4. On failure: Retry with exponential backoff
-5. On success: Mark complete and trigger dependents
-
-**State Manager (`state-manager.ts`)**
-
-Atomic state management with versioning:
-
-```typescript
-interface ExecutionState {
-  [key: string]: StateValue;  // Arbitrary key-value state
-}
-
-interface StateSnapshot {
-  version: number;
-  timestamp: Date;
-  state: ExecutionState;
-  changes: Map<string, any>;  // What changed
-}
-```
-
-**Capabilities**:
-- Create state snapshots (max 100 per execution)
-- Rollback to previous snapshots
-- Custom validators
-- Atomic updates
-- Concurrency locking
-
-**Event Emitter (`event-emitter.ts`)**
-
-Publish-subscribe system for orchestration:
-
-```typescript
-interface WorkflowEvent {
-  type: string;                 // e.g., 'task.completed'
-  executionId: string;
-  agentId: string;
-  timestamp: Date;
-  data: any;
-  metadata?: object;
-}
-```
-
-**Capabilities**:
-- Subscribe with filters
-- Priority ordering
-- One-time listeners
-- Event history (1000 max)
-- Metrics tracking
-
----
-
-### Phase 3: n8n Cloud Integration
-
-**Purpose**: Deploy workflows to n8n Cloud, trigger agents, manage credentials
-
-**Files**:
-```
-src/agents/core/
-├── n8n-integration.ts (380 lines)
-├── n8n-workflow-builder.ts (450 lines)
-└── n8n-deployment-orchestrator.ts (420 lines)
-```
-
-**n8n Integration (`n8n-integration.ts`)**
-
-REST client for n8n Cloud API:
-
-```typescript
-const client = new N8nIntegration({
-  apiKey: 'n8n_api_key',
-  baseUrl: 'https://n8n.cloud'
-});
-
-// Deploy workflow
-await client.deployWorkflow(workflowDefinition);
-
-// Execute workflow
-const execution = await client.executeWorkflow('workflow-id', {
-  data: {agentId: 'LOKI', objective: 'Qualify lead'}
-});
-
-// Wait for completion
-await client.waitForExecution(execution.id, timeout);
-```
-
-**Workflow Builder (`n8n-workflow-builder.ts`)**
-
-Fluent API for workflow construction:
-
-```typescript
-const workflow = new N8nWorkflowBuilder()
-  .addWebhookTrigger({url: '/leads', method: 'POST'})
-  .addAgentNode('LOKI', {objective: 'Qualify lead'})
-  .addConditionalNode('Is high value?', {
-    yes: () => new N8nWorkflowBuilder()
-      .addSlackNotification('#sales'),
-    no: () => new N8nWorkflowBuilder()
-      .addPostgresLogging()
-  })
-  .addGoogleSheetsAppend()
-  .build();
-```
-
-**Node Types**:
-- `webhook`: Trigger on HTTP request
-- `cron`: Scheduled trigger
-- `http`: Call elizaOS agent
-- `conditional`: IF/THEN branching
-- `slack`: Send Slack message
-- `postgres`: Log to database
-- `sheets`: Append to Google Sheets
-
-**Deployment Orchestrator (`n8n-deployment-orchestrator.ts`)**
-
-Deploy all 20 workflows:
-
-```typescript
-const orchestrator = new N8nDeploymentOrchestrator();
-
-const results = await orchestrator.deployAllWorkflows([
-  leadIntakeWorkflow,
-  leadEnrichmentWorkflow,
-  followUpWorkflow,
-  // ... 17 more workflows
-]);
-
-// Validate deployments
-await orchestrator.validateDeployments(results);
-
-// Test each workflow
-await orchestrator.testWorkflowExecutions(results);
-
-// Monitor health
-const health = await orchestrator.monitorWorkflowHealth();
-```
-
----
-
-### Phase 4: Monitoring & Alerting
-
-**Purpose**: Real-time metrics, health checking, alert management, SLA validation
-
-**Files**:
-```
-src/agents/core/
-├── monitoring-service.ts (450 lines)
-├── alert-manager.ts (380 lines)
-└── health-checker.ts (380 lines)
-```
-
-**Monitoring Service (`monitoring-service.ts`)**
-
-Metrics collection and aggregation:
-
-```typescript
-// Record agent execution
-await monitoring.recordAgentExecution(
-  'LOKI',
-  'exec-123',
-  true,          // success
-  2500,          // response_time_ms
-);
-
-// Get metrics
-const metrics = await monitoring.getAgentMetrics('LOKI');
-// {
-//   agentId: 'LOKI',
-//   successRate: 96.5,
-//   averageResponseTimeMs: 2450,
-//   p95ResponseTimeMs: 3200,
-//   p99ResponseTimeMs: 4100,
-//   errorRate: 3.5,
-//   uptimePercent: 96.5
-// }
-```
-
-**Metrics Stored**: 24-hour retention (configurable)
-
-**Alert Thresholds**:
-- Success rate: < 85% → Alert
-- Response time: > 10s → Alert
-- Error rate: > 15% → Alert
-
-**Prometheus Export**: Compatible with Grafana dashboards
-
-**Alert Manager (`alert-manager.ts`)**
-
-Alert lifecycle and notifications:
-
-```typescript
-// Create alert
-const alert = await alertManager.createAlert(
-  'High Latency',
-  'LOKI response time > 5s',
-  AlertSeverity.WARNING,
-  'monitoring'
-);
-
-// Alert lifecycle
-OPEN → ACKNOWLEDGED → RESOLVED
-
-// Notifications
-- Slack: #alerts channel with @oncall mention (critical)
-- Email: alerts@company.com
-- PagerDuty: incident creation (critical)
-```
-
-**Alert Rules**:
-
-```typescript
-alertManager.registerRule({
-  id: 'high-latency',
-  name: 'Agent Latency Check',
-  condition: (data) => data.avgResponseTime > 5000,
-  severity: AlertSeverity.WARNING,
-  enabled: true,
-  notificationChannels: ['slack', 'email']
-});
-```
-
-**Health Checker (`health-checker.ts`)**
-
-SLA validation and health scoring:
-
-```typescript
-// Set SLA target
-healthChecker.setSLATarget('LOKI', {
-  successRateMinPercent: 95,
-  responseTimeMaxMs: 5000,
-  uptimeMinPercent: 99.5,
-  errorRateMaxPercent: 5,
-});
-
-// Check health
-const status = await healthChecker.checkAgentHealth('LOKI');
-// {
-//   componentId: 'LOKI',
-//   healthScore: 87,        // 0-100
-//   healthy: true,          // >= 80
-//   degraded: false,        // 50-80
-//   critical: false,        // < 50
-//   checks: {...},
-//   failures: []
-// }
-```
-
-**Health Scoring**:
-- Agents: 40% success + 40% response time + 20% error rate
-- Workflows: 50% success + 50% execution time
-- System: Average of all components
-
-**SLA Report**:
-
-```typescript
-const report = await healthChecker.generateSLAReport(
-  ['LOKI', 'APOLLO'],  // agents
-  ['wf-intake'],       // workflows
-  '24h'
-);
-// {
-//   period: '24h',
-//   reportDate: Date,
-//   agents: [healthStatus],
-//   workflows: [healthStatus],
-//   systemHealth: 92,
-//   breaches: [{component, metric, target, actual}]
-// }
-```
-
----
-
-### Phase 5: Testing & Validation
-
-**Purpose**: Comprehensive test coverage (91.8%), performance validation, E2E testing
-
-**Test Files** (3,429 lines):
-```
-src/agents/core/__tests__/
-├── monitoring-service.unit.test.ts (510 lines, 60 tests)
-├── alert-manager.unit.test.ts (570 lines, 58 tests)
-├── health-checker.unit.test.ts (550 lines, 57 tests)
-├── monitoring.integration.test.ts (399 lines, 42 tests)
-├── monitoring.load.test.ts (420 lines, 17 tests)
-└── monitoring.e2e.test.ts (580 lines, 19 tests)
-```
-
-**Test Coverage**: 91.8% average
-
-**Performance Results**:
-- 50 concurrent metrics: < 1s ✅
-- 100 concurrent workflows: < 2s ✅
-- 500 metric spike: < 10s ✅
-- 1000 consecutive ops: Stable ✅
-- Memory efficiency: < 1MB/100ops ✅
-
----
-
-## Technology Stack
+## 2. Stack atual
 
 ### Frontend
-- **React 18** with TypeScript
-- **Vite** for fast bundling
-- **Tailwind CSS** for styling
-- **shadcn/ui** for components
 
-### Backend
-- **Node.js** runtime
-- **Express** web framework
-- **TypeScript** for type safety
-- **Supabase** (PostgreSQL + pgvector)
-- **Redis** for caching
-- **PM2** for process management
+- React 18.
+- Vite 5.
+- TypeScript.
+- Tailwind.
+- shadcn/Radix UI.
+- React Router.
+- TanStack Query.
+- Supabase JS.
+- Gemini API para chat/embedding/classificação em alguns fluxos.
 
-### Infrastructure
-- **Hostinger KVM4** VPS
-- **Ubuntu 24** OS
-- **Docker** for containerization
-- **n8n Cloud** for workflows
+### Backend local
 
-### Testing
-- **Vitest** test framework
-- **Jest** compatibility
-- **Supertest** for API testing
+- Node.js.
+- Express.
+- Porta padrão: `3002`.
+- Arquivo principal: `api/server.js`.
 
-### Monitoring
-- **Prometheus** metrics
-- **Grafana** dashboards
-- **Slack** notifications
+### Banco e serviços
 
----
+- Supabase.
+- PostgreSQL.
+- Supabase Auth.
+- Supabase Edge Functions.
+- pgvector previsto/usado para busca vetorial.
 
-## Data Flow
+### MCP
 
-### Agent Execution Flow
+- Node puro, stdio.
+- Caminho: `tools/alexandria-claude-mcp/server.mjs`.
+- Não acessa o banco diretamente.
+- Encaminha chamadas para a edge function `alexandria-mcp`.
 
-```
-1. User Input
-   └─ "Qualifique João Silva como lead"
-   
-2. Intent Router
-   ├─ Parse objective
-   ├─ Extract context
-   └─ Select LOKI agent (Sales division)
-   
-3. Autonomous Agent (LOKI)
-   ├─ Planner
-   │  ├─ Get historical context
-   │  └─ Plan tasks: [lookup, analyze, score]
-   ├─ Executor
-   │  ├─ Execute: Lookup João Silva
-   │  ├─ Execute: Analyze engagement
-   │  └─ Execute: Calculate score (parallel)
-   └─ Reporter
-      └─ Consolidate: "Score 8.5/10 - High value lead"
-   
-4. Monitoring
-   ├─ Log execution (2.3s, success)
-   ├─ Update metrics
-   ├─ Check SLA (pass)
-   └─ Record cost ($0.15)
-   
-5. Response
-   └─ Dashboard shows: "João Silva: 8.5/10"
+## 3. Estrutura real do repositório
+
+```txt
+.
+├── src/                         # App React/Vite
+├── api/                         # Backend Express mínimo
+├── supabase/                    # Config e edge functions
+├── tools/alexandria-claude-mcp/ # MCP local para agentes/Claude
+├── code.grupototum.com/         # Segundo app React sobreposto
+├── Dockerfile                   # Build Docker do app principal
+├── docker-compose.yml           # Compose para VPS/local
+├── ecosystem.config.cjs         # PM2
+├── nginx.conf                   # Exemplo Nginx
+├── vercel.json                  # Deploy SPA em Vercel
+└── docs/arquivos diversos
 ```
 
-### Workflow Orchestration Flow
+## 4. Frontend
 
+O app principal é um SPA com rotas protegidas por autenticação.
+
+Rotas relevantes:
+
+- `/alexandria` — página principal da Alexandria.
+- `/hermione` — chat da Hermione.
+- `/alexandria/pops` — portal POPs.
+- `/alexandria/context` — Context Hub.
+- `/alexandria/skills` — Skills Central.
+- `/alexandria/bridges` — conexões/importação sanitizada.
+- `/alexandria/tutorial` — tutorial.
+
+A página `/alexandria` funciona como hub visual. Parte das áreas ainda são atalhos/portais e não necessariamente pipelines completos.
+
+## 5. Backend Express
+
+Arquivo principal: `api/server.js`.
+
+Endpoints existentes:
+
+- `GET /health`
+- `GET /api/health`
+- CRUD básico de agentes em `/api/agents`
+- `POST /api/transcribe`
+- `POST /api/ingest`
+- `POST /api/webhook/:agent`
+- `GET /api/test-agents`
+- `GET /api/outputs`
+- `GET /api/outputs/:file`
+- Endpoints admin:
+  - `POST /api/admin/confirm-user`
+  - `POST /api/admin/confirm-email`
+  - `POST /api/admin/reset-password`
+
+## 6. Alerta de segurança do backend
+
+Os endpoints admin precisam ser protegidos ou removidos antes de exposição pública.
+
+Eles executam ações sensíveis de autenticação, confirmação de e-mail e reset de senha. Se o backend estiver exposto, isso é risco crítico.
+
+Regra canônica:
+
+> Endpoint admin sem autenticação forte não pode ficar exposto em produção.
+
+## 7. Supabase e conhecimento
+
+Hoje existem múltiplas bases/caminhos de conhecimento no código:
+
+### `giles_knowledge`
+
+Usada por:
+
+- `src/services/hermione.ts`
+- `src/services/alexandriaIngestion.ts`
+
+Pontos fortes:
+
+- Tem caminho de ingestão com chunking.
+- Tem geração de embeddings Gemini `text-embedding-004` quando configurado.
+- Tem RPC semântico previsto via `match_knowledge`.
+
+Ponto fraco:
+
+- Não é a base consultada pelo MCP local dos agentes.
+
+### `hermione_artifacts` e tabelas relacionadas
+
+Usadas por:
+
+- `src/services/hermioneArtifacts.ts`
+- `supabase/functions/alexandria-proxy`
+- `supabase/functions/alexandria-mcp`
+- MCP local.
+
+Pontos fortes:
+
+- Modelo mais adequado para governança: fontes, artefatos, versões, status, relações e consultas.
+- Bom para Hermione controlar revisão, publicação e versionamento.
+
+Ponto fraco:
+
+- A busca atual nas edge functions usa `ilike`, não busca vetorial semântica.
+
+### `rag_documents`
+
+Usada por:
+
+- `ingest-supabase.mjs`
+- dashboard Alexandria via `useAlexandria`.
+
+Ponto fraco:
+
+- Script antigo usa embedding mock 1536D.
+- Não deve ser o schema canônico da Alexandria.
+
+## 8. MCP Alexandria
+
+O MCP local expõe três ferramentas:
+
+- `alexandria_search`
+- `alexandria_get_artifact`
+- `alexandria_context_pack`
+
+Fluxo atual:
+
+```txt
+Agente/Claude
+  -> MCP local `alexandria-claude-mcp`
+  -> Edge Function `alexandria-mcp`
+  -> Tabela `hermione_artifacts`
+  -> Busca textual por `ilike`
 ```
-1. n8n Webhook Trigger
-   └─ /webhooks/leads (POST)
-   
-2. Extract Data
-   └─ {name, email, company, ...}
-   
-3. Call LOKI Agent
-   └─ elizaOS: /api/agents/LOKI/execute
-   
-4. Conditional: Is High Value?
-   ├─ YES → APOLLO (deal sizing)
-   ├─ NO  → Archive to database
-   
-5. Log Results
-   └─ Google Sheets append
-   
-6. Notify
-   └─ Slack: #sales
+
+Esse caminho é arquiteturalmente correto, mas precisa consultar a base canônica com busca semântica real.
+
+## 9. Deploy atual
+
+Há estratégias sobrepostas:
+
+1. Dockerfile.
+2. docker-compose.yml.
+3. PM2 via `ecosystem.config.cjs`.
+4. Nginx.
+5. Vercel.
+
+Isso gera divergência.
+
+Arquitetura recomendada para produção VPS:
+
+```txt
+Nginx
+  -> container Alexandria App/API
+  -> Supabase Edge Functions
+  -> Supabase Postgres + pgvector
 ```
 
----
+Vercel pode ser usado apenas para preview/frontend, não como fonte principal de produção enquanto o backend Express existir junto.
 
-## Scaling Considerations
+## 10. Arquitetura canônica recomendada
 
-### Current Capacity
-- **57 agents** operational
-- **20 workflows** orchestrated
-- **50+ executions/day**
-- **500+ concurrent operations**
+A Alexandria deve ser organizada assim:
 
-### Scaling to 1000+ Agents
+```txt
+Pepper
+  -> decide o que é estado operacional vs conhecimento institucional
+  -> consulta Alexandria via MCP/context pack quando precisa de conhecimento durável
 
-**Database Optimization**
-```sql
--- Indexing strategies
-CREATE INDEX idx_execution_agent_time 
-  ON agent_executions(agent_id, created_at DESC);
+Hermione
+  -> governa Alexandria
+  -> classifica, revisa, versiona e publica conhecimento
 
-CREATE INDEX idx_metrics_agent_time 
-  ON agent_metrics(agent_id, recorded_at DESC);
+Alexandria MCP
+  -> porta oficial de consulta para agentes
+  -> entrega context packs por tarefa/agente/domínio
+
+Supabase
+  -> armazena conhecimento canônico
+  -> busca vetorial com pgvector
+  -> logs de consulta e escrita
 ```
 
-**Caching Layer**
-```typescript
-// Redis caching for frequently accessed data
-const agent = await cache.get('agent:LOKI');
-if (!agent) {
-  agent = await db.getAgent('LOKI');
-  await cache.set('agent:LOKI', agent, 3600);
-}
+## 11. Schema canônico recomendado
+
+O modelo canônico deve ser `hermione_*`, porque ele já representa melhor governança de conhecimento:
+
+- `hermione_sources`
+- `hermione_artifacts`
+- `hermione_artifact_versions`
+- `hermione_artifact_sources`
+- `hermione_consultations`
+
+Mas ele precisa receber:
+
+- embeddings 768D em artefatos/fontes;
+- busca vetorial real;
+- status de governança;
+- logs de escrita;
+- migração do conteúdo útil hoje em `giles_knowledge`.
+
+## 12. Regra de separação Pepper vs Alexandria
+
+Pepper guarda estado operacional.
+Alexandria guarda conhecimento institucional.
+
+Vai para Pepper:
+
+- tarefa em andamento;
+- decisão pendente;
+- preferência imediata do Rael;
+- status do dia;
+- fila de execução.
+
+Vai para Alexandria:
+
+- POP;
+- SLA;
+- skill;
+- DNA/Soul de agente;
+- contexto institucional;
+- brief de cliente;
+- decisão durável;
+- framework;
+- playbook;
+- documentação técnica;
+- aprendizado validado.
+
+## 13. Maturidade real
+
+Funcional hoje:
+
+- App React/Vite.
+- Login Supabase.
+- Páginas principais da Alexandria.
+- HermioneChat com consulta a `giles_knowledge`.
+- Ingestão de markdown para `giles_knowledge`.
+- MCP local funcional como ponte.
+- Edge functions `alexandria-mcp` e `alexandria-proxy`.
+- Captura server-side via `alexandria-proxy/capture`.
+
+Incompleto ou divergente:
+
+- Busca semântica não é o caminho padrão do MCP.
+- Múltiplas bases de conhecimento coexistem.
+- Deploy documentado diverge do código.
+- Documentos antigos citam elizaOS/57 agentes sem evidência no runtime atual.
+- Endpoints admin precisam hardening.
+- Chaves públicas estão hardcoded no Dockerfile/Compose.
+
+## 14. Próxima arquitetura alvo
+
+Objetivo:
+
+> Alexandria vira a memória institucional durável da Totum e a camada de expansão cognitiva da Pepper.
+
+Critério de pronto:
+
+1. Uma base canônica de conhecimento.
+2. Todo conhecimento publicado tem embedding.
+3. MCP consulta por busca semântica.
+4. Hermione governa revisão/publicação.
+5. Pepper usa context packs da Alexandria antes de tarefas estratégicas.
+6. Agentes recebem contexto escopado por função.
+7. Segurança mínima aplicada: RLS, secrets fora do repo, endpoints admin protegidos.
+
+## 15. Alexandria como plugin universal
+
+A Alexandria também deve operar como plugin universal de contexto, acessível por qualquer IA ou terminal.
+
+Interfaces oficiais:
+
+- MCP local para Claude Desktop/agentes compatíveis.
+- HTTP API via Supabase Edge Function `alexandria-mcp`.
+- CLI em `tools/alexandria-cli`.
+- Futuramente SDK JS/TS e Python.
+
+Fluxo:
+
+```txt
+IA / terminal / app / central de agentes
+  -> Alexandria Plugin API
+  -> context pack
+  -> fontes governadas pela Hermione
+  -> execução por Pepper/agente
 ```
 
-**Load Balancing**
-```
-┌─────────────┐
-│   Nginx     │ (Load Balancer)
-├─────────────┤
-│ Node #1     │ (3000)
-│ Node #2     │ (3000)
-│ Node #3     │ (3000)
-└─────────────┘
-```
+Documento canônico: `ALEXANDRIA_UNIVERSAL_PLUGIN.md`.
 
-**Distributed Execution**
-```
-Queue (Redis)
-  ├─ Task-1
-  ├─ Task-2
-  └─ Task-N
-     │
-     ├─ Worker-1 (LOKI)
-     ├─ Worker-2 (APOLLO)
-     └─ Worker-N (...)
+## 16. Assimilação bidirecional de memórias
+
+A Alexandria não deve apenas entregar memórias/contexto para IAs conectadas.
+
+Ela também deve receber memórias dessas IAs, organizar, deduplicar, detectar obsolescência, marcar conflitos e submeter à curadoria da Hermione.
+
+Fluxo alvo:
+
+```txt
+IA conectada
+  -> consome context pack da Alexandria
+  -> executa tarefa
+  -> exporta memórias/aprendizados/lacunas
+  -> Alexandria sanitiza e classifica
+  -> dedupe + obsolescência + conflito
+  -> Hermione revisa
+  -> approved/rejected/superseded/deprecated/conflict
 ```
 
----
+Regra central:
 
-## Security Architecture
+> Memória importada é matéria-prima. Conhecimento aprovado é produto final.
 
-### Authentication
-- JWT tokens for API access
-- Service role keys for backend
-- Rate limiting per agent (100 req/min)
-- CORS configured for trusted origins
-
-### Data Protection
-- TLS/HTTPS for all transport
-- Supabase encryption at rest
-- Row-level security (RLS) policies
-- Audit logs for all operations
-
-### Access Control
-```typescript
-// Role-based access control
-interface UserRole {
-  user_id: string;
-  divisions: string[];      // Can access these divisions
-  agents: string[];         // Can execute these agents
-  workflows: string[];      // Can trigger these workflows
-  can_modify_rules: boolean;
-}
-```
-
----
-
-## Future Architecture
-
-### Version 2
-- Web dashboard for real-time monitoring
-- Advanced analytics and reporting
-- ML-based optimization
-- Custom metric definitions
-
-### Version 3+
-- Multi-region deployment
-- Distributed agent execution
-- Real-time agent collaboration
-- Enterprise SSO integration
-
----
-
-## References
-
-- See QUICK_START.md for getting started
-- See API_REFERENCE.md for endpoint documentation
-- See OPERATIONS.md for deployment and maintenance
-- See test files for implementation examples
-
----
-
-**Architecture Version**: 1.0
-**Last Updated**: 2026-04-14
-**Status**: Production Ready ✅
+Documento canônico: `ALEXANDRIA_MEMORY_ASSIMILATION_PROTOCOL.md`.

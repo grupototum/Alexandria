@@ -1,0 +1,17 @@
+{
+  "name": "@totum-os/alexandria-cli",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "CLI universal para consultar a Alexandria, camada de contexto da Totum.",
+  "bin": {
+    "alexandria": "./cli.mjs"
+  },
+  "scripts": {
+    "check": "node --check cli.mjs",
+    "start": "node cli.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
