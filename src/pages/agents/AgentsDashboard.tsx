@@ -5,43 +5,11 @@ import { usePageTransition } from "@/hooks/usePageTransition";
 import { PageSkeleton } from "@/components/loading";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { EmptyState, MetricCard, PageHeader, Toolbar } from "@/components/ui/patterns";
-import {
-  Bot, Zap, Users, TrendingUp, Search, LayoutGrid, List, BarChart3,
-  Plus, FileText,
-} from "lucide-react";
-import {
-  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
-} from "recharts";
+import { EmptyState, PageHeader, Toolbar } from "@/components/ui/patterns";
+import { Bot, Search, Plus } from "lucide-react";
 import type { Agent } from "@/hooks/useAgents";
-import { AgentList } from "./components/AgentList";
-import { AgentGraph } from "./components/AgentGraph";
-import { AgentStats } from "./components/AgentStats";
 
-/* ─── types ─── */
-interface Interaction {
-  agent_name: string;
-  date: string;
-  interactions: number;
-}
-
-type ViewMode = "list" | "graph" | "stats";
-
-/* ─── constants ─── */
 const CATEGORIES = ["Todos", "ADM", "Comercial", "Criação", "Técnico"];
-const AGENT_COLORS: Record<string, string> = {
-  Controlador: "hsl(28, 90%, 56%)",
-  Cartógrafo: "hsl(200, 80%, 55%)",
-  Vendedor: "hsl(140, 60%, 45%)",
-  "Diretor de Arte": "hsl(280, 70%, 60%)",
-  "Especialista CRM": "hsl(340, 70%, 55%)",
-  Orquestrador: "hsl(45, 90%, 55%)",
-  Atendente: "hsl(170, 60%, 45%)",
-  "Gestor de Tráfego": "hsl(220, 70%, 55%)",
-};
 
 const anim = (i: number) => ({
   initial: { opacity: 0, y: 16 },
@@ -49,17 +17,13 @@ const anim = (i: number) => ({
   transition: { delay: i * 0.06, duration: 0.35 },
 });
 
-/* ─── component ─── */
 export default function AgentsDashboard() {
   const navigate = useNavigate();
   const pageTransition = usePageTransition();
   const [agents, setAgents] = useState<Agent[]>([]);
-  const [interactions, setInteractions] = useState<Interaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Todos");
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
-  const [selectedAgentId, setSelectedAgentId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     let isMounted = true;
@@ -67,15 +31,11 @@ export default function AgentsDashboard() {
 
     async function load() {
       try {
-        const [agRes, intRes] = await Promise.all([
-          supabase.from("agents").select("*"),
-          supabase.from("agent_interactions").select("*").order("date"),
-        ]);
-
+        const { data } = await supabase.from("agents").select("*");
         if (!isMounted) return;
 
-        if (agRes.data) {
-          const typedAgents = (agRes.data || []).map(agent => ({
+        if (data) {
+          const typedAgents = data.map(agent => ({
             id: agent.id,
             name: agent.name,
             role: agent.role,
@@ -95,7 +55,6 @@ export default function AgentsDashboard() {
           }));
           setAgents(typedAgents as Agent[]);
         }
-        if (intRes.data) setInteractions(intRes.data as Interaction[]);
       } catch (error) {
         console.error("Erro ao carregar dados dos agentes:", error);
       } finally {
@@ -111,7 +70,7 @@ export default function AgentsDashboard() {
         if (!isMounted) return;
         supabase.from("agents").select("*").then(({ data }) => {
           if (data && isMounted) {
-            const typedAgents = (data || []).map(agent => ({
+            const typedAgents = data.map(agent => ({
               id: agent.id,
               name: agent.name,
               role: agent.role,
@@ -132,12 +91,6 @@ export default function AgentsDashboard() {
             setAgents(typedAgents as Agent[]);
           }
         });
-      })
-      .on("postgres_changes" as never, { event: "*", schema: "public", table: "agent_interactions" }, () => {
-        if (!isMounted) return;
-        supabase.from("agent_interactions").select("*").order("date").then(({ data }) => {
-          if (data && isMounted) setInteractions(data as Interaction[]);
-        });
       });
     channel.subscribe();
 
@@ -154,7 +107,6 @@ export default function AgentsDashboard() {
       : 'processing';
   }
 
-  /* derived */
   const filtered = useMemo(() => {
     return agents.filter((a) => {
       const matchSearch = a.name.toLowerCase().includes(search.toLowerCase());
@@ -162,40 +114,6 @@ export default function AgentsDashboard() {
       return matchSearch && matchCat;
     });
   }, [agents, search, category]);
-
-  const totalAgents = agents.length;
-  const totalWorkflows = agents.reduce((s, a) => s + (a.tasks_completed || 0), 0);
-  const avgSuccess = agents.length
-    ? Math.round(agents.reduce((s, a) => s + (a.success_rate || 0), 0) / agents.length)
-    : 0;
-
-  /* chart data */
-  const chartData = useMemo(() => {
-    const map: Record<string, Record<string, number>> = {};
-    interactions.forEach(({ agent_name, date, interactions: count }) => {
-      if (!map[date]) map[date] = {};
-      map[date][agent_name] = count;
-    });
-    const dayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-    return Object.entries(map)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([date, vals]) => {
-        const d = new Date(date + "T12:00:00");
-        return { day: dayNames[d.getDay()], ...vals };
-      });
-  }, [interactions]);
-
-  const stats = [
-    { label: "Total de Agentes", value: totalAgents, emoji: "🤖" },
-    { label: "Workflows Ativos", value: totalWorkflows, emoji: "⚡" },
-    { label: "Clientes Atendidos", value: 156, emoji: "👥" },
-    { label: "Taxa de Sucesso", value: `${avgSuccess}%`, emoji: "📈" },
-  ];
-
-  const handleAgentClick = (agent: Agent) => {
-    setSelectedAgentId(agent.id);
-    navigate(`/agents/${agent.id}`);
-  };
 
   if (loading) {
     return (
@@ -210,185 +128,116 @@ export default function AgentsDashboard() {
   return (
     <AppLayout>
       <motion.main {...pageTransition} className="min-h-screen bg-background" aria-label="Agents dashboard">
-        <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
+        <div className="max-w-[920px] mx-auto p-4 sm:p-6 space-y-12">
 
           {/* ─── Header ─── */}
           <motion.div {...anim(0)}>
             <PageHeader
-              eyebrow="Rede operacional"
+              eyebrow="REDE OPERACIONAL"
               title="Totum Agents"
-              description="Gerencie agentes, workflows, performance e conversas de IA em uma central única."
+              description="Sua equipe de inteligência artificial. Gerencie as personalidades, skills e DNA de cada agente do seu ecossistema."
               icon={Bot}
               actions={
-                <>
-              <Button
-                onClick={() => navigate('/agents/new')}
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Agente
-              </Button>
-              <Button variant="secondary">
-                <Plus className="w-4 h-4 mr-2" />
-                Novo Workflow
-              </Button>
-              <Button variant="outline" className="border-border bg-card">
-                <Users className="w-4 h-4 mr-2" />
-                Adicionar Cliente
-              </Button>
-              <Button variant="outline" className="border-border bg-card">
-                <FileText className="w-4 h-4 mr-2" />
-                Ver Relatórios
-              </Button>
-                </>
+                <button
+                  onClick={() => navigate('/agents/new')}
+                  className="button-primary"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Agente
+                </button>
               }
             />
           </motion.div>
 
-          {/* ─── Stats ─── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map((s, i) => {
-              const icons = [Bot, Zap, Users, TrendingUp];
-              return (
-              <motion.div key={s.label} {...anim(i + 1)}>
-                <MetricCard label={s.label} value={s.value} icon={icons[i]} tone={i === 1 ? "amber" : i === 2 ? "sky" : i === 3 ? "emerald" : "primary"} />
-              </motion.div>
-            )})}
-          </div>
-
-          {/* ─── Filters & View Toggle ─── */}
-          <motion.div {...anim(5)}>
-          <Toolbar>
-            <div className="flex gap-2 flex-wrap">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setCategory(cat)}
-                  className={`px-3 py-1.5 text-xs font-medium transition-all border ${
-                    category === cat
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-card text-muted-foreground border-border hover:bg-muted"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex gap-2 items-center w-full lg:w-auto">
-              <div className="relative flex-1 lg:w-56">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  id="agent-search"
-                  name="agent-search"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Buscar agente..."
-                  className="pl-9 bg-card border-border h-9 text-sm"
-                />
-              </div>
-
-              <div className="flex bg-card border border-border p-1">
-                {([
-                  { mode: "list" as ViewMode, icon: List, title: "Vista em Lista" },
-                  { mode: "graph" as ViewMode, icon: LayoutGrid, title: "Vista em Grafo" },
-                  { mode: "stats" as ViewMode, icon: BarChart3, title: "Vista de Estatísticas" },
-                ] as const).map(({ mode, icon: Icon, title }) => (
+          {/* ─── Filters ─── */}
+          <motion.div {...anim(1)}>
+            <Toolbar>
+              <div className="flex gap-2 flex-wrap">
+                {CATEGORIES.map((cat) => (
                   <button
-                    key={mode}
-                    onClick={() => setViewMode(mode)}
-                    className={`p-2 transition-all ${
-                      viewMode === mode
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
+                    key={cat}
+                    onClick={() => setCategory(cat)}
+                    className={`badge-krea px-4 py-2 text-xs transition-all ${
+                      category === cat
+                        ? "bg-white text-black opacity-100"
+                        : "opacity-70 hover:opacity-100 cursor-pointer"
                     }`}
-                    title={title}
                   >
-                    <Icon className="w-4 h-4" />
+                    {cat}
                   </button>
                 ))}
               </div>
-            </div>
-          </Toolbar>
-          </motion.div>
 
-          {/* ─── Usage Chart — full width horizontal ─── */}
-          <motion.div {...anim(6)}>
-            <Card className="border-border bg-card w-full">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium text-foreground">
-                  Uso dos Agentes (7 dias)
-                </CardTitle>
-                <p className="text-[10px] text-muted-foreground">Interações por agente</p>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="h-[200px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData}>
-                      <XAxis
-                        dataKey="day"
-                        tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-                        axisLine={false}
-                        tickLine={false}
-                      />
-                      <YAxis
-                        tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
-                        axisLine={false}
-                        tickLine={false}
-                        width={30}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          background: "hsl(var(--card))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: 8,
-                          fontSize: 12,
-                          color: "hsl(var(--foreground))",
-                        }}
-                        labelStyle={{ color: "hsl(var(--muted-foreground))" }}
-                      />
-                      <Legend wrapperStyle={{ fontSize: 10, paddingTop: 8 }} />
-                      {agents.slice(0, 5).map((agent) => (
-                        <Line
-                          key={agent.name}
-                          type="monotone"
-                          dataKey={agent.name}
-                          stroke={AGENT_COLORS[agent.name] ?? "hsl(var(--muted-foreground))"}
-                          strokeWidth={2}
-                          dot={false}
-                          activeDot={{ r: 4 }}
-                        />
-                      ))}
-                    </LineChart>
-                  </ResponsiveContainer>
+              <div className="flex gap-2 items-center w-full lg:w-auto">
+                <div className="relative flex-1 lg:w-64">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#737373]" />
+                  <input
+                    id="agent-search"
+                    name="agent-search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Buscar agente..."
+                    className="input-krea pl-9 h-10 w-full"
+                  />
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </Toolbar>
           </motion.div>
 
-          {/* ─── Agent Views — full width ─── */}
-          <motion.div {...anim(7)}>
+          {/* ─── Agent Tree / Cards ─── */}
+          <motion.div {...anim(2)}>
             {filtered.length === 0 ? (
               <EmptyState
                 icon={Bot}
                 title="Nenhum agente encontrado"
-                description="Ajuste a busca, mude os filtros ou cadastre um novo agente para ativar a rede."
+                description="Ajuste a busca ou cadastre um novo agente para sua rede."
                 actionLabel="Novo Agente"
                 onAction={() => navigate("/agents/new")}
               />
-            ) : viewMode === "list" ? (
-              <AgentList
-                agents={filtered}
-                onAgentClick={handleAgentClick}
-                selectedAgentId={selectedAgentId}
-              />
-            ) : viewMode === "graph" ? (
-              <AgentGraph
-                agents={filtered}
-                onAgentClick={handleAgentClick}
-                selectedAgentId={selectedAgentId}
-              />
             ) : (
-              <AgentStats agents={filtered} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filtered.map((agent) => (
+                  <div
+                    key={agent.id}
+                    className="card-krea flex flex-col justify-between hover:-translate-y-1 transition-transform duration-300"
+                  >
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3">
+                          <span className="text-3xl" role="img" aria-label={agent.name}>
+                            {agent.emoji}
+                          </span>
+                          <div>
+                            <h3 className="text-[#fafafa] font-medium text-[15px]">{agent.name}</h3>
+                            <span className="text-[#a3a3a3] text-[12px] capitalize tracking-wide">{agent.category}</span>
+                          </div>
+                        </div>
+                        <div className={`w-2 h-2 rounded-full ${agent.status === 'online' ? 'bg-[#10b981]' : 'bg-[#f87171]'}`} />
+                      </div>
+
+                      <div className="text-[#a3a3a3] text-[13px] leading-relaxed line-clamp-3">
+                        {agent.role || "Nenhum DNA ou descrição configurada para este agente ainda. Adicione uma persona para otimizar suas interações."}
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 pt-2 border-t border-[#ffffff0f]">
+                        <span className="badge-krea text-[10px]">Linguagem</span>
+                        {agent.category.toLowerCase().includes("adm") && <span className="badge-krea text-[10px]">Dados</span>}
+                        {agent.category.toLowerCase().includes("comercial") && <span className="badge-krea text-[10px]">CRM</span>}
+                        {agent.category.toLowerCase().includes("criação") && <span className="badge-krea text-[10px]">Visão</span>}
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                      <button
+                        onClick={() => handleAgentClick(agent)}
+                        className="button-secondary w-full text-xs"
+                      >
+                        Acessar Agente
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </motion.div>
 
@@ -396,4 +245,8 @@ export default function AgentsDashboard() {
       </motion.main>
     </AppLayout>
   );
+
+  function handleAgentClick(agent: Agent) {
+    navigate(`/agents/${agent.id}`);
+  }
 }
