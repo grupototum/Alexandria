@@ -151,7 +151,7 @@ export const useTasks = () => {
     setError(null);
 
     try {
-      let query = (supabase as any)
+      let query = supabase
         .from('tarefas')
         .select('*, subtarefas(*)')
         .order('created_at', { ascending: false });
@@ -196,7 +196,7 @@ export const useTasks = () => {
         tags: tarefa.tags || [],
       };
 
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('tarefas')
         .insert([dbData])
         .select()
@@ -230,7 +230,7 @@ export const useTasks = () => {
       if (updates.deadline    !== undefined) dbUpdates.deadline = updates.deadline;
       if (updates.tags        !== undefined) dbUpdates.tags = updates.tags;
 
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('tarefas')
         .update(dbUpdates)
         .eq('id', id);
@@ -250,7 +250,7 @@ export const useTasks = () => {
 
   const deletarTarefa = useCallback(async (id: string): Promise<boolean> => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('tarefas')
         .delete()
         .eq('id', id);
@@ -296,7 +296,7 @@ export const useTasks = () => {
 
   // ── Comentários ─────────────────────────────────────────────────────────────
   const fetchComentarios = useCallback(async (tarefaId: string): Promise<Comentario[]> => {
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from('comentarios_tarefa')
       .select('*')
       .eq('tarefa_id', tarefaId)
@@ -319,7 +319,7 @@ export const useTasks = () => {
     autorId?: string
   ): Promise<Comentario | null> => {
     try {
-      const { data, error } = await (supabase as any)
+      const { data, error } = await supabase
         .from('comentarios_tarefa')
         .insert({
           tarefa_id: tarefaId,
@@ -341,7 +341,7 @@ export const useTasks = () => {
 
   const removerComentario = useCallback(async (comentarioId: string): Promise<boolean> => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('comentarios_tarefa')
         .delete()
         .eq('id', comentarioId);
@@ -360,7 +360,7 @@ export const useTasks = () => {
     titulo: string
   ): Promise<boolean> => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('subtarefas')
         .insert({ tarefa_id: tarefaId, titulo, concluida: false });
 
@@ -384,7 +384,7 @@ export const useTasks = () => {
       // If concluida not passed, fetch current state and flip it
       let newValue = concluida;
       if (newValue === undefined) {
-        const { data } = await (supabase as any)
+        const { data } = await supabase
           .from('subtarefas')
           .select('concluida')
           .eq('id', subtarefaId)
@@ -392,7 +392,7 @@ export const useTasks = () => {
         newValue = !data?.concluida;
       }
 
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('subtarefas')
         .update({ concluida: newValue, updated_at: new Date().toISOString() })
         .eq('id', subtarefaId);
@@ -412,7 +412,7 @@ export const useTasks = () => {
     subtarefaId: string
   ): Promise<boolean> => {
     try {
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('subtarefas')
         .delete()
         .eq('id', subtarefaId);

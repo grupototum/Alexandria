@@ -78,22 +78,11 @@ export const navigationSections: NavSection[] = [
       { label: "Escritório", icon: Building2, path: "/office" },
     ],
   },
-
   {
     id: "ia",
     label: "IA",
     items: [],
     groups: [
-      {
-        id: "ia-command",
-        label: "Command Center",
-        path: "/ai-command-center",
-        icon: MessageSquareText,
-        subItems: [
-          { label: "Conversa IA", path: "/ai-command-center", icon: MessageSquareText },
-          { label: "Geradores", path: "/ai-command-center?tab=generators", icon: WandSparkles },
-        ],
-      },
       {
         id: "ia-agentes",
         label: "Agentes",
@@ -101,29 +90,10 @@ export const navigationSections: NavSection[] = [
         icon: Bot,
         subItems: [
           { label: "Painel de Agentes", path: "/agents", icon: Bot },
-          { label: "Radar", path: "/ai-command-center?agent=radar", emoji: "🔍" },
-          { label: "Gestor", path: "/ai-command-center?agent=gestor", emoji: "📊" },
-          { label: "Social", path: "/ai-command-center?agent=social", emoji: "📱" },
-          { label: "Atendente", path: "/ai-command-center?agent=atendente", emoji: "🎧" },
-          { label: "SDR", path: "/ai-command-center?agent=sdr", emoji: "🤝" },
-          { label: "Kimi", path: "/ai-command-center?agent=kimi", emoji: "🤖" },
-        ],
-      },
-      {
-        id: "ia-ferramentas",
-        label: "Ferramentas IA",
-        path: "/alexandria/openclaw",
-        icon: Workflow,
-        subItems: [
-          { label: "OpenClaw", path: "/alexandria/openclaw", icon: Cloud },
-          { label: "Suna Agent", path: "/suna", icon: Cpu },
-          { label: "Claude Code", path: "/claude-code", icon: Terminal },
-          { label: "Cráudio Codete", path: "/craudio-codete", icon: Cpu },
         ],
       },
     ],
   },
-
   {
     id: "alexandria",
     label: "Alexandria",
@@ -147,23 +117,11 @@ export const navigationSections: NavSection[] = [
       },
     ],
   },
-
   {
     id: "operacao",
     label: "Operação",
     items: [],
     groups: [
-      {
-        id: "operacao-fluxo",
-        label: "Fluxo de Trabalho",
-        path: "/tasks",
-        icon: KanbanSquare,
-        subItems: [
-          { label: "Tarefas", path: "/tasks", icon: KanbanSquare },
-          { label: "Conteúdo", path: "/content", icon: GitBranch },
-          { label: "Plano de Ação", path: "/action-plan", icon: CheckSquare },
-        ],
-      },
       {
         id: "operacao-clientes",
         label: "Clientes",
@@ -176,7 +134,6 @@ export const navigationSections: NavSection[] = [
       },
     ],
   },
-
   {
     id: "sistema",
     label: "Sistema",
@@ -200,7 +157,6 @@ export const navigationSections: NavSection[] = [
         icon: ShieldCheck,
         subItems: [
           { label: "Deploy", path: "/deployment", icon: ShieldCheck },
-          { label: "Hosting", path: "/hosting", icon: Network },
           { label: "Mapa do Sistema", path: "/diagrama-sistemas", icon: LayoutTemplate },
           { label: "Documentação", path: "/docs", icon: BookMarked },
         ],

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import type { Agent } from '@/types/agent';
@@ -240,5 +240,7 @@ export function useDashboardData(): DashboardData {
     };
   }, [refetchVps, refetchApps, refetchAgents, refetchCosts, refetchActivities, refetchMex, refetchGithub, showToast]);
 
-  return { vps, apps, agents, costs, activities, mex, github, loading, realtimeConnected };
+  return React.useMemo(() => ({
+    vps, apps, agents, costs, activities, mex, github, loading, realtimeConnected
+  }), [vps, apps, agents, costs, activities, mex, github, loading, realtimeConnected]);
 }

@@ -17,12 +17,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-interface UserWithRoles {
-  id: string;
-  email: string;
-  created_at: string;
-  roles: string[];
-}
+import { useAdminRoles, UserWithRoles } from "@/hooks/useAdminRoles";
 
 const ROLE_CONFIG = {
   admin: { label: "Admin", icon: Crown, color: "text-amber-500" },
@@ -31,88 +26,12 @@ const ROLE_CONFIG = {
 } as const;
 
 export default function AdminPanel() {
-  const [users, setUsers] = useState<UserWithRoles[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { users, loading, actionLoading, fetchUsers, addRole, removeRole } = useAdminRoles();
   const [expanded, setExpanded] = useState(true);
-  const [actionLoading, setActionLoading] = useState<string | null>(null);
-
-  const fetchUsers = async () => {
-    setLoading(true);
-    try {
-      // Fetch all users via edge function or RPC
-      // Since we can't query auth.users from client, we'll use the roles table
-      // and show users that have roles assigned
-      const { data: rolesData, error: rolesError } = await supabase
-        .from("user_roles")
-        .select("*");
-
-      if (rolesError) throw rolesError;
-
-      // Group roles by user_id
-      const userMap = new Map<string, string[]>();
-      rolesData?.forEach((r: { user_id: string; role: string }) => {
-        const existing = userMap.get(r.user_id) || [];
-        existing.push(r.role);
-        userMap.set(r.user_id, existing);
-      });
-
-      // We'll show user_ids with their roles
-      // For email we need a profiles table or edge function
-      // For now, show user_id and roles
-      const userList: UserWithRoles[] = Array.from(userMap.entries()).map(
-        ([id, roles]) => ({
-          id,
-          email: "", // Will be populated if we add profiles
-          created_at: "",
-          roles,
-        })
-      );
-
-      setUsers(userList);
-    } catch (err: unknown) {
-      toast.error("Erro ao carregar usuários: " + (err instanceof Error ? err.message : 'Erro desconhecido'));
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     fetchUsers();
-  }, []);
-
-  const addRole = async (userId: string, role: string) => {
-    setActionLoading(`${userId}-add-${role}`);
-    try {
-      const { error } = await supabase
-        .from("user_roles")
-        .insert({ user_id: userId, role: role as 'admin' | 'moderator' | 'user' });
-      if (error) throw error;
-      toast.success(`Role "${role}" adicionada com sucesso.`);
-      fetchUsers();
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Erro desconhecido');
-    } finally {
-      setActionLoading(null);
-    }
-  };
-
-  const removeRole = async (userId: string, role: string) => {
-    setActionLoading(`${userId}-rm-${role}`);
-    try {
-      const { error } = await supabase
-        .from("user_roles")
-        .delete()
-        .eq("user_id", userId)
-        .eq("role", role as 'admin' | 'moderator' | 'user');
-      if (error) throw error;
-      toast.success(`Role "${role}" removida.`);
-      fetchUsers();
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Erro desconhecido');
-    } finally {
-      setActionLoading(null);
-    }
-  };
+  }, [fetchUsers]);
 
   return (
     <motion.div

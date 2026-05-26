@@ -47,12 +47,12 @@ export function track(event: string, props?: EventProps): void {
     }
 
     if (isDebug()) {
-      // eslint-disable-next-line no-console
+       
       console.debug("[analytics]", event, props ?? {});
     }
   } catch (err) {
     if (isDebug()) {
-      // eslint-disable-next-line no-console
+       
       console.warn("[analytics] failed to track", event, err);
     }
   }
