@@ -32,11 +32,9 @@ export default function AppSidebarContent({ onNavigate }: Props) {
     <div className="flex h-full flex-col bg-sidebar/95 backdrop-blur-2xl">
       {/* Logo */}
       <div className="flex h-16 shrink-0 items-center gap-2.5 border-b border-sidebar-border/70 px-5">
-        <div className="grid h-9 w-9 place-items-center rounded-full bg-primary text-white shadow-[0_18px_36px_-28px_rgba(0,113,227,0.9)]">
-          <span className="text-sm font-semibold">T</span>
-        </div>
-        <span className="font-['SF_Pro_Display','SF_Pro_Icons','Helvetica_Neue',Helvetica,Arial,sans-serif] text-lg font-semibold tracking-[-0.02em] text-sidebar-foreground">
-          Totum OS
+        <img src="/logo.png" alt="Alexandria" className="h-8 w-8 object-contain" />
+        <span className="font-['geomanist'] text-[18px] font-medium tracking-[-0.02em] text-[#ffffff]">
+          Alexandria
         </span>
       </div>
 
@@ -51,7 +49,7 @@ export default function AppSidebarContent({ onNavigate }: Props) {
           className="flex w-full items-center gap-2 rounded-full border border-sidebar-border/80 bg-sidebar-accent/50 px-3 py-2 text-sidebar-foreground/45 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
         >
           <Search className="w-3.5 h-3.5 shrink-0" />
-          <span className="text-[12px] flex-1 text-left">Buscar no Totum OS...</span>
+          <span className="text-[12px] flex-1 text-left">Buscar na Alexandria...</span>
           <kbd className="rounded-full border border-sidebar-border px-2 py-0.5 text-[10px] opacity-40">⌘K</kbd>
         </button>
       </div>

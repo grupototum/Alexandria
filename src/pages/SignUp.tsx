@@ -69,7 +69,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a] px-4 py-12">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0e0918] px-4 py-12">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -85,17 +85,17 @@ export default function SignUp() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 w-full max-w-md"
       >
-        <div className="p-8 sm:p-10 bg-[#171717] border border-white/10 rounded-[4px]">
+        <div className="p-8 sm:p-10 card-n8n">
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center gap-3 mb-3">
               <img
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310419663032548632/bvUyrRtbH5C9bH6F2BSBEC/totum-icon_c601ad50.png"
-                alt="Totum"
-                className="w-10 h-10 rounded-lg"
+                src="/logo.png"
+                alt="Alexandria"
+                className="w-10 h-10 object-contain"
               />
-              <span className="font-display text-[20px] font-medium tracking-tight text-[#fafafa]">
-                Totum OS
+              <span className="font-['geomanist'] text-[20px] font-medium tracking-tight text-[#ffffff]">
+                Alexandria
               </span>
             </div>
             <span className="text-[11px] text-[#737373] uppercase tracking-wider">Central de Agentes IA</span>
@@ -106,8 +106,8 @@ export default function SignUp() {
             <h1 className="font-display text-[28px] sm:text-[32px] font-medium tracking-tight text-[#fafafa] mb-2">
               Criar conta
             </h1>
-            <p className="text-[13px] text-[#a3a3a3]">
-              Cadastre-se para acessar os agentes de IA da Totum
+            <p className="text-[13px] text-muted-foreground">
+              Cadastre-se para acessar os agentes de IA da Alexandria
             </p>
           </div>
 
@@ -125,7 +125,7 @@ export default function SignUp() {
                 placeholder="Seu nome"
                 disabled={loading}
                 autoComplete="name"
-                className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] ${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                className={`${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
               />
               {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
             </div>
@@ -143,7 +143,7 @@ export default function SignUp() {
                 placeholder="seu@email.com"
                 disabled={loading}
                 autoComplete="email"
-                className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] ${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                className={`${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
               />
               {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
             </div>
@@ -162,7 +162,7 @@ export default function SignUp() {
                   placeholder="Mínimo 6 caracteres"
                   disabled={loading}
                   autoComplete="new-password"
-                  className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] pr-11 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                  className={`pr-11 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 />
                 <button
                   type="button"
@@ -188,7 +188,7 @@ export default function SignUp() {
                 placeholder="Repita a senha"
                 disabled={loading}
                 autoComplete="new-password"
-                className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] ${errors.confirmPassword ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                className={`${errors.confirmPassword ? "border-destructive focus-visible:ring-destructive" : ""}`}
               />
               {errors.confirmPassword && (
                 <p className="text-xs text-destructive mt-1">{errors.confirmPassword}</p>
@@ -209,7 +209,7 @@ export default function SignUp() {
               size="lg"
               onClick={handleGoogleSignIn}
               disabled={googleLoading || loading}
-              className="w-full bg-[#171717] border-white/10 text-[#fafafa] hover:bg-[#262626]"
+              className="w-full"
             >
               {googleLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -225,7 +225,7 @@ export default function SignUp() {
             </Button>
 
             {/* Submit */}
-            <Button type="submit" size="lg" disabled={loading} className="w-full bg-[#ffffff] text-[#0a0a0a] hover:bg-[#e5e5e5]">
+            <Button type="submit" size="lg" disabled={loading} className="w-full">
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {loading ? "Criando conta..." : "Criar conta"}
             </Button>

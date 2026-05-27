@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: 69b93d10cf0eca1290532e5c501d76239ea8e142bdd57d8d8697bf77258aaa35
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/discord.md
 ---
 

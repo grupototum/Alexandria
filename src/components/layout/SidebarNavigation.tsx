@@ -77,11 +77,11 @@ export default function SidebarNavigation({
         <button
           onClick={() => onNavigate(item.path)}
           className={cn(
-            "relative flex w-full items-center gap-3 rounded-[4px] border border-transparent transition-all duration-200",
+            "relative flex w-full items-center gap-3 rounded-[8px] border border-transparent transition-all duration-200",
             collapsed ? "justify-center px-2 py-2" : "px-3 py-2",
             active
-              ? "bg-[#262626] text-[#fafafa]"
-              : "text-[#a3a3a3] hover:bg-[#171717] hover:text-[#fafafa]",
+              ? "bg-gradient-to-b from-[#a06ff6] to-[#6b21ef] text-[#ffffff]"
+              : "text-[#9ca3af] hover:bg-white/10 hover:text-[#ffffff]",
           )}
         >
           {active && !collapsed ? (
@@ -124,10 +124,10 @@ export default function SidebarNavigation({
           <button
             onClick={() => onNavigate(path)}
             className={cn(
-              "flex w-full items-center justify-center rounded-[4px] border border-transparent px-2 py-2 transition-all duration-200",
+              "flex w-full items-center justify-center rounded-[8px] border border-transparent px-2 py-2 transition-all duration-200",
               active
-                ? "bg-[#262626] text-[#fafafa]"
-                : "text-[#a3a3a3] hover:bg-[#171717] hover:text-[#fafafa]",
+                ? "bg-gradient-to-b from-[#a06ff6] to-[#6b21ef] text-[#ffffff]"
+                : "text-[#9ca3af] hover:bg-white/10 hover:text-[#ffffff]",
             )}
           >
             <Icon className="h-[18px] w-[18px]" />
@@ -145,10 +145,10 @@ export default function SidebarNavigation({
               <button
                 onClick={() => onNavigate(path)}
                 className={cn(
-                  "relative flex flex-1 items-center gap-2.5 rounded-[4px] border border-transparent px-3 py-2 transition-all duration-200",
+                  "relative flex flex-1 items-center gap-2.5 rounded-[8px] border border-transparent px-3 py-2 transition-all duration-200",
                   active
-                    ? "bg-[#262626] text-[#fafafa]"
-                    : "text-[#a3a3a3] hover:bg-[#171717] hover:text-[#fafafa]",
+                    ? "bg-gradient-to-b from-[#a06ff6] to-[#6b21ef] text-[#ffffff]"
+                    : "text-[#9ca3af] hover:bg-white/10 hover:text-[#ffffff]",
                 )}
               >
                 <Icon className={cn("h-[18px] w-[18px] shrink-0", active ? "text-[#fafafa]" : "text-[#a3a3a3]")} />
@@ -166,10 +166,10 @@ export default function SidebarNavigation({
                       <button
                         onClick={() => onNavigate(subItem.path)}
                         className={cn(
-                          "flex w-full items-center gap-2 rounded-[4px] px-3 py-1.5 text-[14px] transition-all duration-200",
+                          "flex w-full items-center gap-2 rounded-[8px] px-3 py-1.5 text-[14px] transition-all duration-200",
                           subActive
-                            ? "bg-[#262626] text-[#fafafa]"
-                            : "text-[#a3a3a3] hover:bg-[#171717] hover:text-[#fafafa]",
+                            ? "bg-gradient-to-b from-[#a06ff6] to-[#6b21ef] text-[#ffffff]"
+                            : "text-[#9ca3af] hover:bg-white/10 hover:text-[#ffffff]",
                         )}
                       >
                         {subItem.emoji ? (

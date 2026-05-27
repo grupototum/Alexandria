@@ -34,7 +34,7 @@ export default function AppSidebar() {
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 flex h-full flex-col border-r border-white/10 bg-[#0a0a0a] transition-all duration-300 ease-in-out",
+        "fixed left-0 top-0 z-40 flex h-full flex-col border-r border-[#1f192a] bg-[#1b1728] transition-all duration-300 ease-in-out",
         collapsed ? "w-[72px]" : "w-[260px]"
       )}
     >
@@ -42,10 +42,8 @@ export default function AppSidebar() {
       <div className="flex h-[56px] shrink-0 items-center justify-between border-b border-white/10 px-5">
         {!collapsed && (
           <div className="flex items-center gap-2.5">
-            <div className="grid h-8 w-8 place-items-center rounded-[4px] bg-[#ffffff] text-[#000000]">
-              <span className="text-sm font-semibold tracking-[-0.04em]">K</span>
-            </div>
-            <span className="font-['Suisse_Intl'] text-[18px] font-medium tracking-[-0.02em] text-[#fafafa]">
+            <img src="/logo.png" alt="Alexandria" className="h-8 w-8 object-contain" />
+            <span className="text-[18px] font-medium tracking-[-0.02em] text-[#ffffff]">
               Alexandria
             </span>
           </div>
@@ -64,7 +62,7 @@ export default function AppSidebar() {
         <button
           onClick={openCommandPalette}
           className={cn(
-            "flex w-full items-center gap-2 rounded-[4px] border border-white/10 bg-[#171717] text-[#a3a3a3] transition-colors hover:bg-[#262626] hover:text-[#fafafa]",
+            "flex w-full items-center gap-2 rounded-[6px] border border-[#1f192a] bg-[#1f192a] text-[#9ca3af] transition-colors hover:bg-[#272333] hover:text-[#ffffff]",
             collapsed ? "justify-center p-2" : "px-3 py-2"
           )}
         >

@@ -1,4 +1,4 @@
-# Claude Web · content
+# ChatGPT · content
 
 - Skills nesta categoria: 6
 

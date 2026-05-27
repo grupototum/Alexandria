@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: e28a3b3affe89c150fc320f8df92084e3d6d41ab84e977cf6534d92f03f4f9c0
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/playwright_mcp.md
 ---
 

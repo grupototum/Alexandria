@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: 57c78d975a1d4d2f32983349a78e45b4d4fa4d9706967106e930af8c5190cd6b
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/google_sheets.md
 ---
 

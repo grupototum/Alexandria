@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: d6420591207db1615592cccc0453bc921b29338ca22f8b3e3ad05084f55d29b3
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/mailchimp.md
 ---
 

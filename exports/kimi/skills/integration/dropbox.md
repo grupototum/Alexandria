@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: ba9da090de1741a85aefe8c5ca6a2cb712ae44c394bb664c863fb93063a49e3a
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/dropbox.md
 ---
 

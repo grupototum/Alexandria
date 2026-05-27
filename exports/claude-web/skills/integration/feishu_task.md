@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: c18b712f346a9b5c155cf3bfd07d1df53a14092c761d40b298289b729a32affb
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/feishu_task.md
 ---
 

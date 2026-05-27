@@ -1,4 +1,4 @@
-# Claude Web · analytics
+# ChatGPT · analytics
 
 - Skills nesta categoria: 23
 

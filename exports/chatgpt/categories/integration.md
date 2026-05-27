@@ -1,4 +1,4 @@
-# Claude Web · integration
+# ChatGPT · integration
 
 - Skills nesta categoria: 34
 

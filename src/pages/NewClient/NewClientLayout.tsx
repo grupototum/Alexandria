@@ -128,10 +128,10 @@ export function NewClientLayout() {
           >
             <ArrowLeft className="w-3 h-3 mr-1" /> Voltar à Central
           </Button>
-          <h1 className="font-sans text-[24px] font-medium text-[#fafafa] tracking-[-0.02em]">
+          <h1 className="font-sans text-[24px] font-medium text-foreground tracking-[-0.02em]">
             NOVO CLIENTE
           </h1>
-          <p className="text-[11px] text-[#737373] uppercase tracking-widest mt-1">
+          <p className="text-[11px] text-muted-foreground uppercase tracking-widest mt-1">
             Etapa {step + 1} de 5
           </p>
         </motion.div>
@@ -146,17 +146,17 @@ export function NewClientLayout() {
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           {/* Form area */}
           <div className="xl:col-span-3">
-            <Card className="border-white/10 bg-[#0a0a0a]">
-              <CardHeader className="pb-4 border-b border-white/5 mb-4">
+            <Card className="card-n8n border-[#1f192a] bg-[#0e0918]">
+              <CardHeader className="pb-4 border-b border-[#1f192a] mb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-[4px] bg-[#171717] border border-white/10 flex items-center justify-center">
-                    {React.createElement(STEPS[step].icon, { className: "w-5 h-5 text-[#fafafa]" })}
+                  <div className="w-10 h-10 rounded-xl bg-[#1b1728] border border-[#1f192a] flex items-center justify-center">
+                    {React.createElement(STEPS[step].icon, { className: "w-5 h-5 text-foreground" })}
                   </div>
                   <div>
-                    <CardTitle className="text-[16px] text-[#fafafa] font-medium">
+                    <CardTitle className="text-[16px] text-foreground font-medium">
                       {STEPS[step].title}
                     </CardTitle>
-                    <p className="text-[12px] text-[#a3a3a3]">
+                    <p className="text-[12px] text-muted-foreground">
                       {STEPS[step].subtitle}
                     </p>
                   </div>
@@ -172,19 +172,19 @@ export function NewClientLayout() {
                 />
 
                 {/* Navigation */}
-                <div className="flex justify-between items-center mt-8 pt-4 border-t border-white/10">
+                <div className="flex justify-between items-center mt-8 pt-4 border-t border-[#1f192a]">
                   <Button
                     variant="ghost"
                     onClick={prev}
                     disabled={step === 0}
-                    className="text-[13px] text-[#a3a3a3] hover:text-[#fafafa]"
+                    className="text-[13px] text-muted-foreground hover:text-foreground"
                   >
                     <ChevronLeft className="w-4 h-4 mr-1" /> Voltar
                   </Button>
                   {step < 4 ? (
                     <Button
                       onClick={next}
-                      className="bg-[#ffffff] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[13px]"
+                      className="text-[13px]"
                     >
                       Próximo <ChevronRight className="w-4 h-4 ml-1" />
                     </Button>
@@ -192,7 +192,7 @@ export function NewClientLayout() {
                     <Button
                       onClick={handleSubmit}
                       disabled={saving}
-                      className="bg-[#ffffff] hover:bg-[#e5e5e5] text-[#0a0a0a] text-[13px]"
+                      className="text-[13px]"
                     >
                       {saving ? (
                         <>

@@ -1,4 +1,4 @@
-# Claude Web · automation
+# ChatGPT · automation
 
 - Skills nesta categoria: 7
 

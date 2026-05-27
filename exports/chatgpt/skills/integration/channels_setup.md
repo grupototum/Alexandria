@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: 120731cb8ae5804afcb7c7463d44610ea37cd0c9189287edcb093f5dfba0641c
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/channels_setup.md
 ---
 

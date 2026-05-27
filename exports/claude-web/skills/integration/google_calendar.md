@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: d75d1a6e83a86bb25a3214ba5df284fddf270f78ce140e387d54c1258e20f3eb
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/google_calendar.md
 ---
 

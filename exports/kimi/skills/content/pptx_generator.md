@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: ec8cd73710216002060722b02914f6aa2501775b841ad59cf41952dd3ea01e76
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/pptx_generator.md
 ---
 

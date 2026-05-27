@@ -1,46 +1,39 @@
-@import url('https://www.krea.ai/fonts/fonts.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root, .dark {
-    --background: 0 0% 4%; /* #0a0a0a */
-    --foreground: 0 0% 98%; /* #fafafa */
+    /* Mapped from Tailwind config for components using HSL if needed, but we mostly use explicit hex now */
+    --background: 260 45% 6%; /* #0e0918 */
+    --foreground: 0 1% 81%; /* #d1cece */
     
-    --card: 0 0% 9%; /* #171717 */
-    --card-foreground: 0 0% 98%;
+    --card: 254 27% 13%; /* #1b1728 */
+    --card-foreground: 0 1% 81%; /* #d1cece */
     
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 261 25% 14%; /* #1f192a */
+    --popover-foreground: 0 0% 100%; /* #ffffff */
 
-    --primary: 0 0% 100%; /* #ffffff */
-    --primary-foreground: 0 0% 0%; /* #000000 */
+    --primary: 12 85% 54%; /* #ee4f27 */
+    --primary-foreground: 0 0% 100%; /* #ffffff */
 
-    --secondary: 0 0% 15%; /* #262626 */
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 205 93% 40%; /* #077ac7 */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 15%; /* #262626 */
-    --muted-foreground: 0 0% 64%; /* #a3a3a3 */
+    --muted: 214 11% 65%; /* #9ca3af */
+    --muted-foreground: 214 11% 65%;
 
-    --accent: 0 0% 15%; /* #262626 */
-    --accent-foreground: 0 0% 98%;
+    --accent: 12 85% 54%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%; /* #f87171 */
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 82% 47%; /* #d91616 */
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 13%; 
-    --input: 0 0% 19%; 
-    --ring: 0 0% 45%; /* #737373 */
+    --border: 261 25% 14%; /* #1f192a */
+    --input: 261 25% 14%;
+    --ring: 12 85% 54%;
 
-    --radius: 10px;
-
-    /* Chart colors */
-    --chart-1: 221 83% 53%;
-    --chart-2: 160 84% 39%;
-    --chart-3: 38 92% 50%;
-    --chart-4: 262 83% 58%;
-    --chart-5: 343 88% 60%;
+    --radius: 6px;
   }
 
   * {
@@ -49,62 +42,79 @@
   }
 
   html, body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: "Suisse Intl", ui-sans-serif, system-ui, sans-serif;
+    background-color: #0e0918;
+    color: #d1cece;
+    font-family: "geomanist", ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  
+  strong {
+    font-family: "geomanist-book", ui-sans-serif, system-ui, sans-serif;
+    font-weight: 400;
   }
 }
 
 @layer components {
   /* ==========================================================
-     KREA COMPONENTS
+     N8N COMPONENTS (Replaces Krea)
      ========================================================== */
 
   .button-primary, .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #171717;
+    background-color: #ee4f27;
     color: #ffffff;
     border: none;
-    border-radius: 4px;
-    padding: 8px 13px;
-    font-family: "Suisse Intl", ui-sans-serif, system-ui, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    box-shadow: 0 0 2px 0.5px rgba(0,0,0,0.2), 
-                0 0 4px 1px rgba(0,0,0,0.1), 
-                0 0 8px 2px rgba(0,0,0,0.05), 
-                0 0 0 0.5px rgba(0,0,0,1), 
-                inset 0 0 0 1px rgba(255,255,255,0.1), 
-                inset 0 0 3px 1px rgba(255,255,255,0.1), 
-                inset 0 0.5px 0 0.5px rgba(255,255,255,0.1);
-    transition: color 0.2s ease-out, background-color 0.1s ease-out, scale 0.5s ease-out;
+    border-radius: 9999px;
+    padding: 12px 24px;
+    font-family: "geomanist", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2),
+                0 1px 2px rgba(8,8,8,0.2),
+                0 4px 4px rgba(8,8,8,0.08),
+                inset 0 6px 12px rgba(255,255,255,0.12);
+    transition: all 0.2s ease-out;
   }
 
   .button-primary:hover, .btn-primary:hover {
-    background-color: #000000;
+    background-color: #ff0c00;
+    box-shadow: 0 7px 80px -12px #ee4f27,
+                inset 0 1px 1px rgba(255,255,255,0.2),
+                0 1px 2px rgba(8,8,8,0.2),
+                0 4px 4px rgba(8,8,8,0.08),
+                inset 0 6px 12px rgba(255,255,255,0.12);
   }
 
   .button-secondary, .btn-outline {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: transparent;
-    color: #fafafa;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    padding: 8px 13px;
-    font-family: "Suisse Intl", ui-sans-serif, system-ui, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background-color 0.1s ease-out;
+    background: linear-gradient(135deg, #077ac7 0%, #6b21ef 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    padding: 12px 24px;
+    font-family: "geomanist", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2),
+                0 1px 2px rgba(8,8,8,0.2),
+                0 4px 4px rgba(8,8,8,0.08),
+                0 7px 0 -12px #077ac7,
+                inset 0 6px 12px rgba(255,255,255,0.12);
+    transition: all 0.2s ease-out;
   }
 
   .button-secondary:hover, .btn-outline:hover {
-    background-color: #262626;
+    transform: translateY(-1px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.2),
+                0 2px 4px rgba(8,8,8,0.3),
+                0 8px 8px rgba(8,8,8,0.1),
+                0 7px 0 -10px #077ac7,
+                inset 0 6px 12px rgba(255,255,255,0.12);
   }
 
   .button-ghost {
@@ -112,76 +122,90 @@
     align-items: center;
     justify-content: center;
     background-color: transparent;
-    color: #fafafa;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    padding: 8px 13px;
-    font-family: "Suisse Intl", ui-sans-serif, system-ui, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    padding: 10px 20px;
+    font-family: "geomanist", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
     transition: background-color 0.1s ease-out;
   }
 
   .button-ghost:hover {
-    background-color: #262626;
+    background-color: rgba(255, 255, 255, 0.1);
   }
 
-  .card-krea, .card-editorial {
-    background-color: #171717;
-    border-radius: 14px;
-    padding: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    outline: 0.5px solid rgba(255, 255, 255, 0.06);
-    color: #fafafa;
+  .card-n8n, .card-editorial, .card-krea {
+    background-color: #1b1728;
+    border-radius: 24px;
+    padding: 32px;
+    box-shadow: inset 0 0 0 1px hsla(0,0%,100%,0.1);
+    color: #d1cece;
+    transition: background-color 0.2s ease;
   }
 
-  .card-elevated-krea {
-    background-color: #262626;
-    border-radius: 14px;
-    padding: 24px;
-    box-shadow: 0 9px 8px rgba(0, 0, 0, 0.25), 0 6px 4px -1px rgba(0, 0, 0, 0.25);
-    outline: 0.5px solid rgba(255, 255, 255, 0.06);
-    color: #fafafa;
+  .card-n8n:hover, .card-editorial:hover, .card-krea:hover {
+    background-color: #272333;
   }
 
-  .input-krea, .input-ds {
-    background-color: transparent;
-    color: #fafafa;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 0px;
+  .card-elevated-n8n, .card-elevated-krea {
+    background-color: #1f192a;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: inset 0 0 0 1px hsla(0,0%,100%,0.1), 0 4px 12px rgba(0,0,0,0.5);
+    color: #d1cece;
+  }
+
+  .input-n8n, .input-ds, .input-krea {
+    background-color: #1f192a;
+    color: #9ca3af;
+    border: none;
+    box-shadow: inset 0 0 0 1px #1f192a;
+    border-radius: 6px;
     padding: 8px 12px;
     font-size: 16px;
-    font-family: "Suisse Intl", ui-sans-serif, system-ui, sans-serif;
+    font-family: "geomanist", ui-sans-serif, system-ui, sans-serif;
     font-weight: 400;
-    transition: all 5000s ease-in-out;
+    transition: all 0.2s ease-in-out;
     outline: none;
     width: 100%;
   }
 
-  .input-krea:focus-visible, .input-ds:focus-visible {
-    background-color: #171717;
+  .input-n8n:focus-visible, .input-ds:focus-visible, .input-krea:focus-visible {
     outline: 2px solid transparent;
     outline-offset: 2px;
-    box-shadow: 0 0 0 2px #0a0a0a, 0 0 0 4px #737373;
+    box-shadow: inset 0 0 0 1px #1f192a, 0 0 0 2px #0e0918, 0 0 0 3px #ee4f27;
   }
 
-  .badge-krea, .badge-pill, .badge-tag {
+  .badge-n8n, .badge-pill, .badge-tag, .badge-krea {
     display: inline-flex;
     background-color: rgba(255, 255, 255, 0.1);
-    color: rgba(250, 250, 250, 0.7);
+    color: #ffffff;
+    border: 1px solid #1f192a;
     border-radius: 9999px;
-    padding: 2px 8px;
-    font-family: "Suisse Intl", ui-sans-serif, system-ui, sans-serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    border: none;
+    padding: 4px 12px;
+    font-family: "geomanist", ui-sans-serif, system-ui, sans-serif;
+    font-size: 14px; /* Slightly oversized */
+    font-weight: 400;
   }
 
-  .nav-glass {
-    background-color: #0a0a0a;
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  .badge-warm {
+    display: inline-flex;
+    background-color: #ff9b26;
+    color: #0e0918;
+    border: none;
+    border-radius: 9999px;
+    padding: 4px 12px;
+    font-family: "geomanist", ui-sans-serif, system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .nav-glass, .nav-header {
+    background-color: rgba(27, 23, 40, 0.85); /* #1b1728 translucent */
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid #1f192a;
   }
 }

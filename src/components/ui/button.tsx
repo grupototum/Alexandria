@@ -4,27 +4,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-[4px] text-[14px] font-medium leading-[1.25] tracking-[-0.005em] transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-full text-[16px] font-normal transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        primary:
-          "bg-[#171717] text-[#ffffff] shadow-[0_0_2px_0.5px_rgba(0,0,0,0.2),0_0_4px_1px_rgba(0,0,0,0.1),0_0_8px_2px_rgba(0,0,0,0.05),0_0_0_0.5px_rgba(0,0,0,1),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_0_3px_1px_rgba(255,255,255,0.1),inset_0_0.5px_0_0.5px_rgba(255,255,255,0.1)] hover:bg-[#000000] hover:scale-[1.02]",
-        secondary:
-          "bg-transparent text-[#fafafa] border border-white/10 hover:bg-[#262626]",
-        ghost:
-          "bg-transparent text-[#fafafa] hover:bg-[#262626]",
-        link: 
-          "text-[#fafafa] underline-offset-4 hover:underline",
-        destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        "gradient-action":
-          "bg-[#ffffff] text-[#000000] font-semibold rounded-[10px] shadow-[0_9px_8px_rgba(0,0,0,0.2),0_6px_4px_-1px_rgba(0,0,0,0.2)] hover:bg-opacity-90",
+        primary: "btn-primary",
+        secondary: "btn-outline",
+        ghost: "button-ghost",
+        link: "text-primary underline-offset-4 hover:underline",
+        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        "gradient-action": "btn-primary",
       },
       size: {
-        default: "px-[13px] py-[8px]",
-        sm: "h-8 px-3 text-xs",
-        lg: "h-11 px-8",
+        default: "",
+        sm: "text-[14px]",
+        lg: "px-8 py-4 text-[18px]",
         icon: "h-9 w-9",
       },
     },

@@ -37,26 +37,26 @@ export function ClientListView({
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/5">
+              <tr className="border-b border-[#1f192a]">
                 <th className="p-3 text-left w-8">
                   <Checkbox
                     checked={selected.size === clients.length && clients.length > 0}
                     onCheckedChange={onToggleAll}
                   />
                 </th>
-                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium">
+                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium">
                   Empresa
                 </th>
-                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium hidden md:table-cell">
+                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium hidden md:table-cell">
                   Responsável
                 </th>
-                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium hidden lg:table-cell">
+                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium hidden lg:table-cell">
                   Ramo
                 </th>
-                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium">
+                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium">
                   Status
                 </th>
-                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium hidden lg:table-cell">
+                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium hidden lg:table-cell">
                   Cadastro
                 </th>
                 <th className="p-3 w-10"></th>
@@ -66,7 +66,7 @@ export function ClientListView({
               {clients.map((c) => (
                 <tr
                   key={c.id}
-                  className="border-b border-white/5 hover:bg-[#262626] transition-colors cursor-pointer"
+                  className="border-b border-[#1f192a] hover:bg-[#272333] transition-colors cursor-pointer"
                   onClick={() => onDetail(c)}
                 >
                   <td className="p-3" onClick={(e) => e.stopPropagation()}>
@@ -78,19 +78,19 @@ export function ClientListView({
                   <td className="p-3">
                     <div className="flex items-center gap-3">
                       <div
-                        className="w-9 h-9 rounded-[4px] flex items-center justify-center text-[12px] font-bold shrink-0 border border-white/10"
+                        className="w-9 h-9 rounded-lg flex items-center justify-center text-[12px] font-bold shrink-0 border border-[#1f192a]"
                         style={{
                           backgroundColor: (c.primary_color ?? "#737373") + "20",
-                          color: c.primary_color ?? "#fafafa",
+                          color: c.primary_color ?? "var(--foreground)",
                         }}
                       >
                         {c.company_name.charAt(0)}
                       </div>
                       <div>
-                        <p className="font-medium text-[#fafafa] text-[13px]">
+                        <p className="font-medium text-foreground text-[13px]">
                           {c.company_name}
                         </p>
-                        <p className="text-[11px] text-[#a3a3a3]">
+                        <p className="text-[11px] text-muted-foreground">
                           {c.email}
                         </p>
                       </div>
@@ -98,8 +98,8 @@ export function ClientListView({
                   </td>
                   <td className="p-3 hidden md:table-cell">
                     <div className="flex items-center gap-2">
-                      <User className="w-3 h-3 text-[#737373]" />
-                      <span className="text-[#fafafa] text-[12px]">
+                      <User className="w-3 h-3 text-muted-foreground" />
+                      <span className="text-foreground text-[12px]">
                         {c.contact_name ?? "—"}
                       </span>
                     </div>
@@ -108,9 +108,9 @@ export function ClientListView({
                     {c.industry && (
                       <Badge
                         variant="outline"
-                        className={`text-[10px] border-white/10 ${
+                        className={`text-[10px] border-[#1f192a] ${
                           INDUSTRY_COLORS[c.industry] ??
-                          "bg-[#171717] text-[#a3a3a3]"
+                          "bg-[#1b1728] text-muted-foreground"
                         }`}
                       >
                         {c.industry}
@@ -120,7 +120,7 @@ export function ClientListView({
                   <td className="p-3">
                     <Badge
                       variant="outline"
-                      className={`text-[10px] capitalize border-white/10 ${STATUS_BADGE[c.status]}`}
+                      className={`text-[10px] capitalize border-[#1f192a] ${STATUS_BADGE[c.status]}`}
                     >
                       {c.status === "active"
                         ? "Ativo"
@@ -129,7 +129,7 @@ export function ClientListView({
                           : "Inativo"}
                     </Badge>
                   </td>
-                  <td className="p-3 hidden lg:table-cell text-[12px] text-[#a3a3a3]">
+                  <td className="p-3 hidden lg:table-cell text-[12px] text-muted-foreground">
                     {timeAgo(c.created_at)}
                   </td>
                   <td className="p-3" onClick={(e) => e.stopPropagation()}>

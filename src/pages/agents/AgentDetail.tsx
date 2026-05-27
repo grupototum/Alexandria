@@ -197,11 +197,11 @@ export default function AgentDetail() {
       <AppLayout>
         <div className="min-h-screen">
           <div className="max-w-[1400px] mx-auto p-8">
-            <div className="h-32 bg-[#171717] animate-pulse rounded-[14px] mb-6 border border-white/5" />
-            <div className="h-12 bg-[#171717] animate-pulse rounded-[14px] mb-6 border border-white/5" />
+            <div className="h-32 bg-[#1b1728] animate-pulse rounded-2xl mb-6 border border-[#1f192a]" />
+            <div className="h-12 bg-[#1b1728] animate-pulse rounded-2xl mb-6 border border-[#1f192a]" />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 h-96 bg-[#171717] animate-pulse rounded-[14px] border border-white/5" />
-              <div className="h-96 bg-[#171717] animate-pulse rounded-[14px] border border-white/5" />
+              <div className="lg:col-span-2 h-96 bg-[#1b1728] animate-pulse rounded-2xl border border-[#1f192a]" />
+              <div className="h-96 bg-[#1b1728] animate-pulse rounded-2xl border border-[#1f192a]" />
             </div>
           </div>
         </div>
@@ -214,11 +214,11 @@ export default function AgentDetail() {
       <AppLayout>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#171717] border border-white/5 flex items-center justify-center">
-              <Icon icon="solar:ghost-linear" className="w-8 h-8 text-[#737373]" />
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#1b1728] border border-[#1f192a] flex items-center justify-center">
+              <Icon icon="solar:ghost-linear" className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h1 className="text-2xl font-medium text-[#fafafa] mb-2">Agente não encontrado</h1>
-            <p className="text-[#a3a3a3] mb-6">O agente solicitado não existe ou foi removido.</p>
+            <h1 className="text-2xl font-medium text-foreground mb-2">Agente não encontrado</h1>
+            <p className="text-muted-foreground mb-6">O agente solicitado não existe ou foi removido.</p>
             <Button 
               onClick={() => navigate('/agents')} 
               variant="primary"
@@ -240,7 +240,7 @@ export default function AgentDetail() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="p-8 border-b border-white/10"
+            className="p-8 border-b border-[#1f192a]"
           >
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div className="flex items-center gap-4">
@@ -255,24 +255,24 @@ export default function AgentDetail() {
 
                 <div className="relative">
                   <div className={`
-                    w-16 h-16 rounded-[4px] flex items-center justify-center text-3xl border border-white/10 bg-[#171717]
+                    w-16 h-16 rounded-xl flex items-center justify-center text-3xl border border-[#1f192a] bg-[#1b1728]
                   `}>
                     {agent.emoji}
                   </div>
                   <span className={`
-                    absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full ring-2 ring-[#0a0a0a]
+                    absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full ring-2 ring-[#0e0918]
                     ${statusColors[agent.status]}
                   `} />
                 </div>
 
                 <div>
                   <div className="flex items-center gap-3 flex-wrap">
-                    <h1 className="text-[28px] font-medium text-[#fafafa] tracking-[-0.02em]">
+                    <h1 className="text-[28px] font-medium text-foreground tracking-[-0.02em]">
                       {agent.name}
                     </h1>
                     
                     {isNew && (
-                      <Badge className="bg-[#ffffff] text-[#000000] text-[10px] uppercase tracking-[0.04em]">
+                      <Badge className="bg-primary text-primary-foreground text-[10px] uppercase tracking-[0.04em]">
                         New
                       </Badge>
                     )}
@@ -285,18 +285,18 @@ export default function AgentDetail() {
                     )}
                   </div>
                   
-                  <p className="text-[14px] text-[#a3a3a3] mt-1">{agent.role}</p>
+                  <p className="text-[14px] text-muted-foreground mt-1">{agent.role}</p>
                   
                   <div className="flex items-center gap-2 mt-2">
                     <Badge 
                       variant="outline" 
-                      className={`${classification?.bgColor} ${classification?.color} border-white/10 text-[10px] tracking-[0.04em] uppercase font-medium`}
+                      className={`${classification?.bgColor} ${classification?.color} border-[#1f192a] text-[10px] tracking-[0.04em] uppercase font-medium`}
                     >
                       <Icon icon={classification?.icon || ''} className="w-3 h-3 mr-1" />
                       {classification?.label}
                     </Badge>
                     
-                    <span className="text-[11px] text-[#737373]">
+                    <span className="text-[11px] text-muted-foreground">
                       Criado em {new Date(agent.created_at).toLocaleDateString('pt-BR')}
                     </span>
                   </div>
@@ -334,9 +334,9 @@ export default function AgentDetail() {
 
       {/* Edit Sheet */}
       <Sheet open={editOpen} onOpenChange={setEditOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto bg-[#0a0a0a] border-l border-white/10 text-[#fafafa]">
+        <SheetContent className="w-full sm:max-w-md overflow-y-auto bg-[#0e0918] border-l border-[#1f192a] text-foreground">
           <SheetHeader className="mb-6">
-            <SheetTitle className="text-[20px] font-medium text-[#fafafa]">Editar Agente</SheetTitle>
+            <SheetTitle className="text-[20px] font-medium text-foreground">Editar Agente</SheetTitle>
           </SheetHeader>
 
           {editForm && (
@@ -369,11 +369,11 @@ export default function AgentDetail() {
 
               <div>
                 <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Descrição</Label>
-                <Textarea
+                  <Textarea
                   value={editForm.description}
                   onChange={e => setEditForm(f => f ? { ...f, description: e.target.value } : f)}
                   rows={3}
-                  className="bg-transparent border border-white/15 text-[#fafafa] rounded-[4px] resize-none focus-visible:ring-2 focus-visible:ring-white/20"
+                  className="input-n8n resize-none"
                 />
               </div>
 
@@ -381,12 +381,12 @@ export default function AgentDetail() {
                 <div>
                   <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Categoria</Label>
                   <Select value={editForm.category} onValueChange={v => setEditForm(f => f ? { ...f, category: v } : f)}>
-                    <SelectTrigger className="bg-transparent border-white/15 text-[#fafafa] rounded-[4px]">
+                    <SelectTrigger className="input-n8n">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#171717] border-white/10 text-[#fafafa] rounded-[4px]">
+                    <SelectContent className="bg-[#1b1728] border-[#1f192a] text-foreground rounded-lg">
                       {CATEGORIES.map(c => (
-                        <SelectItem key={c} value={c} className="hover:bg-[#262626] focus:bg-[#262626]">{c}</SelectItem>
+                        <SelectItem key={c} value={c} className="hover:bg-[#272333] focus:bg-[#272333]">{c}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -394,12 +394,12 @@ export default function AgentDetail() {
                 <div>
                   <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Status</Label>
                   <Select value={editForm.status} onValueChange={v => setEditForm(f => f ? { ...f, status: v } : f)}>
-                    <SelectTrigger className="bg-transparent border-white/15 text-[#fafafa] rounded-[4px]">
+                    <SelectTrigger className="input-n8n">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-[#171717] border-white/10 text-[#fafafa] rounded-[4px]">
+                    <SelectContent className="bg-[#1b1728] border-[#1f192a] text-foreground rounded-lg">
                       {STATUSES.map(s => (
-                        <SelectItem key={s} value={s} className="hover:bg-[#262626] focus:bg-[#262626]">{s}</SelectItem>
+                        <SelectItem key={s} value={s} className="hover:bg-[#272333] focus:bg-[#272333]">{s}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -412,6 +412,7 @@ export default function AgentDetail() {
                   value={editForm.agent_group}
                   onChange={e => setEditForm(f => f ? { ...f, agent_group: e.target.value } : f)}
                   placeholder="tier1, tier2, totum…"
+                  className="input-n8n"
                 />
               </div>
 
@@ -421,7 +422,7 @@ export default function AgentDetail() {
                   value={editForm.slug}
                   onChange={e => setEditForm(f => f ? { ...f, slug: e.target.value } : f)}
                   placeholder="meu-agente"
-                  className="font-mono"
+                  className="input-n8n font-mono"
                 />
               </div>
 

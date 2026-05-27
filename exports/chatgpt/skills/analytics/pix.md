@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: b27d78e1bf2b7ac363fa0df420a8575c44c24593fb5bda55120f1b83cf3c3401
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/pix.md
 ---
 

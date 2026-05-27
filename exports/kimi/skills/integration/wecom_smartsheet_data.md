@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: d1b2dde11bd2d0b7aeb4df5021eef5d97858bc21be727fc930c958985c804c8e
-updated_at: 2026-05-27T12:07:15.535Z
+updated_at: 2026-05-27T18:54:31.431Z
 prompt_template_path: prompts/wecom_smartsheet_data.md
 ---
 
