@@ -45,11 +45,11 @@ export function NewClientForm({
   onToggleArray,
 }: NewClientFormProps) {
   const inputCls = (key: string) =>
-    `bg-secondary border-border/40 h-10 text-sm ${
+    `bg-[#171717] border-white/10 h-10 text-[13px] text-[#fafafa] ${
       errors[key] ? "border-destructive focus-visible:ring-destructive" : ""
     }`;
   const textareaCls = (key: string) =>
-    `bg-secondary border-border/40 text-sm min-h-[80px] resize-none ${
+    `bg-[#171717] border border-white/10 text-[13px] text-[#fafafa] min-h-[80px] resize-none ${
       errors[key] ? "border-destructive focus-visible:ring-destructive" : ""
     }`;
 
@@ -144,7 +144,7 @@ export function NewClientForm({
                   value={form.industry}
                   onValueChange={(v) => onSet("industry", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -162,7 +162,7 @@ export function NewClientForm({
                   value={form.time_in_market}
                   onValueChange={(v) => onSet("time_in_market", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -200,7 +200,7 @@ export function NewClientForm({
                   value={form.company_size}
                   onValueChange={(v) => onSet("company_size", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -218,7 +218,7 @@ export function NewClientForm({
                   value={form.monthly_revenue}
                   onValueChange={(v) => onSet("monthly_revenue", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -289,10 +289,10 @@ export function NewClientForm({
                     <button
                       key={g}
                       onClick={() => onSet("gender", g.toLowerCase())}
-                      className={`flex-1 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                      className={`flex-1 px-3 py-2 rounded-[4px] text-[12px] font-medium transition-all ${
                         form.gender === g.toLowerCase()
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-secondary text-secondary-foreground"
+                          ? "bg-[#ffffff] text-[#0a0a0a]"
+                          : "bg-[#171717] text-[#a3a3a3] hover:text-[#fafafa]"
                       }`}
                     >
                       {g}
@@ -306,7 +306,7 @@ export function NewClientForm({
                   value={form.location}
                   onValueChange={(v) => onSet("location", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -324,7 +324,7 @@ export function NewClientForm({
                   value={form.social_class}
                   onValueChange={(v) => onSet("social_class", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -343,7 +343,7 @@ export function NewClientForm({
                 value={form.brand_tone}
                 onValueChange={(v) => onSet("brand_tone", v)}
               >
-                <SelectTrigger className="bg-secondary border-border/40">
+                <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
                 <SelectContent>
@@ -369,7 +369,7 @@ export function NewClientForm({
                     type="color"
                     value={form.primary_color}
                     onChange={(e) => onSet("primary_color", e.target.value)}
-                    className="w-10 h-10 rounded-lg border border-border/40 cursor-pointer bg-transparent"
+                    className="w-10 h-10 rounded-[4px] border border-white/10 cursor-pointer bg-transparent"
                   />
                   <Input
                     value={form.primary_color}
@@ -385,7 +385,7 @@ export function NewClientForm({
                     type="color"
                     value={form.secondary_color}
                     onChange={(e) => onSet("secondary_color", e.target.value)}
-                    className="w-10 h-10 rounded-lg border border-border/40 cursor-pointer bg-transparent"
+                    className="w-10 h-10 rounded-[4px] border border-white/10 cursor-pointer bg-transparent"
                   />
                   <Input
                     value={form.secondary_color}
@@ -435,10 +435,10 @@ export function NewClientForm({
                   <button
                     key={ch}
                     onClick={() => onToggleArray("support_channels", ch)}
-                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    className={`px-3 py-2 rounded-[4px] text-[12px] font-medium transition-all ${
                       form.support_channels.includes(ch)
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-secondary text-secondary-foreground"
+                        ? "bg-[#ffffff] text-[#0a0a0a]"
+                        : "bg-[#171717] text-[#a3a3a3] hover:text-[#fafafa]"
                     }`}
                   >
                     {ch}
@@ -453,7 +453,7 @@ export function NewClientForm({
                   value={form.crm_used}
                   onValueChange={(v) => onSet("crm_used", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -471,7 +471,7 @@ export function NewClientForm({
                   value={form.sla_response}
                   onValueChange={(v) => onSet("sla_response", v)}
                 >
-                  <SelectTrigger className="bg-secondary border-border/40">
+                  <SelectTrigger className="bg-[#171717] border-white/10 text-[#fafafa]">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                   <SelectContent>
@@ -513,10 +513,10 @@ export function NewClientForm({
                   <button
                     key={d}
                     onClick={() => onToggleArray("working_days", d)}
-                    className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    className={`px-3 py-2 rounded-[4px] text-[12px] font-medium transition-all ${
                       form.working_days.includes(d)
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-secondary text-secondary-foreground"
+                        ? "bg-[#ffffff] text-[#0a0a0a]"
+                        : "bg-[#171717] text-[#a3a3a3] hover:text-[#fafafa]"
                     }`}
                   >
                     {d}
@@ -533,12 +533,12 @@ export function NewClientForm({
                 placeholder="Algo mais que devamos saber?"
               />
             </div>
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-secondary/50">
+            <div className="flex items-center gap-2 p-3 rounded-[4px] bg-[#171717] border border-white/5">
               <Checkbox
                 checked={form.terms_accepted}
                 onCheckedChange={(c) => onSet("terms_accepted", !!c)}
               />
-              <span className="text-sm text-foreground">
+              <span className="text-[12px] text-[#fafafa]">
                 Aceito os termos de uso e política de privacidade
               </span>
             </div>

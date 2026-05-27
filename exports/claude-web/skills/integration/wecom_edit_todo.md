@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: 45c856866b75617b82df891a4cd831709228a1422d56189d8138b8216c72bc48
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/wecom_edit_todo.md
 ---
 

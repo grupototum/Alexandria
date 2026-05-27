@@ -33,30 +33,30 @@ export function ClientListView({
 }: ClientListViewProps) {
   return (
     <motion.div {...anim(2)}>
-      <Card className="border-border/40 bg-card/80 overflow-hidden">
+      <Card className="overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border/30">
+              <tr className="border-b border-white/5">
                 <th className="p-3 text-left w-8">
                   <Checkbox
                     checked={selected.size === clients.length && clients.length > 0}
                     onCheckedChange={onToggleAll}
                   />
                 </th>
-                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium">
+                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium">
                   Empresa
                 </th>
-                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium hidden md:table-cell">
+                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium hidden md:table-cell">
                   Responsável
                 </th>
-                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium hidden lg:table-cell">
+                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium hidden lg:table-cell">
                   Ramo
                 </th>
-                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium">
+                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium">
                   Status
                 </th>
-                <th className="p-3 text-left text-[10px] text-muted-foreground uppercase font-medium hidden lg:table-cell">
+                <th className="p-3 text-left text-[10px] text-[#a3a3a3] uppercase font-medium hidden lg:table-cell">
                   Cadastro
                 </th>
                 <th className="p-3 w-10"></th>
@@ -66,7 +66,7 @@ export function ClientListView({
               {clients.map((c) => (
                 <tr
                   key={c.id}
-                  className="border-b border-border/20 hover:bg-secondary/30 transition-colors cursor-pointer"
+                  className="border-b border-white/5 hover:bg-[#262626] transition-colors cursor-pointer"
                   onClick={() => onDetail(c)}
                 >
                   <td className="p-3" onClick={(e) => e.stopPropagation()}>
@@ -78,19 +78,19 @@ export function ClientListView({
                   <td className="p-3">
                     <div className="flex items-center gap-3">
                       <div
-                        className="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold shrink-0"
+                        className="w-9 h-9 rounded-[4px] flex items-center justify-center text-[12px] font-bold shrink-0 border border-white/10"
                         style={{
-                          backgroundColor: (c.primary_color ?? "#f76926") + "20",
-                          color: c.primary_color ?? "#f76926",
+                          backgroundColor: (c.primary_color ?? "#737373") + "20",
+                          color: c.primary_color ?? "#fafafa",
                         }}
                       >
                         {c.company_name.charAt(0)}
                       </div>
                       <div>
-                        <p className="font-medium text-foreground">
+                        <p className="font-medium text-[#fafafa] text-[13px]">
                           {c.company_name}
                         </p>
-                        <p className="text-[10px] text-muted-foreground">
+                        <p className="text-[11px] text-[#a3a3a3]">
                           {c.email}
                         </p>
                       </div>
@@ -98,8 +98,8 @@ export function ClientListView({
                   </td>
                   <td className="p-3 hidden md:table-cell">
                     <div className="flex items-center gap-2">
-                      <User className="w-3 h-3 text-muted-foreground" />
-                      <span className="text-foreground text-xs">
+                      <User className="w-3 h-3 text-[#737373]" />
+                      <span className="text-[#fafafa] text-[12px]">
                         {c.contact_name ?? "—"}
                       </span>
                     </div>
@@ -108,9 +108,9 @@ export function ClientListView({
                     {c.industry && (
                       <Badge
                         variant="outline"
-                        className={`text-[10px] ${
+                        className={`text-[10px] border-white/10 ${
                           INDUSTRY_COLORS[c.industry] ??
-                          "bg-muted text-muted-foreground"
+                          "bg-[#171717] text-[#a3a3a3]"
                         }`}
                       >
                         {c.industry}
@@ -120,7 +120,7 @@ export function ClientListView({
                   <td className="p-3">
                     <Badge
                       variant="outline"
-                      className={`text-[10px] capitalize ${STATUS_BADGE[c.status]}`}
+                      className={`text-[10px] capitalize border-white/10 ${STATUS_BADGE[c.status]}`}
                     >
                       {c.status === "active"
                         ? "Ativo"
@@ -129,7 +129,7 @@ export function ClientListView({
                           : "Inativo"}
                     </Badge>
                   </td>
-                  <td className="p-3 hidden lg:table-cell text-xs text-muted-foreground">
+                  <td className="p-3 hidden lg:table-cell text-[12px] text-[#a3a3a3]">
                     {timeAgo(c.created_at)}
                   </td>
                   <td className="p-3" onClick={(e) => e.stopPropagation()}>

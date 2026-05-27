@@ -9,7 +9,7 @@ routing_priority: 1000
 model_preference: claude
 tags: ["router", "planner", "orchestration", "skills", "alexandria"]
 content_hash: f996d9c619b4f188a54b4bd538faee2d6c61a6a1687ae34412c3a63f51d4569f
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/skill_router.md
 ---
 

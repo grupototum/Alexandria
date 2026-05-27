@@ -31,9 +31,9 @@ import { useAgentForm } from '@/hooks/useAgentForm';
 import { supabase } from '@/integrations/supabase/client';
 
 const tiers = [
-  { value: 1, label: 'Laboratório', desc: 'Claude/Gemini - Decisões estratégicas', color: 'bg-purple-500' },
-  { value: 2, label: 'Midtier', desc: 'Groq Free - Execução constante', color: 'bg-blue-500' },
-  { value: 3, label: 'Fábrica', desc: 'Ollama Local - Automação mecânica', color: 'bg-green-500' },
+  { value: 1, label: 'Laboratório', desc: 'Claude/Gemini - Decisões estratégicas', color: 'bg-[#fafafa]' },
+  { value: 2, label: 'Midtier', desc: 'Groq Free - Execução constante', color: 'bg-[#a3a3a3]' },
+  { value: 3, label: 'Fábrica', desc: 'Ollama Local - Automação mecânica', color: 'bg-[#737373]' },
 ];
 
 const modelsByTier: Record<number, string[]> = {
@@ -179,7 +179,7 @@ export default function AgentElizaOSEdit() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen">
         <div className="max-w-7xl mx-auto p-6">
           {/* Header */}
           <motion.div
@@ -192,10 +192,10 @@ export default function AgentElizaOSEdit() {
                 <ArrowLeft className="w-4 h-4" />
               </Button>
               <div>
-                <h1 className="text-2xl font-semibold">
+                <h1 className="text-[28px] font-medium text-[#fafafa] tracking-[-0.02em]">
                   {isNew ? 'Novo Agente' : `Editar: ${formData.name || 'Agente'}`}
                 </h1>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[14px] text-[#a3a3a3]">
                   Configure seu agente elizaOS
                 </p>
               </div>
@@ -226,28 +226,46 @@ export default function AgentElizaOSEdit() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-            <TabsList className="grid grid-cols-6 w-full">
-              <TabsTrigger value="identity" className="gap-2">
+            <TabsList className="grid grid-cols-6 w-full bg-transparent border-b border-white/10 p-0 h-12 rounded-none">
+              <TabsTrigger 
+                value="identity" 
+                className="gap-2 data-[state=active]:bg-[#171717] data-[state=active]:border-white/10 data-[state=active]:text-[#fafafa] border border-transparent text-[#a3a3a3] rounded-t-[4px] rounded-b-none"
+              >
                 <Bot className="w-4 h-4" />
                 Identidade
               </TabsTrigger>
-              <TabsTrigger value="channels" className="gap-2">
+              <TabsTrigger 
+                value="channels" 
+                className="gap-2 data-[state=active]:bg-[#171717] data-[state=active]:border-white/10 data-[state=active]:text-[#fafafa] border border-transparent text-[#a3a3a3] rounded-t-[4px] rounded-b-none"
+              >
                 <MessageSquare className="w-4 h-4" />
                 Canais
               </TabsTrigger>
-              <TabsTrigger value="brain" className="gap-2">
+              <TabsTrigger 
+                value="brain" 
+                className="gap-2 data-[state=active]:bg-[#171717] data-[state=active]:border-white/10 data-[state=active]:text-[#fafafa] border border-transparent text-[#a3a3a3] rounded-t-[4px] rounded-b-none"
+              >
                 <Brain className="w-4 h-4" />
                 Cérebro
               </TabsTrigger>
-              <TabsTrigger value="alexandria" className="gap-2">
+              <TabsTrigger 
+                value="alexandria" 
+                className="gap-2 data-[state=active]:bg-[#171717] data-[state=active]:border-white/10 data-[state=active]:text-[#fafafa] border border-transparent text-[#a3a3a3] rounded-t-[4px] rounded-b-none"
+              >
                 <BookOpen className="w-4 h-4" />
                 Alexandria
               </TabsTrigger>
-              <TabsTrigger value="actions" className="gap-2">
+              <TabsTrigger 
+                value="actions" 
+                className="gap-2 data-[state=active]:bg-[#171717] data-[state=active]:border-white/10 data-[state=active]:text-[#fafafa] border border-transparent text-[#a3a3a3] rounded-t-[4px] rounded-b-none"
+              >
                 <Zap className="w-4 h-4" />
                 Ações
               </TabsTrigger>
-              <TabsTrigger value="preview" className="gap-2">
+              <TabsTrigger 
+                value="preview" 
+                className="gap-2 data-[state=active]:bg-[#171717] data-[state=active]:border-white/10 data-[state=active]:text-[#fafafa] border border-transparent text-[#a3a3a3] rounded-t-[4px] rounded-b-none"
+              >
                 <Eye className="w-4 h-4" />
                 Preview
               </TabsTrigger>
@@ -325,15 +343,15 @@ export default function AgentElizaOSEdit() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Telegram */}
-                  <div className="border rounded-lg p-4">
+                  <div className="border border-white/10 bg-[#171717] rounded-[4px] p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center text-white">
+                        <div className="w-10 h-10 bg-[#262626] border border-white/10 rounded-[4px] flex items-center justify-center text-[#fafafa]">
                           <MessageSquare className="w-5 h-5" />
                         </div>
                         <div>
-                          <h3 className="font-medium">Telegram</h3>
-                          <p className="text-sm text-muted-foreground">Bot do Telegram</p>
+                          <h3 className="font-medium text-[#fafafa]">Telegram</h3>
+                          <p className="text-[12px] text-[#a3a3a3]">Bot do Telegram</p>
                         </div>
                       </div>
                       <Switch
@@ -350,7 +368,7 @@ export default function AgentElizaOSEdit() {
                           onChange={(e) => updateChannelConfig('telegram', { token: e.target.value })}
                           placeholder="123456:ABCxyz..."
                         />
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-[11px] text-[#737373]">
                           Obtenha o token com @BotFather no Telegram
                         </p>
                       </div>
@@ -358,15 +376,15 @@ export default function AgentElizaOSEdit() {
                   </div>
 
                   {/* Discord */}
-                  <div className="border rounded-lg p-4 opacity-60">
+                  <div className="border border-white/10 bg-[#171717] rounded-[4px] p-4 opacity-60">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center text-white">
+                        <div className="w-10 h-10 bg-[#262626] border border-white/10 rounded-[4px] flex items-center justify-center text-[#fafafa]">
                           <MessageSquare className="w-5 h-5" />
                         </div>
                         <div>
-                          <h3 className="font-medium">Discord</h3>
-                          <p className="text-sm text-muted-foreground">Bot do Discord (V2)</p>
+                          <h3 className="font-medium text-[#fafafa]">Discord</h3>
+                          <p className="text-[12px] text-[#a3a3a3]">Bot do Discord (V2)</p>
                         </div>
                       </div>
                       <Switch disabled />
@@ -391,15 +409,15 @@ export default function AgentElizaOSEdit() {
                         <button
                           key={tier.value}
                           onClick={() => updateField('tier', tier.value)}
-                          className={`p-4 rounded-lg border text-left transition-all ${
+                          className={`p-4 rounded-[4px] border text-left transition-all ${
                             formData.tier === tier.value
-                              ? 'border-primary bg-primary/10'
-                              : 'border-border hover:border-primary/50'
+                              ? 'border-white/20 bg-[#262626]'
+                              : 'border-white/5 bg-[#171717] hover:border-white/10'
                           }`}
                         >
-                          <div className={`w-3 h-3 rounded-full ${tier.color} mb-2`} />
-                          <div className="font-medium">{tier.label}</div>
-                          <div className="text-xs text-muted-foreground">{tier.desc}</div>
+                          <div className={`w-3 h-3 rounded-[2px] ${tier.color} mb-2`} />
+                          <div className="font-medium text-[#fafafa]">{tier.label}</div>
+                          <div className="text-[12px] text-[#a3a3a3]">{tier.desc}</div>
                         </button>
                       ))}
                     </div>
@@ -476,21 +494,21 @@ export default function AgentElizaOSEdit() {
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={() => updateField('rag_mode', 'static')}
-                        className={`p-4 rounded-lg border text-left transition-all ${
+                        className={`p-4 rounded-[4px] border text-left transition-all ${
                           formData.rag_mode === 'static'
-                            ? 'border-primary bg-primary/10'
-                            : 'border-border'
+                            ? 'border-white/20 bg-[#262626]'
+                            : 'border-white/5 bg-[#171717]'
                         }`}
                       >
-                        <div className="font-medium">Cache Estático</div>
-                        <div className="text-xs text-muted-foreground">MVP - Documentos carregados uma vez</div>
+                        <div className="font-medium text-[#fafafa]">Cache Estático</div>
+                        <div className="text-[12px] text-[#a3a3a3]">MVP - Documentos carregados uma vez</div>
                       </button>
                       <button
                         disabled
-                        className="p-4 rounded-lg border text-left opacity-50 cursor-not-allowed"
+                        className="p-4 rounded-[4px] border border-white/5 bg-[#171717] text-left opacity-50 cursor-not-allowed"
                       >
-                        <div className="font-medium">RAG Dinâmico</div>
-                        <div className="text-xs text-muted-foreground">V2 - Busca em tempo real</div>
+                        <div className="font-medium text-[#fafafa]">RAG Dinâmico</div>
+                        <div className="text-[12px] text-[#a3a3a3]">V2 - Busca em tempo real</div>
                       </button>
                     </div>
                   </div>
@@ -498,14 +516,14 @@ export default function AgentElizaOSEdit() {
                   {/* Documents List */}
                   <div className="space-y-2">
                     <Label>Documentos Disponíveis</Label>
-                    <div className="border rounded-lg divide-y">
+                    <div className="border border-white/10 rounded-[4px] divide-y divide-white/5 bg-[#171717]">
                       {documents.length === 0 ? (
-                        <div className="p-4 text-center text-muted-foreground">
+                        <div className="p-4 text-center text-[#a3a3a3]">
                           Nenhum documento disponível
                         </div>
                       ) : (
                         documents.map((doc) => (
-                          <label key={doc.id} className="flex items-center gap-3 p-3 hover:bg-muted cursor-pointer">
+                          <label key={doc.id} className="flex items-center gap-3 p-3 hover:bg-[#262626] cursor-pointer transition-colors">
                             <input
                               type="checkbox"
                               checked={formData.knowledge_sources.includes(doc.id)}
@@ -513,11 +531,11 @@ export default function AgentElizaOSEdit() {
                                 if (e.target.checked) addKnowledgeSource(doc.id);
                                 else removeKnowledgeSource(doc.id);
                               }}
-                              className="w-4 h-4"
+                              className="w-4 h-4 bg-[#0a0a0a] border-white/10"
                             />
                             <div className="flex-1">
-                              <div className="font-medium">{doc.title}</div>
-                              <div className="text-xs text-muted-foreground">{doc.source}</div>
+                              <div className="font-medium text-[#fafafa]">{doc.title}</div>
+                              <div className="text-[12px] text-[#737373]">{doc.source}</div>
                             </div>
                           </label>
                         ))
@@ -582,14 +600,14 @@ export default function AgentElizaOSEdit() {
                   <CardTitle>Preview em Tempo Real</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="border rounded-lg">
+                  <div className="border border-white/10 rounded-[4px] bg-[#0a0a0a] overflow-hidden">
                     {/* Messages */}
-                    <div className="h-96 overflow-y-auto p-4 space-y-4 bg-muted/30">
+                    <div className="h-96 overflow-y-auto p-4 space-y-4">
                       {previewMessages.length === 0 ? (
-                        <div className="text-center text-muted-foreground py-12">
-                          <Bot className="w-12 h-12 mx-auto mb-2" />
+                        <div className="text-center text-[#737373] py-12">
+                          <Bot className="w-12 h-12 mx-auto mb-2 opacity-50" />
                           <p>Envie uma mensagem para testar o agente</p>
-                          <p className="text-xs mt-1">O preview usa o system prompt configurado</p>
+                          <p className="text-[11px] mt-1 text-[#a3a3a3]">O preview usa o system prompt configurado</p>
                         </div>
                       ) : (
                         previewMessages.map((msg, i) => (
@@ -598,10 +616,10 @@ export default function AgentElizaOSEdit() {
                             className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                           >
                             <div
-                              className={`max-w-[80%] px-4 py-2 rounded-lg ${
+                              className={`max-w-[80%] px-4 py-2 rounded-[4px] ${
                                 msg.role === 'user'
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'bg-muted'
+                                  ? 'bg-[#ffffff] text-[#0a0a0a]'
+                                  : 'bg-[#171717] text-[#fafafa] border border-white/5'
                               }`}
                             >
                               {msg.content}
@@ -612,14 +630,15 @@ export default function AgentElizaOSEdit() {
                     </div>
 
                     {/* Input */}
-                    <div className="p-4 border-t flex gap-2">
+                    <div className="p-4 border-t border-white/10 bg-[#171717] flex gap-2">
                       <Input
                         value={previewInput}
                         onChange={(e) => setPreviewInput(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handlePreviewSend()}
                         placeholder="Digite uma mensagem..."
+                        className="bg-[#0a0a0a] border-white/10"
                       />
-                      <Button onClick={handlePreviewSend}>
+                      <Button variant="secondary" onClick={handlePreviewSend}>
                         <Send className="w-4 h-4" />
                       </Button>
                     </div>

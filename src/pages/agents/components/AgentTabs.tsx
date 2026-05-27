@@ -78,22 +78,22 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <div className="border-b border-stone-300">
+      <div className="border-b border-white/10">
         <TabsList className="bg-transparent border-0 p-0 h-12 w-full justify-start gap-1 overflow-x-auto">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.id}
               value={tab.id}
               className="
-                data-[state=active]:bg-white 
-                data-[state=active]:border-stone-900 
-                data-[state=active]:text-stone-900
+                data-[state=active]:bg-[#171717] 
+                data-[state=active]:border-white/10 
+                data-[state=active]:text-[#fafafa]
                 data-[state=active]:shadow-sm
                 border border-transparent
-                text-stone-500
+                text-[#a3a3a3]
                 px-4 py-2
                 text-sm font-medium
-                rounded-t-lg
+                rounded-t-[4px]
                 transition-all
               "
             >
@@ -112,18 +112,18 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
               {/* Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { label: 'Tarefas Hoje', value: agent.daily_tasks || 0, icon: 'solar:task-square-linear', color: 'text-stone-900' },
-                  { label: 'Taxa de Sucesso', value: `${agent.success_rate || 0}%`, icon: 'solar:check-circle-linear', color: 'text-emerald-600' },
-                  { label: 'Total Tarefas', value: agent.tasks_completed || 0, icon: 'solar:clipboard-list-linear', color: 'text-blue-600' },
-                  { label: 'Créditos Usados', value: agent.credits_used || 0, icon: 'solar:wallet-money-linear', color: 'text-amber-600' },
+                  { label: 'Tarefas Hoje', value: agent.daily_tasks || 0, icon: 'solar:task-square-linear', color: 'text-[#fafafa]' },
+                  { label: 'Taxa de Sucesso', value: `${agent.success_rate || 0}%`, icon: 'solar:check-circle-linear', color: 'text-emerald-500' },
+                  { label: 'Total Tarefas', value: agent.tasks_completed || 0, icon: 'solar:clipboard-list-linear', color: 'text-blue-500' },
+                  { label: 'Créditos Usados', value: agent.credits_used || 0, icon: 'solar:wallet-money-linear', color: 'text-amber-500' },
                 ].map((stat, i) => (
-                  <Card key={i} className="border-stone-300 bg-[#EAEAE5]">
+                  <Card key={i}>
                     <CardContent className="p-4">
                       <div className="flex items-center gap-3">
                         <Icon icon={stat.icon} className={`w-5 h-5 ${stat.color}`} />
                         <div>
-                          <p className="text-[10px] uppercase tracking-widest text-stone-400">{stat.label}</p>
-                          <p className="text-xl font-medium text-stone-900">{stat.value}</p>
+                          <p className="text-[10px] uppercase tracking-[0.04em] text-[#a3a3a3]">{stat.label}</p>
+                          <p className="text-xl font-medium text-[#fafafa]">{stat.value}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -132,14 +132,14 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
               </div>
 
               {/* Activity Chart */}
-              <Card className="border-stone-300 bg-[#EAEAE5]">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Atividade dos Últimos 7 Dias</CardTitle>
+                  <CardTitle className="text-[14px] font-medium text-[#fafafa]">Atividade dos Últimos 7 Dias</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="h-64 flex items-center justify-center">
-                    <div className="text-center text-stone-500">
-                      <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                    <div className="text-center text-[#737373]">
+                      <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50 text-[#a3a3a3]" />
                       <p className="text-sm">Dados de atividade serão exibidos aqui</p>
                       <p className="text-xs mt-1">Quando o tracking estiver ativo</p>
                     </div>
@@ -150,9 +150,9 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
 
             {/* Sidebar */}
             <div className="space-y-6">
-              <Card className="border-stone-300 bg-[#EAEAE5]">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Efetividade</CardTitle>
+                  <CardTitle className="text-[14px] font-medium text-[#fafafa]">Efetividade</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-center">
@@ -163,7 +163,7 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                           cy="64"
                           r="56"
                           fill="none"
-                          stroke="#D6D3D1"
+                          stroke="#262626"
                           strokeWidth="12"
                         />
                         <circle
@@ -171,7 +171,7 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                           cy="64"
                           r="56"
                           fill="none"
-                          stroke="#1C1917"
+                          stroke="#fafafa"
                           strokeWidth="12"
                           strokeLinecap="round"
                           strokeDasharray={`${(agent.success_rate || 0) * 3.52} 352`}
@@ -179,45 +179,45 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                         />
                       </svg>
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-2xl font-medium text-stone-900">
+                        <span className="text-2xl font-medium text-[#fafafa]">
                           {agent.success_rate || 0}%
                         </span>
                       </div>
                     </div>
                   </div>
-                  <p className="text-xs text-stone-500 text-center mt-4">
+                  <p className="text-[12px] text-[#a3a3a3] text-center mt-4">
                     Taxa de sucesso nas tarefas executadas
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="border-stone-300 bg-[#EAEAE5]">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Informações</CardTitle>
+                  <CardTitle className="text-[14px] font-medium text-[#fafafa]">Informações</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-stone-500">ID</span>
-                    <span className="text-stone-900 font-mono text-xs">{agent.id.slice(0, 8)}...</span>
+                  <div className="flex justify-between text-[13px]">
+                    <span className="text-[#a3a3a3]">ID</span>
+                    <span className="text-[#fafafa] font-mono">{agent.id.slice(0, 8)}...</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-stone-500">Categoria</span>
-                    <span className="text-stone-900">{agent.category}</span>
+                  <div className="flex justify-between text-[13px]">
+                    <span className="text-[#a3a3a3]">Categoria</span>
+                    <span className="text-[#fafafa]">{agent.category}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-stone-500">Tipo</span>
-                    <span className="text-stone-900 capitalize">{agent.type}</span>
+                  <div className="flex justify-between text-[13px]">
+                    <span className="text-[#a3a3a3]">Tipo</span>
+                    <span className="text-[#fafafa] capitalize">{agent.type}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-stone-500">Status</span>
+                  <div className="flex justify-between text-[13px]">
+                    <span className="text-[#a3a3a3]">Status</span>
                     <span className="flex items-center gap-1">
                       <span className={`w-2 h-2 rounded-full ${statusColors[agent.status]}`} />
-                      <span className="text-stone-900 capitalize">{statusLabels[agent.status]}</span>
+                      <span className="text-[#fafafa] capitalize">{statusLabels[agent.status]}</span>
                     </span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-stone-500">Criado em</span>
-                    <span className="text-stone-900 text-xs">
+                  <div className="flex justify-between text-[13px]">
+                    <span className="text-[#a3a3a3]">Criado em</span>
+                    <span className="text-[#fafafa]">
                       {new Date(agent.created_at).toLocaleDateString('pt-BR')}
                     </span>
                   </div>
@@ -230,9 +230,9 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
         {/* Credits Tab */}
         <TabsContent value="credits" className="m-0 mt-0">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="border-stone-300 bg-[#EAEAE5]">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Uso de Créditos por Categoria</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Uso de Créditos por Categoria</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-64">
@@ -253,10 +253,10 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                       </Pie>
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: '#1C1917', 
-                          border: 'none', 
-                          borderRadius: '8px',
-                          color: 'white'
+                          backgroundColor: '#171717', 
+                          border: '1px solid rgba(255,255,255,0.1)', 
+                          borderRadius: '4px',
+                          color: '#fafafa'
                         }} 
                       />
                     </PieChart>
@@ -266,54 +266,54 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                   {creditsData.map((item, i) => (
                     <div key={item.name} className="flex items-center gap-2">
                       <div 
-                        className="w-3 h-3 rounded-full" 
+                        className="w-3 h-3 rounded-[2px]" 
                         style={{ backgroundColor: COLORS[i] }}
                       />
-                      <span className="text-xs text-stone-600">{item.name}</span>
-                      <span className="text-xs text-stone-900 font-medium ml-auto">{item.value}</span>
+                      <span className="text-[12px] text-[#a3a3a3]">{item.name}</span>
+                      <span className="text-[12px] text-[#fafafa] font-medium ml-auto">{item.value}</span>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-stone-300 bg-[#EAEAE5]">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Histórico de Uso (7 dias)</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Histórico de Uso (7 dias)</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-64 flex items-center justify-center">
-                  <div className="text-center text-stone-500">
-                    <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <div className="text-center text-[#a3a3a3]">
+                    <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50 text-[#737373]" />
                     <p className="text-sm">Histórico de uso será exibido aqui</p>
-                    <p className="text-xs mt-1">Quando os dados de créditos estiverem disponíveis</p>
+                    <p className="text-[11px] mt-1">Quando os dados de créditos estiverem disponíveis</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-stone-300 bg-[#EAEAE5] lg:col-span-2">
+            <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Detalhamento de Custos</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Detalhamento de Custos</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {creditsData.map((item, i) => (
                     <div key={item.name}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-stone-600">{item.name}</span>
-                        <span className="text-stone-900 font-medium">{item.value} créditos</span>
+                      <div className="flex justify-between text-[13px] mb-1">
+                        <span className="text-[#a3a3a3]">{item.name}</span>
+                        <span className="text-[#fafafa] font-medium">{item.value} créditos</span>
                       </div>
                       <Progress 
                         value={(item.value / (agent.credits_used || 100)) * 100} 
-                        className="h-2 bg-stone-200"
+                        className="h-2 bg-[#262626]"
                       />
                     </div>
                   ))}
                 </div>
-                <div className="mt-6 pt-4 border-t border-stone-200 flex justify-between items-center">
-                  <span className="text-sm font-medium text-stone-900">Total</span>
-                  <span className="text-xl font-medium text-stone-900">{agent.credits_used || 0} créditos</span>
+                <div className="mt-6 pt-4 border-t border-white/10 flex justify-between items-center">
+                  <span className="text-[14px] font-medium text-[#fafafa]">Total</span>
+                  <span className="text-[18px] font-medium text-[#fafafa]">{agent.credits_used || 0} créditos</span>
                 </div>
               </CardContent>
             </Card>
@@ -323,9 +323,9 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
         {/* Effectiveness Tab */}
         <TabsContent value="effectiveness" className="m-0 mt-0">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="border-stone-300 bg-[#EAEAE5]">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Taxa de Sucesso</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Taxa de Sucesso</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center py-4">
@@ -336,7 +336,7 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                         cy="80"
                         r="70"
                         fill="none"
-                        stroke="#D6D3D1"
+                        stroke="#262626"
                         strokeWidth="16"
                       />
                       <circle
@@ -344,7 +344,7 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                         cy="80"
                         r="70"
                         fill="none"
-                        stroke="#1C1917"
+                        stroke="#fafafa"
                         strokeWidth="16"
                         strokeLinecap="round"
                         strokeDasharray={`${(agent.success_rate || 0) * 4.4} 440`}
@@ -352,58 +352,58 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                       />
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span className="text-4xl font-medium text-stone-900">
+                      <span className="text-[32px] font-medium text-[#fafafa]">
                         {agent.success_rate || 0}%
                       </span>
-                      <span className="text-xs text-stone-500">sucesso</span>
+                      <span className="text-[11px] text-[#a3a3a3] uppercase tracking-[0.04em]">sucesso</span>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-stone-300 bg-[#EAEAE5]">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Tarefas Completadas</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Tarefas Completadas</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center py-4">
                   <div className="text-center">
-                    <span className="text-5xl font-medium text-stone-900">
+                    <span className="text-[48px] font-medium text-[#fafafa] leading-none">
                       {agent.tasks_completed || 0}
                     </span>
-                    <p className="text-sm text-stone-500 mt-2">tarefas no total</p>
+                    <p className="text-[12px] text-[#a3a3a3] mt-2">tarefas no total</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-stone-300 bg-[#EAEAE5]">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Eficiência Diária</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Eficiência Diária</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center py-4">
                   <div className="text-center">
-                    <span className="text-5xl font-medium text-stone-900">
+                    <span className="text-[48px] font-medium text-[#fafafa] leading-none">
                       {agent.daily_tasks || 0}
                     </span>
-                    <p className="text-sm text-stone-500 mt-2">tarefas hoje</p>
+                    <p className="text-[12px] text-[#a3a3a3] mt-2">tarefas hoje</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-stone-300 bg-[#EAEAE5] lg:col-span-3">
+            <Card className="lg:col-span-3">
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Desempenho Semanal</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Desempenho Semanal</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-72 flex items-center justify-center">
-                  <div className="text-center text-stone-500">
+                  <div className="text-center text-[#737373]">
                     <TrendingUp className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">Dados de desempenho serão exibidos aqui</p>
-                    <p className="text-xs mt-1">Quando o histórico semanal estiver disponível</p>
+                    <p className="text-[13px]">Dados de desempenho serão exibidos aqui</p>
+                    <p className="text-[11px] mt-1 text-[#a3a3a3]">Quando o histórico semanal estiver disponível</p>
                   </div>
                 </div>
               </CardContent>
@@ -415,40 +415,40 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
         <TabsContent value="hierarchy" className="m-0 mt-0">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {parentAgent && (
-              <Card className="border-stone-300 bg-[#EAEAE5]">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-medium">Agente Superior</CardTitle>
+                  <CardTitle className="text-[14px] font-medium text-[#fafafa]">Agente Superior</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div 
-                    className="flex items-center gap-4 p-4 bg-white rounded-lg cursor-pointer hover:bg-stone-50 transition-colors"
+                    className="flex items-center gap-4 p-4 bg-[#171717] rounded-[4px] border border-white/5 cursor-pointer hover:bg-[#262626] transition-colors"
                     onClick={() => navigate(`/agents/${parentAgent.id}`)}
                   >
-                    <div className="w-14 h-14 rounded-full bg-stone-200 flex items-center justify-center text-2xl">
+                    <div className="w-12 h-12 rounded-[4px] bg-[#262626] flex items-center justify-center text-2xl border border-white/10">
                       {parentAgent.emoji}
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-stone-900">{parentAgent.name}</p>
-                      <p className="text-sm text-stone-500">{parentAgent.role}</p>
-                      <Badge variant="outline" className="text-[10px] mt-1">
+                      <p className="font-medium text-[#fafafa]">{parentAgent.name}</p>
+                      <p className="text-[12px] text-[#a3a3a3]">{parentAgent.role}</p>
+                      <Badge variant="outline" className="text-[10px] mt-1 border-white/10">
                         Nível {parentAgent.hierarchy_level}
                       </Badge>
                     </div>
-                    <Icon icon="solar:arrow-right-linear" className="w-5 h-5 text-stone-400" />
+                    <Icon icon="solar:arrow-right-linear" className="w-5 h-5 text-[#a3a3a3]" />
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            <Card className={`border-stone-300 bg-[#EAEAE5] ${!parentAgent ? 'lg:col-span-2' : ''}`}>
+            <Card className={!parentAgent ? 'lg:col-span-2' : ''}>
               <CardHeader>
-                <CardTitle className="text-sm font-medium">
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">
                   Sub-agentes ({childAgents.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {childAgents.length === 0 ? (
-                  <p className="text-sm text-stone-500 text-center py-8">
+                  <p className="text-[13px] text-[#a3a3a3] text-center py-8">
                     Este agente não possui sub-agentes
                   </p>
                 ) : (
@@ -456,21 +456,21 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                     {childAgents.map((child) => (
                       <div 
                         key={child.id}
-                        className="flex items-center gap-4 p-4 bg-white rounded-lg cursor-pointer hover:bg-stone-50 transition-colors"
+                        className="flex items-center gap-4 p-4 bg-[#171717] rounded-[4px] border border-white/5 cursor-pointer hover:bg-[#262626] transition-colors"
                         onClick={() => navigate(`/agents/${child.id}`)}
                       >
-                        <div className="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center text-xl">
+                        <div className="w-10 h-10 rounded-[4px] bg-[#262626] flex items-center justify-center text-xl border border-white/10">
                           {child.emoji}
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-stone-900">{child.name}</p>
-                          <p className="text-sm text-stone-500">{child.role}</p>
+                          <p className="font-medium text-[#fafafa]">{child.name}</p>
+                          <p className="text-[12px] text-[#a3a3a3]">{child.role}</p>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-xs text-stone-500">
+                          <span className="text-[11px] text-[#737373]">
                             ✓ {child.success_rate || 0}%
                           </span>
-                          <Icon icon="solar:arrow-right-linear" className="w-5 h-5 text-stone-400" />
+                          <Icon icon="solar:arrow-right-linear" className="w-5 h-5 text-[#a3a3a3]" />
                         </div>
                       </div>
                     ))}
@@ -479,9 +479,9 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
               </CardContent>
             </Card>
 
-            <Card className="border-stone-300 bg-[#EAEAE5] lg:col-span-2">
+            <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle className="text-sm font-medium">Posição na Hierarquia</CardTitle>
+                <CardTitle className="text-[14px] font-medium text-[#fafafa]">Posição na Hierarquia</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-center py-8">
@@ -489,45 +489,45 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
                     {parentAgent && (
                       <>
                         <div className="text-center">
-                          <div className="w-16 h-16 rounded-full bg-stone-200 flex items-center justify-center text-2xl mx-auto">
+                          <div className="w-14 h-14 rounded-[4px] bg-[#171717] border border-white/10 flex items-center justify-center text-xl mx-auto">
                             {parentAgent.emoji}
                           </div>
-                          <p className="text-xs text-stone-500 mt-2">{parentAgent.name}</p>
+                          <p className="text-[11px] text-[#a3a3a3] mt-2">{parentAgent.name}</p>
                         </div>
-                        <Icon icon="solar:alt-arrow-right-linear" className="w-6 h-6 text-stone-400" />
+                        <Icon icon="solar:alt-arrow-right-linear" className="w-6 h-6 text-[#737373]" />
                       </>
                     )}
                     
                     <div className="text-center">
-                      <div className="w-20 h-20 rounded-full bg-stone-900 flex items-center justify-center text-3xl mx-auto ring-4 ring-stone-200">
-                        <span className="text-white">{agent.emoji}</span>
+                      <div className="w-16 h-16 rounded-[4px] bg-[#262626] border border-white/10 flex items-center justify-center text-3xl mx-auto ring-4 ring-white/5">
+                        <span className="text-[#fafafa]">{agent.emoji}</span>
                       </div>
-                      <p className="text-sm font-medium text-stone-900 mt-2">{agent.name}</p>
-                      <Badge className="text-[10px] mt-1">Nível {agent.hierarchy_level}</Badge>
+                      <p className="text-[13px] font-medium text-[#fafafa] mt-2">{agent.name}</p>
+                      <Badge className="text-[10px] mt-1 bg-[#171717] text-[#fafafa] border border-white/10">Nível {agent.hierarchy_level}</Badge>
                     </div>
                     
                     {childAgents.length > 0 && (
                       <>
-                        <Icon icon="solar:alt-arrow-right-linear" className="w-6 h-6 text-stone-400" />
+                        <Icon icon="solar:alt-arrow-right-linear" className="w-6 h-6 text-[#737373]" />
                         <div className="text-center">
                           <div className="flex -space-x-2">
                             {childAgents.slice(0, 3).map((child, i) => (
                               <div 
                                 key={child.id}
-                                className="w-12 h-12 rounded-full bg-stone-200 flex items-center justify-center text-lg ring-2 ring-white"
+                                className="w-10 h-10 rounded-full bg-[#171717] border border-white/10 flex items-center justify-center text-lg ring-2 ring-[#0a0a0a]"
                                 style={{ zIndex: 3 - i }}
                               >
                                 {child.emoji}
                               </div>
                             ))}
                             {childAgents.length > 3 && (
-                              <div className="w-12 h-12 rounded-full bg-stone-300 flex items-center justify-center text-xs ring-2 ring-white"
+                              <div className="w-10 h-10 rounded-full bg-[#262626] border border-white/10 flex items-center justify-center text-xs ring-2 ring-[#0a0a0a]"
                               >
                                 +{childAgents.length - 3}
                               </div>
                             )}
                           </div>
-                          <p className="text-xs text-stone-500 mt-2">{childAgents.length} sub-agentes</p>
+                          <p className="text-[11px] text-[#a3a3a3] mt-2">{childAgents.length} sub-agentes</p>
                         </div>
                       </>
                     )}

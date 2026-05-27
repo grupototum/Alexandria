@@ -27,14 +27,14 @@ export function ClientCard({
 }: ClientCardProps) {
   return (
     <motion.div key={client.id} layout {...anim(index + 2)} exit={{ opacity: 0, scale: 0.95 }}>
-      <Card className="border-border/80 bg-card cursor-pointer group" onClick={() => onDetail(client)}>
+      <Card className="cursor-pointer group" onClick={() => onDetail(client)}>
         <CardContent className="p-5">
           <div className="flex items-start justify-between mb-3">
             <div
-              className="w-12 h-12 border flex items-center justify-center text-lg font-bold"
+              className="w-12 h-12 border border-white/10 flex items-center justify-center text-lg font-bold"
               style={{
-                backgroundColor: (client.primary_color ?? "#f76926") + "20",
-                color: client.primary_color ?? "#f76926",
+                backgroundColor: (client.primary_color ?? "#737373") + "20",
+                color: client.primary_color ?? "#fafafa",
               }}
             >
               {client.company_name.charAt(0)}
@@ -48,41 +48,41 @@ export function ClientCard({
               />
             </div>
           </div>
-          <h3 className="font-medium text-foreground mb-1">{client.company_name}</h3>
-          <p className="text-xs text-muted-foreground mb-3">{client.cnpj ?? "—"}</p>
+          <h3 className="font-medium text-[#fafafa] mb-1">{client.company_name}</h3>
+          <p className="text-[12px] text-[#a3a3a3] mb-3">{client.cnpj ?? "—"}</p>
 
           <div className="space-y-2 mb-4">
             {client.contact_name && (
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-primary/10 border border-primary/20 flex items-center justify-center">
-                  <span className="text-[10px] font-bold">
+                <div className="w-5 h-5 bg-[#262626] border border-white/10 flex items-center justify-center">
+                  <span className="text-[10px] font-bold text-[#fafafa]">
                     {client.contact_name.charAt(0).toUpperCase()}
                   </span>
                 </div>
-                <span className="text-[10px] text-muted-foreground">
+                <span className="text-[10px] text-[#a3a3a3]">
                   {client.contact_name}
                 </span>
               </div>
             )}
             {client.email && (
-              <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-2 text-[10px] text-[#737373]">
                 <Mail className="w-3.5 h-3.5" />
                 <span className="truncate">{client.email}</span>
               </div>
             )}
             {client.phone && (
-              <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+              <div className="flex items-center gap-2 text-[10px] text-[#737373]">
                 <Phone className="w-3.5 h-3.5" />
                 <span>{client.phone}</span>
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-border/30">
+          <div className="flex items-center justify-between pt-3 border-t border-white/5">
             <div className="flex gap-2">
               <Badge
                 variant="outline"
-                className={`text-[10px] capitalize ${STATUS_BADGE[client.status]}`}
+                className={`text-[10px] capitalize border-white/10 ${STATUS_BADGE[client.status]}`}
               >
                 {client.status === "active"
                   ? "Ativo"
@@ -93,13 +93,13 @@ export function ClientCard({
               {client.industry && (
                 <Badge
                   variant="outline"
-                  className={`text-[10px] ${INDUSTRY_COLORS[client.industry] ?? "bg-muted text-muted-foreground"}`}
+                  className={`text-[10px] border-white/10 ${INDUSTRY_COLORS[client.industry] ?? "bg-[#171717] text-[#a3a3a3]"}`}
                 >
                   {client.industry}
                 </Badge>
               )}
             </div>
-            <span className="text-[10px] text-muted-foreground">
+            <span className="text-[10px] text-[#a3a3a3]">
               {timeAgo(client.created_at)}
             </span>
           </div>

@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: 4fcc3e4c3e8547c53c6b782d130d320dfce34f83c9b9efb33e3c88cbc84b9cbe
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/openclaw_usage_tracker.md
 ---
 

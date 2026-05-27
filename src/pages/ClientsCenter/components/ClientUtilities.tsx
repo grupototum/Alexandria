@@ -27,20 +27,20 @@ export function timeAgo(dateStr: string | null): string {
  * Status badge styling
  */
 export const STATUS_BADGE: Record<string, string> = {
-  active: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  inactive: "bg-muted text-muted-foreground border-border/40",
+  active: "bg-[#ffffff] text-[#0a0a0a]",
+  pending: "bg-[#262626] text-[#fafafa]",
+  inactive: "bg-[#171717] text-[#a3a3a3]",
 };
 
 /**
  * Industry color styling
  */
 export const INDUSTRY_COLORS: Record<string, string> = {
-  Tecnologia: "bg-sky-500/20 text-sky-400 border-sky-500/30",
-  Saúde: "bg-rose-500/20 text-rose-400 border-rose-500/30",
-  Educação: "bg-violet-500/20 text-violet-400 border-violet-500/30",
-  "E-commerce": "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  Serviços: "bg-teal-500/20 text-teal-400 border-teal-500/30",
+  Tecnologia: "bg-[#171717] text-[#fafafa]",
+  Saúde: "bg-[#171717] text-[#fafafa]",
+  Educação: "bg-[#171717] text-[#fafafa]",
+  "E-commerce": "bg-[#171717] text-[#fafafa]",
+  Serviços: "bg-[#171717] text-[#fafafa]",
 };
 
 /**
@@ -66,12 +66,12 @@ export function InfoRow({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <Icon className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
+      <Icon className="w-4 h-4 text-[#737373] shrink-0 mt-0.5" />
       <div className="flex-1">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">
+        <p className="text-[10px] text-[#737373] uppercase tracking-wider font-medium">
           {label}
         </p>
-        <p className="text-sm text-foreground font-medium">{value}</p>
+        <p className="text-[13px] text-[#fafafa] font-medium">{value}</p>
       </div>
     </div>
   );
@@ -97,13 +97,13 @@ export function ClientActions({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-muted-foreground hover:text-foreground"
+          className="h-8 w-8 text-[#a3a3a3] hover:text-[#fafafa] hover:bg-[#262626]"
         >
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={onView} className="gap-2">
+      <DropdownMenuContent align="end" className="bg-[#171717] border-white/10 text-[#fafafa]">
+        <DropdownMenuItem onClick={onView} className="gap-2 hover:bg-[#262626] focus:bg-[#262626]">
           <Eye className="h-3.5 w-3.5" />
           Visualizar
         </DropdownMenuItem>
@@ -117,14 +117,14 @@ export function ClientActions({
                   : "active";
             onStatusChange(client.id, newStatus);
           }}
-          className="gap-2"
+          className="gap-2 hover:bg-[#262626] focus:bg-[#262626]"
         >
           <Pencil className="h-3.5 w-3.5" />
           Alterar Status
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => onDelete(client.id)}
-          className="gap-2 text-destructive"
+          className="gap-2 text-[#f87171] hover:bg-[#262626] focus:bg-[#262626]"
         >
           <Trash2 className="h-3.5 w-3.5" />
           Remover

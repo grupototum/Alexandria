@@ -4,30 +4,28 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-normal tracking-[-0.022em] transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-[4px] text-[14px] font-medium leading-[1.25] tracking-[-0.005em] transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
         primary:
-          "bg-primary text-primary-foreground shadow-[0_18px_34px_-24px_rgba(0,113,227,0.85)] hover:-translate-y-px hover:bg-[#0077ed] active:translate-y-0 active:bg-[#006edb]",
-        accent:
-          "bg-[#1d1d1f] text-white shadow-[0_18px_34px_-24px_rgba(29,29,31,0.7)] hover:-translate-y-px hover:bg-[#2a2a2d] active:translate-y-0",
+          "bg-[#171717] text-[#ffffff] shadow-[0_0_2px_0.5px_rgba(0,0,0,0.2),0_0_4px_1px_rgba(0,0,0,0.1),0_0_8px_2px_rgba(0,0,0,0.05),0_0_0_0.5px_rgba(0,0,0,1),inset_0_0_0_1px_rgba(255,255,255,0.1),inset_0_0_3px_1px_rgba(255,255,255,0.1),inset_0_0.5px_0_0.5px_rgba(255,255,255,0.1)] hover:bg-[#000000] hover:scale-[1.02]",
         secondary:
-          "border border-border/80 bg-card text-foreground hover:border-border hover:bg-secondary/85",
-        outline:
-          "border border-transparent bg-transparent px-0 text-[#0066cc] shadow-none hover:bg-secondary/70 hover:px-5",
+          "bg-transparent text-[#fafafa] border border-white/10 hover:bg-[#262626]",
         ghost:
-          "bg-transparent text-foreground shadow-none hover:bg-secondary/80",
-        link: "bg-transparent px-0 text-[#0066cc] shadow-none hover:underline hover:underline-offset-4",
+          "bg-transparent text-[#fafafa] hover:bg-[#262626]",
+        link: 
+          "text-[#fafafa] underline-offset-4 hover:underline",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-[0_18px_34px_-24px_rgba(182,68,0,0.8)] hover:-translate-y-px hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        "gradient-action":
+          "bg-[#ffffff] text-[#000000] font-semibold rounded-[10px] shadow-[0_9px_8px_rgba(0,0,0,0.2),0_6px_4px_-1px_rgba(0,0,0,0.2)] hover:bg-opacity-90",
       },
       size: {
-        default: "h-11 px-[22px] text-[17px] leading-[1.1764805882]",
-        sm: "h-8 px-4 text-[12px] leading-[1.3333733333] tracking-[-0.01em]",
-        lg: "h-12 px-[31px] text-[17px] leading-[1.1764805882]",
-        xl: "h-14 px-10 text-[17px] leading-[1.1764805882]",
-        icon: "h-11 w-11 rounded-full",
+        default: "px-[13px] py-[8px]",
+        sm: "h-8 px-3 text-xs",
+        lg: "h-11 px-8",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: {
@@ -61,15 +59,10 @@ interface CompatButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement
   children: React.ReactNode;
 }
 
+// Legacy Aliases - mapped to Krea variants
 const GlowButton = React.forwardRef<HTMLButtonElement, CompatButtonProps>(
   ({ className, children, ...props }, ref) => (
-    <Button
-      ref={ref}
-      variant="primary"
-      size="lg"
-      className={cn(className)}
-      {...props}
-    >
+    <Button ref={ref} variant="gradient-action" className={cn(className)} {...props}>
       {children}
     </Button>
   )
@@ -78,13 +71,7 @@ GlowButton.displayName = "GlowButton";
 
 const BeamButton = React.forwardRef<HTMLButtonElement, CompatButtonProps>(
   ({ className, children, ...props }, ref) => (
-    <Button
-      ref={ref}
-      variant="outline"
-      size="lg"
-      className={cn(className)}
-      {...props}
-    >
+    <Button ref={ref} variant="primary" className={cn(className)} {...props}>
       {children}
     </Button>
   )
@@ -93,13 +80,7 @@ BeamButton.displayName = "BeamButton";
 
 const OutlineButton = React.forwardRef<HTMLButtonElement, CompatButtonProps>(
   ({ className, children, ...props }, ref) => (
-    <Button
-      ref={ref}
-      variant="outline"
-      size="default"
-      className={cn(className)}
-      {...props}
-    >
+    <Button ref={ref} variant="secondary" className={cn(className)} {...props}>
       {children}
     </Button>
   )

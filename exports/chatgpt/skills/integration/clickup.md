@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: 3e8ad94423c9b6d8962e95450c9970e42d882343aafd8f9e41e43f026d52468f
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/clickup.md
 ---
 

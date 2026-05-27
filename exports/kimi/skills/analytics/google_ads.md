@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: e0bfb314665804111d643e06c905bdebb57aa65ea51c13c715cca9a1ede0675b
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/google_ads.md
 ---
 

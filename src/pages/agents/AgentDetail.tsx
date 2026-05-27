@@ -195,13 +195,13 @@ export default function AgentDetail() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="min-h-screen" style={{ backgroundColor: '#EAEAE5' }}>
+        <div className="min-h-screen">
           <div className="max-w-[1400px] mx-auto p-8">
-            <div className="h-32 bg-stone-200 animate-pulse rounded-lg mb-6" />
-            <div className="h-12 bg-stone-200 animate-pulse rounded-lg mb-6" />
+            <div className="h-32 bg-[#171717] animate-pulse rounded-[14px] mb-6 border border-white/5" />
+            <div className="h-12 bg-[#171717] animate-pulse rounded-[14px] mb-6 border border-white/5" />
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 h-96 bg-stone-200 animate-pulse rounded-lg" />
-              <div className="h-96 bg-stone-200 animate-pulse rounded-lg" />
+              <div className="lg:col-span-2 h-96 bg-[#171717] animate-pulse rounded-[14px] border border-white/5" />
+              <div className="h-96 bg-[#171717] animate-pulse rounded-[14px] border border-white/5" />
             </div>
           </div>
         </div>
@@ -212,16 +212,16 @@ export default function AgentDetail() {
   if (!agent) {
     return (
       <AppLayout>
-        <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#EAEAE5' }}>
+        <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-stone-200 flex items-center justify-center">
-              <Icon icon="solar:ghost-linear" className="w-8 h-8 text-stone-400" />
+            <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-[#171717] border border-white/5 flex items-center justify-center">
+              <Icon icon="solar:ghost-linear" className="w-8 h-8 text-[#737373]" />
             </div>
-            <h1 className="text-2xl font-medium text-stone-900 mb-2">Agente não encontrado</h1>
-            <p className="text-stone-500 mb-6">O agente solicitado não existe ou foi removido.</p>
+            <h1 className="text-2xl font-medium text-[#fafafa] mb-2">Agente não encontrado</h1>
+            <p className="text-[#a3a3a3] mb-6">O agente solicitado não existe ou foi removido.</p>
             <Button 
               onClick={() => navigate('/agents')} 
-              className="bg-stone-900 hover:bg-stone-800"
+              variant="primary"
             >
               Voltar ao Dashboard
             </Button>
@@ -233,74 +233,70 @@ export default function AgentDetail() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen" style={{ backgroundColor: '#EAEAE5' }}>
+      <div className="min-h-screen">
         <div className="max-w-[1400px] mx-auto">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="p-8 border-b border-stone-300"
+            className="p-8 border-b border-white/10"
           >
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div className="flex items-center gap-4">
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="icon"
                   onClick={() => navigate(-1)}
-                  className="shrink-0 border-stone-300 bg-white"
+                  className="shrink-0"
                 >
                   <Icon icon="solar:arrow-left-linear" className="w-5 h-5" />
                 </Button>
 
                 <div className="relative">
                   <div className={`
-                    w-16 h-16 rounded-full flex items-center justify-center text-3xl border-2
-                    ${agent.is_orchestrator 
-                      ? 'bg-stone-900 text-white border-stone-900' 
-                      : 'bg-stone-200 border-stone-300'
-                    }
+                    w-16 h-16 rounded-[4px] flex items-center justify-center text-3xl border border-white/10 bg-[#171717]
                   `}>
                     {agent.emoji}
                   </div>
                   <span className={`
-                    absolute bottom-0 right-0 w-4 h-4 rounded-full ring-2 ring-[#EAEAE5]
+                    absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full ring-2 ring-[#0a0a0a]
                     ${statusColors[agent.status]}
                   `} />
                 </div>
 
                 <div>
                   <div className="flex items-center gap-3 flex-wrap">
-                    <h1 className="text-2xl font-semibold text-stone-900 tracking-tight">
+                    <h1 className="text-[28px] font-medium text-[#fafafa] tracking-[-0.02em]">
                       {agent.name}
                     </h1>
                     
                     {isNew && (
-                      <Badge className="bg-stone-900 text-white text-[10px] uppercase tracking-wider">
+                      <Badge className="bg-[#ffffff] text-[#000000] text-[10px] uppercase tracking-[0.04em]">
                         New
                       </Badge>
                     )}
                     
                     {agent.is_orchestrator && (
-                      <Badge variant="outline" className="text-[10px] border-amber-400 text-amber-600">
+                      <Badge variant="outline" className="text-[10px] uppercase tracking-[0.04em] border-amber-400/20 text-amber-500 bg-amber-500/10">
                         <Icon icon="solar:crown-linear" className="w-3 h-3 mr-1" />
                         Orquestrador
                       </Badge>
                     )}
                   </div>
                   
-                  <p className="text-sm text-stone-500">{agent.role}</p>
+                  <p className="text-[14px] text-[#a3a3a3] mt-1">{agent.role}</p>
                   
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-2 mt-2">
                     <Badge 
                       variant="outline" 
-                      className={`${classification?.bgColor} ${classification?.color} ${classification?.borderColor} text-[10px]`}
+                      className={`${classification?.bgColor} ${classification?.color} border-white/10 text-[10px] tracking-[0.04em] uppercase font-medium`}
                     >
                       <Icon icon={classification?.icon || ''} className="w-3 h-3 mr-1" />
                       {classification?.label}
                     </Badge>
                     
-                    <span className="text-xs text-stone-400">
+                    <span className="text-[11px] text-[#737373]">
                       Criado em {new Date(agent.created_at).toLocaleDateString('pt-BR')}
                     </span>
                   </div>
@@ -309,17 +305,15 @@ export default function AgentDetail() {
 
               <div className="flex items-center gap-3">
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   onClick={() => navigate('/agents')}
-                  className="border-stone-300 bg-white"
                 >
                   <Icon icon="solar:graph-new-linear" className="w-4 h-4 mr-2" />
                   Ver no Dashboard
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   onClick={openEdit}
-                  className="border-stone-300 bg-white"
                 >
                   <Icon icon="solar:pen-linear" className="w-4 h-4 mr-2" />
                   Editar
@@ -340,74 +334,72 @@ export default function AgentDetail() {
 
       {/* Edit Sheet */}
       <Sheet open={editOpen} onOpenChange={setEditOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto bg-[#EAEAE5] border-stone-300">
+        <SheetContent className="w-full sm:max-w-md overflow-y-auto bg-[#0a0a0a] border-l border-white/10 text-[#fafafa]">
           <SheetHeader className="mb-6">
-            <SheetTitle className="text-stone-900">Editar Agente</SheetTitle>
+            <SheetTitle className="text-[20px] font-medium text-[#fafafa]">Editar Agente</SheetTitle>
           </SheetHeader>
 
           {editForm && (
             <div className="space-y-4">
               <div className="grid grid-cols-4 gap-3">
                 <div>
-                  <Label className="text-xs text-stone-500 mb-1 block">Emoji</Label>
+                  <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Emoji</Label>
                   <Input
                     value={editForm.emoji}
                     onChange={e => setEditForm(f => f ? { ...f, emoji: e.target.value } : f)}
-                    className="text-center text-xl bg-white border-stone-300"
+                    className="text-center text-xl"
                   />
                 </div>
                 <div className="col-span-3">
-                  <Label className="text-xs text-stone-500 mb-1 block">Nome</Label>
+                  <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Nome</Label>
                   <Input
                     value={editForm.name}
                     onChange={e => setEditForm(f => f ? { ...f, name: e.target.value } : f)}
-                    className="bg-white border-stone-300"
                   />
                 </div>
               </div>
 
               <div>
-                <Label className="text-xs text-stone-500 mb-1 block">Role / Função</Label>
+                <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Role / Função</Label>
                 <Input
                   value={editForm.role}
                   onChange={e => setEditForm(f => f ? { ...f, role: e.target.value } : f)}
-                  className="bg-white border-stone-300"
                 />
               </div>
 
               <div>
-                <Label className="text-xs text-stone-500 mb-1 block">Descrição</Label>
+                <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Descrição</Label>
                 <Textarea
                   value={editForm.description}
                   onChange={e => setEditForm(f => f ? { ...f, description: e.target.value } : f)}
                   rows={3}
-                  className="bg-white border-stone-300 resize-none"
+                  className="bg-transparent border border-white/15 text-[#fafafa] rounded-[4px] resize-none focus-visible:ring-2 focus-visible:ring-white/20"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label className="text-xs text-stone-500 mb-1 block">Categoria</Label>
+                  <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Categoria</Label>
                   <Select value={editForm.category} onValueChange={v => setEditForm(f => f ? { ...f, category: v } : f)}>
-                    <SelectTrigger className="bg-white border-stone-300">
+                    <SelectTrigger className="bg-transparent border-white/15 text-[#fafafa] rounded-[4px]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-[#171717] border-white/10 text-[#fafafa] rounded-[4px]">
                       {CATEGORIES.map(c => (
-                        <SelectItem key={c} value={c}>{c}</SelectItem>
+                        <SelectItem key={c} value={c} className="hover:bg-[#262626] focus:bg-[#262626]">{c}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <Label className="text-xs text-stone-500 mb-1 block">Status</Label>
+                  <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Status</Label>
                   <Select value={editForm.status} onValueChange={v => setEditForm(f => f ? { ...f, status: v } : f)}>
-                    <SelectTrigger className="bg-white border-stone-300">
+                    <SelectTrigger className="bg-transparent border-white/15 text-[#fafafa] rounded-[4px]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-[#171717] border-white/10 text-[#fafafa] rounded-[4px]">
                       {STATUSES.map(s => (
-                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                        <SelectItem key={s} value={s} className="hover:bg-[#262626] focus:bg-[#262626]">{s}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -415,22 +407,21 @@ export default function AgentDetail() {
               </div>
 
               <div>
-                <Label className="text-xs text-stone-500 mb-1 block">Grupo</Label>
+                <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Grupo</Label>
                 <Input
                   value={editForm.agent_group}
                   onChange={e => setEditForm(f => f ? { ...f, agent_group: e.target.value } : f)}
                   placeholder="tier1, tier2, totum…"
-                  className="bg-white border-stone-300"
                 />
               </div>
 
               <div>
-                <Label className="text-xs text-stone-500 mb-1 block">Slug</Label>
+                <Label className="text-[12px] text-[#a3a3a3] mb-1 block">Slug</Label>
                 <Input
                   value={editForm.slug}
                   onChange={e => setEditForm(f => f ? { ...f, slug: e.target.value } : f)}
                   placeholder="meu-agente"
-                  className="bg-white border-stone-300 font-mono text-sm"
+                  className="font-mono"
                 />
               </div>
 
@@ -438,7 +429,8 @@ export default function AgentDetail() {
                 <Button
                   onClick={saveEdit}
                   disabled={saving}
-                  className="flex-1 bg-stone-900 hover:bg-stone-800 text-white"
+                  className="flex-1"
+                  variant="primary"
                 >
                   {saving ? (
                     <Icon icon="solar:refresh-linear" className="w-4 h-4 mr-2 animate-spin" />
@@ -448,9 +440,8 @@ export default function AgentDetail() {
                   {saving ? 'Salvando…' : 'Salvar'}
                 </Button>
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   onClick={() => setEditOpen(false)}
-                  className="border-stone-300 bg-white"
                 >
                   Cancelar
                 </Button>

@@ -25,30 +25,29 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "relative overflow-hidden rounded-[28px] border border-border/70 bg-white px-6 py-7 shadow-[0_30px_80px_-60px_rgba(29,29,31,0.35)] sm:px-8 sm:py-9",
+        "relative overflow-hidden px-2 py-4 sm:px-4 sm:py-6",
         className
       )}
       {...props}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(0,113,227,0.12),transparent_70%)]" />
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 items-start gap-4">
           {Icon && (
-            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-full border border-border bg-secondary text-primary">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-[4px] border border-white/10 bg-[#171717] text-[#fafafa]">
               <Icon className="h-5 w-5" />
             </div>
           )}
           <div className="min-w-0">
             {eyebrow && (
-              <p className="mb-2 text-[12px] tracking-[-0.01em] text-[#0066cc]">
+              <p className="mb-2 text-[11px] font-medium tracking-[0.04em] uppercase text-[#a3a3a3]">
                 {eyebrow}
               </p>
             )}
-            <h1 className="max-w-4xl text-[clamp(2.5rem,5vw,4.5rem)] font-semibold leading-[1.0834933333] tracking-[-0.03em] text-foreground">
+            <h1 className="max-w-4xl text-[48px] font-medium leading-[1.1] tracking-[-0.03em] text-[#fafafa] sm:text-[64px]">
               {title}
             </h1>
             {description && (
-              <p className="paragraph-lg mt-3 max-w-3xl text-muted-foreground">
+              <p className="mt-3 max-w-3xl text-[18px] font-normal leading-[1.5] tracking-[-0.005em] text-[#a3a3a3]">
                 {description}
               </p>
             )}
@@ -71,9 +70,9 @@ export function SectionHeader({
 }) {
   return (
     <div className={cn("mb-4 flex items-center justify-between gap-3", className)}>
-      <p className="text-[12px] tracking-[-0.01em] text-muted-foreground">
+      <h2 className="text-[20px] font-medium leading-[1.3] tracking-[-0.01em] text-[#fafafa]">
         {title}
-      </p>
+      </h2>
       {action}
     </div>
   );
@@ -92,28 +91,30 @@ export function MetricCard({
   icon?: LucideIcon;
   tone?: "primary" | "emerald" | "amber" | "sky" | "violet";
 }) {
-  const tones = {
-    primary: "text-primary bg-primary/10 border-primary/20",
-    emerald: "text-[#0066cc] bg-[#0066cc]/10 border-[#0066cc]/20",
-    amber: "text-[#b64400] bg-[#ff791b]/10 border-[#ff791b]/20",
-    sky: "text-primary bg-primary/10 border-primary/20",
-    violet: "text-foreground bg-foreground/5 border-border",
-  };
+  // Em Krea, as cores de data-viz (tones) são estritas e apenas o foreground muda, 
+  // não pintamos o background do card
+  const toneColor = {
+    primary: "text-[#ffffff]",
+    emerald: "text-emerald-400",
+    amber: "text-amber-400",
+    sky: "text-blue-400",
+    violet: "text-violet-400",
+  }[tone];
 
   return (
     <Card>
       <CardContent className="flex items-center gap-4 p-5">
         {Icon && (
-          <div className={cn("grid h-11 w-11 shrink-0 place-items-center rounded-full border", tones[tone])}>
-            <Icon className="h-5 w-5" />
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-[4px] border border-white/10 bg-[#171717]">
+            <Icon className={cn("h-5 w-5", toneColor)} />
           </div>
         )}
         <div className="min-w-0">
-          <p className="text-[12px] tracking-[-0.01em] text-muted-foreground">
+          <p className="text-[12px] tracking-[-0.01em] text-[#a3a3a3]">
             {label}
           </p>
-          <p className="mt-1 font-['SF_Pro_Display','SF_Pro_Icons','Helvetica_Neue',Helvetica,Arial,sans-serif] text-3xl font-semibold tracking-[-0.03em] text-foreground">{value}</p>
-          {description && <p className="mt-1 truncate text-sm text-muted-foreground">{description}</p>}
+          <p className="mt-1 text-3xl font-medium tracking-[-0.03em] text-[#fafafa]">{value}</p>
+          {description && <p className="mt-1 truncate text-[13px] text-[#737373]">{description}</p>}
         </div>
       </CardContent>
     </Card>
@@ -153,19 +154,19 @@ export function EmptyState({
   onAction?: () => void;
 }) {
   return (
-    <Card className="border-dashed border-border/80 bg-secondary/55">
+    <Card className="border border-white/5 bg-transparent">
       <CardContent className="flex flex-col items-center justify-center px-6 py-12 text-center">
         {Icon && (
-          <div className="mb-4 grid h-14 w-14 place-items-center rounded-full border border-border bg-white text-muted-foreground">
+          <div className="mb-4 grid h-14 w-14 place-items-center rounded-[4px] border border-white/10 bg-[#171717] text-[#a3a3a3]">
             <Icon className="h-6 w-6" />
           </div>
         )}
-        <p className="text-base font-medium text-foreground">{title}</p>
-        {description && <p className="mt-2 max-w-md text-sm text-muted-foreground">{description}</p>}
+        <p className="text-[16px] font-medium text-[#fafafa]">{title}</p>
+        {description && <p className="mt-2 max-w-md text-[14px] text-[#a3a3a3]">{description}</p>}
         {actionLabel && onAction && (
           <Button className="mt-5" onClick={onAction}>
             {actionLabel}
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         )}
       </CardContent>
@@ -177,7 +178,7 @@ export function Toolbar({ className, ...props }: React.HTMLAttributes<HTMLDivEle
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-[22px] border border-border/80 bg-card p-3 shadow-[0_16px_36px_-30px_rgba(29,29,31,0.25)] sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-3 rounded-[14px] border border-white/10 bg-[#171717] p-3 shadow-[0_4px_12px_rgba(0,0,0,0.1)] sm:flex-row sm:items-center sm:justify-between",
         className
       )}
       {...props}

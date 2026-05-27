@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: 9b91a827fa197f87974d4e4c54a5be8e08037cdd9cedb42ceb197e97b22c9b4b
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/shopify.md
 ---
 

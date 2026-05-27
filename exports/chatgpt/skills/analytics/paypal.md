@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: 508e4ef6eb3fccd52d355c42086f7eaaa2d6130c11d7d7574fc98a8b1d30f4f1
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/paypal.md
 ---
 

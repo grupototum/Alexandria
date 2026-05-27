@@ -69,13 +69,13 @@ export default function SignUp() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-surface-container-high px-4 py-12">
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0a0a] px-4 py-12">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 50% at 50% 0%, hsl(var(--accent) / 0.08) 0%, transparent 70%)",
+            "radial-gradient(60% 50% at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 70%)",
         }}
       />
 
@@ -85,7 +85,7 @@ export default function SignUp() {
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 w-full max-w-md"
       >
-        <div className="ds-panel p-8 sm:p-10 bg-surface-container">
+        <div className="p-8 sm:p-10 bg-[#171717] border border-white/10 rounded-[4px]">
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="flex items-center gap-3 mb-3">
@@ -94,19 +94,19 @@ export default function SignUp() {
                 alt="Totum"
                 className="w-10 h-10 rounded-lg"
               />
-              <span className="font-display text-xl font-semibold tracking-tight text-foreground">
+              <span className="font-display text-[20px] font-medium tracking-tight text-[#fafafa]">
                 Totum OS
               </span>
             </div>
-            <span className="label-mono">Central de Agentes IA</span>
+            <span className="text-[11px] text-[#737373] uppercase tracking-wider">Central de Agentes IA</span>
           </div>
 
           {/* Heading */}
           <div className="text-center mb-8">
-            <h1 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-foreground mb-2">
+            <h1 className="font-display text-[28px] sm:text-[32px] font-medium tracking-tight text-[#fafafa] mb-2">
               Criar conta
             </h1>
-            <p className="paragraph text-muted-foreground">
+            <p className="text-[13px] text-[#a3a3a3]">
               Cadastre-se para acessar os agentes de IA da Totum
             </p>
           </div>
@@ -114,7 +114,7 @@ export default function SignUp() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div className="space-y-1.5">
-              <label className="label-mono block">Nome completo</label>
+              <label className="text-[12px] text-[#a3a3a3] block">Nome completo</label>
               <Input
                 type="text"
                 value={name}
@@ -125,14 +125,14 @@ export default function SignUp() {
                 placeholder="Seu nome"
                 disabled={loading}
                 autoComplete="name"
-                className={errors.name ? "border-destructive focus-visible:ring-destructive" : ""}
+                className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] ${errors.name ? "border-destructive focus-visible:ring-destructive" : ""}`}
               />
               {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
             </div>
 
             {/* Email */}
             <div className="space-y-1.5">
-              <label className="label-mono block">E-mail</label>
+              <label className="text-[12px] text-[#a3a3a3] block">E-mail</label>
               <Input
                 type="email"
                 value={email}
@@ -143,14 +143,14 @@ export default function SignUp() {
                 placeholder="seu@email.com"
                 disabled={loading}
                 autoComplete="email"
-                className={errors.email ? "border-destructive focus-visible:ring-destructive" : ""}
+                className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] ${errors.email ? "border-destructive focus-visible:ring-destructive" : ""}`}
               />
               {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
             </div>
 
             {/* Password */}
             <div className="space-y-1.5">
-              <label className="label-mono block">Senha</label>
+              <label className="text-[12px] text-[#a3a3a3] block">Senha</label>
               <div className="relative">
                 <Input
                   type={showPass ? "text" : "password"}
@@ -162,12 +162,12 @@ export default function SignUp() {
                   placeholder="Mínimo 6 caracteres"
                   disabled={loading}
                   autoComplete="new-password"
-                  className={`pr-11 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
+                  className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] pr-11 ${errors.password ? "border-destructive focus-visible:ring-destructive" : ""}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373] hover:text-[#fafafa] transition-colors"
                 >
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -177,7 +177,7 @@ export default function SignUp() {
 
             {/* Confirm Password */}
             <div className="space-y-1.5">
-              <label className="label-mono block">Confirmar senha</label>
+              <label className="text-[12px] text-[#a3a3a3] block">Confirmar senha</label>
               <Input
                 type={showPass ? "text" : "password"}
                 value={confirmPassword}
@@ -188,7 +188,7 @@ export default function SignUp() {
                 placeholder="Repita a senha"
                 disabled={loading}
                 autoComplete="new-password"
-                className={errors.confirmPassword ? "border-destructive focus-visible:ring-destructive" : ""}
+                className={`bg-[#0a0a0a] border-white/10 text-[#fafafa] placeholder:text-[#737373] ${errors.confirmPassword ? "border-destructive focus-visible:ring-destructive" : ""}`}
               />
               {errors.confirmPassword && (
                 <p className="text-xs text-destructive mt-1">{errors.confirmPassword}</p>
@@ -197,9 +197,9 @@ export default function SignUp() {
 
             {/* Divider */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">ou</span>
-              <div className="flex-1 h-px bg-border" />
+              <div className="flex-1 h-[1px] bg-white/5" />
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#737373]">ou</span>
+              <div className="flex-1 h-[1px] bg-white/5" />
             </div>
 
             {/* Google Sign In */}
@@ -209,7 +209,7 @@ export default function SignUp() {
               size="lg"
               onClick={handleGoogleSignIn}
               disabled={googleLoading || loading}
-              className="w-full"
+              className="w-full bg-[#171717] border-white/10 text-[#fafafa] hover:bg-[#262626]"
             >
               {googleLoading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -225,7 +225,7 @@ export default function SignUp() {
             </Button>
 
             {/* Submit */}
-            <Button type="submit" variant="primary" size="lg" disabled={loading} className="w-full">
+            <Button type="submit" size="lg" disabled={loading} className="w-full bg-[#ffffff] text-[#0a0a0a] hover:bg-[#e5e5e5]">
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {loading ? "Criando conta..." : "Criar conta"}
             </Button>
@@ -234,13 +234,13 @@ export default function SignUp() {
 
         {/* Footer */}
         <div className="mt-6 space-y-2 text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-[13px] text-[#a3a3a3]">
             Já tem conta?{" "}
-            <Link to="/login" className="text-foreground hover:underline font-medium">
+            <Link to="/login" className="text-[#fafafa] hover:underline font-medium">
               Entrar
             </Link>
           </p>
-          <p className="label-mono">
+          <p className="text-[11px] text-[#737373] uppercase tracking-wider">
             © {new Date().getFullYear()} Grupo Totum · Sistema de Agentes IA
           </p>
         </div>

@@ -2,7 +2,7 @@
 
 - Scope: all_active
 - Skills ativas exportadas: 70
-- Gerado em: 2026-05-16T17:36:54.391Z
+- Gerado em: 2026-05-27T12:07:15.535Z
 - Skill principal: [Skill Router](./skills/automation/skill_router.md)
 
 ## Categorias

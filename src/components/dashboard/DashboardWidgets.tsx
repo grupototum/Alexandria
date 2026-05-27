@@ -88,7 +88,7 @@ export function OverviewCards() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {cards.map((c, i) => (
         <motion.div key={c.label} {...anim(i)}>
-          <Card cornerMarks className={`border-l-2 ${c.accent} bg-card/50 backdrop-blur-sm border-border/40 hover:border-border/80 transition-all`}>
+          <Card className={`border-l-2 ${c.accent} transition-all`}>
             <CardContent className="p-4 flex items-start gap-3">
               <div className="w-9 h-9 rounded-lg bg-secondary/80 flex items-center justify-center shrink-0">
                 <c.icon className="w-4.5 h-4.5 text-muted-foreground" />
@@ -115,7 +115,7 @@ export function AppStatusList() {
   if (loading) return <CardSkeleton />;
   return (
     <motion.div {...anim(5)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5">
           <h3 className="font-sans font-bold text-sm text-foreground mb-4 flex items-center gap-2">
             <Activity className="w-4 h-4 text-primary" />
@@ -165,7 +165,7 @@ export function ActivityLog() {
   if (loading) return <CardSkeleton />;
   return (
     <motion.div {...anim(6)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5">
           <h3 className="font-sans font-bold text-sm text-foreground mb-4 flex items-center gap-2">
             <Clock className="w-4 h-4 text-primary" />
@@ -217,7 +217,7 @@ export function ResourceUsage() {
   if (loading) return <CardSkeleton />;
   return (
     <motion.div {...anim(7)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5 space-y-5">
           <h3 className="font-sans font-bold text-sm text-foreground flex items-center gap-2">
             <Server className="w-4 h-4 text-primary" />
@@ -252,7 +252,7 @@ export function CostEstimate() {
   const total = costs.reduce((sum, c) => sum + Number(c.value), 0);
   return (
     <motion.div {...anim(8)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5">
           <h3 className="font-sans font-bold text-sm text-foreground mb-4 flex items-center gap-2">
             <DollarSign className="w-4 h-4 text-primary" />
@@ -309,7 +309,7 @@ export function MexSync() {
   if (loading) return <CardSkeleton />;
   return (
     <motion.div {...anim(9)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5">
           <h3 className="font-sans font-bold text-sm text-foreground mb-4 flex items-center gap-2">
             <Brain className="w-4 h-4 text-primary" />
@@ -375,7 +375,7 @@ export function AgentCards() {
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {display.map((agent, i) => (
         <motion.div key={agent.id} {...anim(10 + i)}>
-          <Card className="border-gradient backdrop-blur-sm hover:shadow-lg hover:shadow-primary/5 transition-shadow group cursor-pointer"
+          <Card className="hover:shadow-[0_9px_8px_rgba(0,0,0,0.4),0_6px_4px_-1px_rgba(0,0,0,0.4)] transition-shadow group cursor-pointer"
             onClick={() => navigate(`/agents/${agent.slug || agent.id}/chat`)}>
             <CardContent className="p-5 text-center">
               <span className="text-3xl block mb-2">{agent.emoji}</span>
@@ -447,7 +447,7 @@ export function SystemHealthScore() {
 
   return (
     <motion.div {...anim(11)}>
-      <Card cornerAccents className="border-gradient backdrop-blur-sm">
+      <Card elevated>
         <CardContent className="p-5">
           <h3 className="font-sans font-bold text-sm text-foreground mb-4 flex items-center gap-2">
             <Activity className="w-4 h-4 text-primary" />
@@ -580,7 +580,7 @@ export function VpsLiveStatus() {
 
   return (
     <motion.div {...anim(13)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-sans font-bold text-sm text-foreground flex items-center gap-2">
@@ -645,7 +645,7 @@ export function DatabaseStatus() {
 
   return (
     <motion.div {...anim(14)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-sans font-bold text-sm text-foreground flex items-center gap-2">
@@ -709,7 +709,7 @@ export function InfraControls() {
 
   return (
     <motion.div {...anim(15)}>
-      <Card cornerMarks className="bg-card/50 backdrop-blur-sm border-border/40">
+      <Card>
         <CardContent className="p-5">
           <h3 className="font-sans font-bold text-sm text-foreground mb-4 flex items-center gap-2">
             <Zap className="w-4 h-4 text-primary" />

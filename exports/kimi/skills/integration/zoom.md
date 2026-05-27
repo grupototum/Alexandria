@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: claude
 tags: []
 content_hash: 9dc8b22ef571c73e3ab783237b9408521782bcdd634b1ff4625adf25427ae35f
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/zoom.md
 ---
 

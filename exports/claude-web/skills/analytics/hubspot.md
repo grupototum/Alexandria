@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: 566ee9d0f6da141a788dbe67115a0e7ef6421c0d89811d8ad7ce2861b8ffba50
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/hubspot.md
 ---
 

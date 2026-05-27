@@ -20,21 +20,21 @@ export function NewClientSteps({
           <div key={i} className="flex-1 flex items-center gap-1">
             <button
               onClick={() => onStepClick(i)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all w-full ${
+              className={`flex items-center gap-2 px-3 py-2 rounded-[4px] text-[12px] font-medium transition-all w-full ${
                 i === step
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-[#262626] text-[#fafafa]"
                   : i < step
-                    ? "bg-emerald-500/20 text-emerald-400"
-                    : "bg-secondary text-muted-foreground"
+                    ? "bg-[#171717] text-[#a3a3a3]"
+                    : "bg-transparent text-[#737373] hover:text-[#a3a3a3]"
               }`}
             >
               <div
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
                   i < step
-                    ? "bg-emerald-500 text-white"
+                    ? "bg-[#fafafa] text-[#0a0a0a]"
                     : i === step
-                      ? "bg-primary-foreground text-primary"
-                      : "bg-muted text-muted-foreground"
+                      ? "bg-[#ffffff] text-[#0a0a0a]"
+                      : "bg-[#171717] text-[#737373] border border-white/5"
                 }`}
               >
                 {i < step ? <Check className="w-3 h-3" /> : i + 1}
@@ -43,17 +43,17 @@ export function NewClientSteps({
             </button>
             {i < 4 && (
               <div
-                className={`w-4 h-0.5 shrink-0 ${
-                  i < step ? "bg-emerald-500" : "bg-border"
+                className={`w-4 h-[1px] shrink-0 ${
+                  i < step ? "bg-[#fafafa]" : "bg-white/10"
                 }`}
               />
             )}
           </div>
         ))}
       </div>
-      <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+      <div className="h-1.5 bg-[#171717] rounded-full overflow-hidden mt-4">
         <motion.div
-          className="h-full bg-primary rounded-full"
+          className="h-full bg-[#ffffff] rounded-full"
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.4 }}
         />

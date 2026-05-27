@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: f8247973ab4ed30381162785dd44834f5e4150ecf8461e0b483136de0e4851fa
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/meta_ads.md
 ---
 

@@ -31,7 +31,7 @@ export function ClientDetail({
         <DialogHeader>
           <div className="flex items-start gap-4 mb-4">
             <div
-              className="w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-bold shrink-0"
+              className="w-16 h-16 rounded-[4px] border border-white/10 flex items-center justify-center text-2xl font-bold shrink-0"
               style={{
                 backgroundColor: (client.primary_color ?? "#f76926") + "20",
                 color: client.primary_color ?? "#f76926",
@@ -40,10 +40,10 @@ export function ClientDetail({
               {client.company_name.charAt(0)}
             </div>
             <div className="flex-1">
-              <DialogTitle className="text-2xl">
+              <DialogTitle className="text-[20px] font-medium text-[#fafafa]">
                 {client.company_name}
               </DialogTitle>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-[13px] text-[#a3a3a3] mt-1">
                 {client.cnpj ?? "CNPJ não informado"}
               </p>
             </div>
@@ -53,7 +53,7 @@ export function ClientDetail({
         <div className="space-y-6">
           {/* Contact Info */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">
+            <h3 className="text-[14px] font-medium text-[#fafafa]">
               Informações de Contato
             </h3>
             <div className="space-y-2">
@@ -78,7 +78,7 @@ export function ClientDetail({
 
           {/* Business Info */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">
+            <h3 className="text-[14px] font-medium text-[#fafafa]">
               Informações da Empresa
             </h3>
             <div className="space-y-2">
@@ -109,10 +109,10 @@ export function ClientDetail({
           {/* Description */}
           {client.business_description && (
             <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-foreground">
+              <h3 className="text-[14px] font-medium text-[#fafafa]">
                 Descrição
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-[13px] text-[#a3a3a3] leading-relaxed">
                 {client.business_description}
               </p>
             </div>
@@ -120,26 +120,26 @@ export function ClientDetail({
 
           {/* Additional Info */}
           <div className="space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">
+            <h3 className="text-[14px] font-medium text-[#fafafa]">
               Configurações
             </h3>
             <div className="space-y-2">
               {client.brand_tone && (
-                <div className="text-xs">
-                  <p className="text-muted-foreground font-medium">Tom de Voz</p>
-                  <p className="text-foreground">{client.brand_tone}</p>
+                <div className="text-[12px]">
+                  <p className="text-[#737373] font-medium">Tom de Voz</p>
+                  <p className="text-[#fafafa]">{client.brand_tone}</p>
                 </div>
               )}
               {client.crm_used && (
-                <div className="text-xs">
-                  <p className="text-muted-foreground font-medium">CRM Utilizado</p>
-                  <p className="text-foreground">{client.crm_used}</p>
+                <div className="text-[12px]">
+                  <p className="text-[#737373] font-medium">CRM Utilizado</p>
+                  <p className="text-[#fafafa]">{client.crm_used}</p>
                 </div>
               )}
               {client.sla_response && (
-                <div className="text-xs">
-                  <p className="text-muted-foreground font-medium">SLA de Resposta</p>
-                  <p className="text-foreground">{client.sla_response}</p>
+                <div className="text-[12px]">
+                  <p className="text-[#737373] font-medium">SLA de Resposta</p>
+                  <p className="text-[#fafafa]">{client.sla_response}</p>
                 </div>
               )}
             </div>
@@ -150,7 +150,7 @@ export function ClientDetail({
           {onEdit && (
             <Button
               onClick={() => onEdit(client)}
-              className="bg-primary hover:bg-primary/90"
+              className="bg-[#ffffff] text-[#0a0a0a] hover:bg-[#e5e5e5]"
             >
               Editar Cliente
             </Button>

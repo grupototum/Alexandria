@@ -9,7 +9,7 @@ routing_priority: 0
 model_preference: groq
 tags: []
 content_hash: 43e48d16d4747fd12d27c450e5210d391304c37afbadc68c00a0c62906e227bd
-updated_at: 2026-05-16T17:36:54.391Z
+updated_at: 2026-05-27T12:07:15.535Z
 prompt_template_path: prompts/airtable.md
 ---
 

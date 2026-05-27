@@ -91,7 +91,7 @@ export function AuthFormSplitScreen({
   return (
     <div className="relative flex min-h-screen w-full flex-col md:flex-row">
       {/* Left Panel: Form */}
-      <div className="flex w-full flex-col items-center justify-center bg-background p-8 md:w-1/2">
+      <div className="flex w-full flex-col items-center justify-center bg-[#0a0a0a] p-8 md:w-1/2">
         <div className="w-full max-w-md">
           <motion.div
             variants={containerVariants}
@@ -103,8 +103,8 @@ export function AuthFormSplitScreen({
               {logo}
             </motion.div>
             <motion.div variants={itemVariants} className="text-left">
-              <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-              <p className="text-sm text-muted-foreground">{description}</p>
+              <h1 className="text-[24px] font-medium text-[#fafafa] tracking-[-0.02em]">{title}</h1>
+              <p className="text-[13px] text-[#a3a3a3]">{description}</p>
             </motion.div>
 
             <Form {...form}>
@@ -179,14 +179,14 @@ export function AuthFormSplitScreen({
                   />
                   <a
                     href={forgotPasswordHref}
-                    className="text-sm font-medium text-primary hover:underline"
+                    className="text-[12px] font-medium text-[#a3a3a3] hover:text-[#fafafa] hover:underline"
                   >
                     Esqueci a senha
                   </a>
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
+                  <Button type="submit" className="w-full bg-[#ffffff] text-[#0a0a0a] hover:bg-[#e5e5e5]" disabled={isLoading}>
                     {isLoading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
@@ -198,12 +198,12 @@ export function AuthFormSplitScreen({
 
             <motion.p
               variants={itemVariants}
-              className="px-8 text-center text-sm text-muted-foreground"
+              className="px-8 text-center text-[13px] text-[#a3a3a3]"
             >
               Não tem conta?{" "}
               <a
                 href={createAccountHref}
-                className="font-medium text-primary hover:underline"
+                className="font-medium text-[#fafafa] hover:underline"
               >
                 Crie uma aqui
               </a>
