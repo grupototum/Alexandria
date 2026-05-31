@@ -4,6 +4,7 @@ Alexandria é a fonte canônica de conhecimento do Totum OS. Aqui vivem decisõe
 
 ## Estrutura
 
+- `AGENT_ARCHITECTURE.md` → **MUITO IMPORTANTE:** Arquitetura de "Cascata Circular" (Regras de Operação p/ Agentes Autônomos).
 - `decisions/` → Decisões estratégicas permanentes
 - `projects/` → Projetos ativos
 - `lessons/` → Lições aprendidas
