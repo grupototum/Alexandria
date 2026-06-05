@@ -14,6 +14,14 @@ import {
   readMetadataAgents,
 } from "./resources/metadata-agents.js";
 import {
+  METADATA_WORKFLOWS_URI,
+  readMetadataWorkflows,
+} from "./resources/metadata-workflows.js";
+import {
+  METADATA_HEALTH_URI,
+  readMetadataHealth,
+} from "./resources/metadata-health.js";
+import {
   KNOWLEDGE_SEARCH_URI_BASE,
   KNOWLEDGE_SEARCH_URI_TEMPLATE,
   readKnowledgeSearch,
@@ -71,6 +79,20 @@ export function buildServer(params: { config: Config; logger: Logger }): Server 
         description: "Feed dinâmico de AGENT_DIVISION_MAPPING.json (57 agentes / 7 divisões).",
         mimeType: "application/json",
       },
+      {
+        uri: METADATA_WORKFLOWS_URI,
+        name: "Agent Execution Matrix",
+        description:
+          "Feed dinâmico de AGENT_EXECUTION_MATRIX.json (20 workflows). Consulte antes de chamar execute_agentic_task.",
+        mimeType: "application/json",
+      },
+      {
+        uri: METADATA_HEALTH_URI,
+        name: "Agent Health Metrics",
+        description:
+          "Feed dinâmico de AGENT_HEALTH_METRICS.json (SLA targets e resource budgets por agente).",
+        mimeType: "application/json",
+      },
     ],
   }));
 
@@ -98,6 +120,16 @@ export function buildServer(params: { config: Config; logger: Logger }): Server 
 
     if (uri === METADATA_AGENTS_URI) {
       const content = await readMetadataAgents(config);
+      return { contents: [content] };
+    }
+
+    if (uri === METADATA_WORKFLOWS_URI) {
+      const content = await readMetadataWorkflows(config);
+      return { contents: [content] };
+    }
+
+    if (uri === METADATA_HEALTH_URI) {
+      const content = await readMetadataHealth(config);
       return { contents: [content] };
     }
 

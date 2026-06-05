@@ -16,6 +16,8 @@ Construído com `@modelcontextprotocol/sdk` oficial. Não é plugin — é servi
 | URI | Backend | Conteúdo |
 |---|---|---|
 | `alexandria://metadata/agents` | `AGENT_DIVISION_MAPPING.json` | Feed dinâmico (57 agentes / 7 divisões). |
+| `alexandria://metadata/workflows` | `AGENT_EXECUTION_MATRIX.json` | 20 workflows × 57 agentes. Discovery antes de `execute_agentic_task`. |
+| `alexandria://metadata/health` | `AGENT_HEALTH_METRICS.json` | SLA targets + resource budgets por agente. |
 | `alexandria://knowledge/search?q=<query>&limit=<n>` | `giles_knowledge` via RPC `match_documents` | Busca semântica na base canônica (657 chunks). Embedding 768d gerado client-side. |
 | `alexandria://operations/docs?type={doc\|pop\|skill}&q=<query>&limit=<n>` | `alexandria_documents` via `search_docs`/`search_pops`/`search_skills` | Busca semântica em docs operacionais. RPC selecionada pelo `type`. |
 
