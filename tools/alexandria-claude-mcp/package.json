@@ -1,17 +1,38 @@
 {
   "name": "@totum-os/alexandria-claude-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Local MCP bridge for Claude Desktop to consult Alexandria in Totum OS.",
+  "description": "Alexandria MCP Server — Hub de Contexto Semântico do Totum OS (Stdio + SSE, Keycloak, Supabase pgvector).",
   "bin": {
-    "alexandria-claude-mcp": "./server.mjs"
+    "alexandria-claude-mcp": "./dist/index.js"
   },
   "scripts": {
-    "start": "node server.mjs",
-    "check": "node --check server.mjs"
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "dev:sse": "MCP_TRANSPORT=sse tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "@supabase/supabase-js": "^2.45.0",
+    "express": "^4.21.1",
+    "jose": "^5.9.6",
+    "pino": "^9.5.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.16.10",
+    "tsup": "^8.3.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
   }
 }
