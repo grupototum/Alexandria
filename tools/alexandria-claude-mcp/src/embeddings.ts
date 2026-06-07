@@ -83,7 +83,21 @@ export async function generateEmbedding(
       `embedding dimension mismatch: got ${parsed.embedding.values.length}, expected ${cfg.dimensions}`,
     );
   }
-  return parsed.embedding.values;
+  // gemini-embedding-001 com outputDimensionality<3072 (MRL) vem NÃO-normalizado
+  // → L2-norm para cosine (match_documents usa cosine distance).
+  return normalizeL2(parsed.embedding.values);
+}
+
+/**
+ * L2-normaliza um vetor (||v|| = 1 → cosine ≡ produto interno). Vetor nulo
+ * retorna como está (evita divisão por zero).
+ */
+export function normalizeL2(vec: number[]): number[] {
+  let sumSq = 0;
+  for (const v of vec) sumSq += v * v;
+  const norm = Math.sqrt(sumSq);
+  if (norm === 0) return vec;
+  return vec.map((v) => v / norm);
 }
 
 // Stub determinístico — hash simples sobre os caracteres distribuído em [-1,1].
@@ -98,9 +112,5 @@ function deterministicStub(text: string, dim: number): number[] {
     const prev = out[safeIdx] ?? 0;
     out[safeIdx] = prev + sign * ((code % 17) / 17);
   }
-  // Normaliza para a esfera unitária (cosine ≡ produto interno).
-  let norm = 0;
-  for (const v of out) norm += v * v;
-  norm = Math.sqrt(norm) || 1;
-  return out.map((v) => v / norm);
+  return normalizeL2(out);
 }

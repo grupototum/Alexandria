@@ -15,6 +15,20 @@ export const EMBEDDING_MODEL = 'gemini-embedding-001';
 export const EMBEDDING_DIM = 768;
 
 /**
+ * L2-normaliza um vetor (||v|| = 1), tornando cosine ≡ produto interno.
+ * `gemini-embedding-001` com `outputDimensionality < 3072` (MRL truncado)
+ * retorna vetores NÃO-normalizados — sem isto a similaridade cosseno fica
+ * enviesada. Vetor nulo retorna como está (evita divisão por zero).
+ */
+export function normalizeL2(vec: number[]): number[] {
+  let sumSq = 0;
+  for (const v of vec) sumSq += v * v;
+  const norm = Math.sqrt(sumSq);
+  if (norm === 0) return vec;
+  return vec.map((v) => v / norm);
+}
+
+/**
  * Gera um embedding via Gemini. Retorna `null` em falta de key/erro/dimensão
  * inesperada — cada caller decide o fallback (busca textual, etc.). NUNCA
  * lança: o frontend degrada graciosamente.
@@ -51,7 +65,8 @@ export async function geminiEmbed(
       console.warn(`geminiEmbed: dim ${values.length} != ${EMBEDDING_DIM} — fallback`);
       return null;
     }
-    return values;
+    // MRL truncado (<3072) vem não-normalizado → L2-norm para cosine.
+    return normalizeL2(values);
   } catch (err) {
     console.warn('geminiEmbed: falhou — fallback:', err);
     return null;
