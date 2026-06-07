@@ -130,4 +130,45 @@ describe("auth/keycloak — verifyBearer (introspection)", () => {
     expect(verdict.ok).toBe(false);
     expect(verdict.reason).toMatch(/inactive/);
   });
+
+  it("rejeita quando introspection não está configurada (sem URL/secret)", async () => {
+    const verdict = await verifyBearer({
+      bearer: "any",
+      requiredScopes: ["alexandria:read"],
+      config: baseConfig({ introspectUrl: undefined, clientMcpReadSecret: undefined }),
+      logger,
+    });
+    expect(verdict.ok).toBe(false);
+    expect(verdict.reason).toMatch(/not configured/);
+  });
+
+  it("rejeita quando o endpoint de introspection responde não-2xx (401)", async () => {
+    globalThis.fetch = vi.fn(async () =>
+      new Response("unauthorized", { status: 401 }),
+    ) as unknown as typeof fetch;
+
+    const verdict = await verifyBearer({
+      bearer: "tok",
+      requiredScopes: ["alexandria:read"],
+      config: baseConfig(),
+      logger,
+    });
+    expect(verdict.ok).toBe(false);
+    expect(verdict.reason).toMatch(/introspection http 401/);
+  });
+
+  it("rejeita graciosamente em erro de rede (fetch lança)", async () => {
+    globalThis.fetch = vi.fn(async () => {
+      throw new Error("ECONNREFUSED");
+    }) as unknown as typeof fetch;
+
+    const verdict = await verifyBearer({
+      bearer: "tok",
+      requiredScopes: ["alexandria:read"],
+      config: baseConfig(),
+      logger,
+    });
+    expect(verdict.ok).toBe(false);
+    expect(verdict.reason).toMatch(/network error/);
+  });
 });
