@@ -8,10 +8,9 @@ import { z } from "zod";
  * Geração tem que ser aqui no servidor MCP.
  *
  * Dimensão: 768 (giles_knowledge / alexandria_documents / hermione base).
- * Modelo default: text-embedding-004 (Google Gemini, 768d).
- *
- * TODO(M79): confirmar com o app Alexandria qual encoder 768d popula o
- * `giles_knowledge` HOJE — se mudar, ajustar `EMBEDDING_MODEL` default.
+ * Modelo default: gemini-embedding-001 @ outputDimensionality=768 (M134).
+ * `text-embedding-004` foi deprecado pelo Google (404). MRL truncado <3072
+ * vem NÃO-normalizado → L2-norm aplicada antes de devolver (cosine).
  */
 
 export interface EmbeddingConfig {
@@ -23,7 +22,7 @@ export interface EmbeddingConfig {
 
 export function loadEmbeddingConfig(): EmbeddingConfig {
   const provider = (process.env.EMBEDDING_PROVIDER ?? "google") as "google" | "stub";
-  const model = process.env.EMBEDDING_MODEL ?? "text-embedding-004";
+  const model = process.env.EMBEDDING_MODEL ?? "gemini-embedding-001";
   const dimensions = Number(process.env.EMBEDDING_DIMENSIONS ?? 768);
   return {
     provider,
@@ -44,9 +43,13 @@ const GoogleEmbedResponseSchema = z.object({
  * configurada (default 768). Em modo `stub` (testes), retorna um vetor
  * pseudo-determinístico — útil para asserts mas inútil semanticamente.
  */
+export type EmbeddingTaskType = "RETRIEVAL_DOCUMENT" | "RETRIEVAL_QUERY";
+
 export async function generateEmbedding(
   text: string,
   cfg: EmbeddingConfig,
+  // O MCP só embeda QUERIES de busca (ingestão é no app frontend) → default QUERY.
+  taskType: EmbeddingTaskType = "RETRIEVAL_QUERY",
 ): Promise<number[]> {
   if (!text.trim()) {
     throw new Error("generateEmbedding: input vazio");
@@ -62,14 +65,16 @@ export async function generateEmbedding(
     );
   }
 
-  // Google Gemini: text-embedding-004 → 768 dims.
-  // https://ai.google.dev/gemini-api/docs/embeddings
+  // Google Gemini: gemini-embedding-001 com outputDimensionality=768 (MRL).
+  // text-embedding-004 foi deprecado (M134). https://ai.google.dev/gemini-api/docs/embeddings
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(cfg.model)}:embedContent?key=${cfg.apiKey}`;
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       content: { parts: [{ text }] },
+      taskType,
+      outputDimensionality: cfg.dimensions,
     }),
   });
   if (!response.ok) {
@@ -83,7 +88,21 @@ export async function generateEmbedding(
       `embedding dimension mismatch: got ${parsed.embedding.values.length}, expected ${cfg.dimensions}`,
     );
   }
-  return parsed.embedding.values;
+  // gemini-embedding-001 com outputDimensionality<3072 (MRL) vem NÃO-normalizado
+  // → L2-norm para cosine (match_documents usa cosine distance).
+  return normalizeL2(parsed.embedding.values);
+}
+
+/**
+ * L2-normaliza um vetor (||v|| = 1 → cosine ≡ produto interno). Vetor nulo
+ * retorna como está (evita divisão por zero).
+ */
+export function normalizeL2(vec: number[]): number[] {
+  let sumSq = 0;
+  for (const v of vec) sumSq += v * v;
+  const norm = Math.sqrt(sumSq);
+  if (norm === 0) return vec;
+  return vec.map((v) => v / norm);
 }
 
 // Stub determinístico — hash simples sobre os caracteres distribuído em [-1,1].
@@ -98,9 +117,5 @@ function deterministicStub(text: string, dim: number): number[] {
     const prev = out[safeIdx] ?? 0;
     out[safeIdx] = prev + sign * ((code % 17) / 17);
   }
-  // Normaliza para a esfera unitária (cosine ≡ produto interno).
-  let norm = 0;
-  for (const v of out) norm += v * v;
-  norm = Math.sqrt(norm) || 1;
-  return out.map((v) => v / norm);
+  return normalizeL2(out);
 }

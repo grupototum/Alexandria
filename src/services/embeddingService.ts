@@ -5,46 +5,19 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { RagDocument, RagContext } from '@/types/alexandria';
-
-// Gemini text-embedding-004 — 768 dimensões
-const GEMINI_EMBEDDING_DIMENSIONS = 768;
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+import { geminiEmbed, type EmbeddingTaskType } from './embeddingModel';
 
 /**
- * Gera embedding real via Gemini text-embedding-004.
- * Se não tiver API key configurada, retorna array vazio
- * e a busca cai automaticamente no fallback textual.
+ * Gera embedding real via Gemini (gemini-embedding-001 @ 768d, M134).
+ * `taskType` default `RETRIEVAL_QUERY` (busca); use `RETRIEVAL_DOCUMENT` ao
+ * indexar conteúdo. Se não tiver API key / falhar, retorna array vazio e a
+ * busca cai no fallback textual (ver searchSimilarDocuments).
  */
-export async function generateEmbedding(text: string): Promise<number[]> {
-  if (!GEMINI_API_KEY) {
-    // Sem API key → fallback para busca textual (ver searchSimilarDocuments)
-    return [];
-  }
-
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'models/text-embedding-004',
-          content: { parts: [{ text }] },
-        }),
-      }
-    );
-
-    if (!response.ok) {
-      console.warn('Embedding API error, usando fallback textual');
-      return [];
-    }
-
-    const data = await response.json();
-    return data?.embedding?.values ?? [];
-  } catch (err) {
-    console.warn('generateEmbedding falhou, usando fallback textual:', err);
-    return [];
-  }
+export async function generateEmbedding(
+  text: string,
+  taskType: EmbeddingTaskType = 'RETRIEVAL_QUERY',
+): Promise<number[]> {
+  return (await geminiEmbed(text, { taskType })) ?? [];
 }
 
 /**
@@ -226,7 +199,7 @@ export async function addDocument(
     // Gerar embedding (opcional - pode ser feito async depois)
     let embedding = null;
     try {
-      embedding = await generateEmbedding(content);
+      embedding = await generateEmbedding(content, 'RETRIEVAL_DOCUMENT');
     } catch (e) {
       console.log('Embedding generation failed, storing without vector');
     }

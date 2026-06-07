@@ -1,6 +1,8 @@
 // Hermione Knowledge Service
 // Uses unified Supabase client from src/integrations/supabase/client.ts
 export { supabase } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
+import { geminiEmbed } from './embeddingModel';
 
 // Tipos para o Hermione
 export interface HermioneChunk {
@@ -244,26 +246,11 @@ export async function searchHermioneSemantic(
   options: { limit?: number; threshold?: number } = {}
 ): Promise<HermioneChunk[]> {
   const { limit = 8, threshold = 0.45 } = options;
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
-  if (!apiKey) return [];
 
   try {
-    // Generate query embedding
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'models/text-embedding-004',
-          content: { parts: [{ text: query.substring(0, 500) }] },
-        }),
-      }
-    );
-    if (!res.ok) return [];
-    const embData = await res.json();
-    const embedding: number[] = embData?.embedding?.values ?? [];
-    if (!embedding.length) return [];
+    // Generate query embedding (gemini-embedding-001 @ 768d, M134)
+    const embedding = await geminiEmbed(query, { taskType: 'RETRIEVAL_QUERY', maxChars: 500 });
+    if (!embedding) return [];
 
     // Call RPC
     const { data, error } = await supabase.rpc('match_knowledge', {

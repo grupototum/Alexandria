@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { generateEmbedding, type EmbeddingConfig } from "../src/embeddings.js";
+import { generateEmbedding, normalizeL2, type EmbeddingConfig } from "../src/embeddings.js";
 
 const STUB_CFG: EmbeddingConfig = {
   provider: "stub",
@@ -71,10 +71,44 @@ describe("embeddings — google provider", () => {
 
     const cfg: EmbeddingConfig = {
       provider: "google",
-      model: "text-embedding-004",
+      model: "gemini-embedding-001",
       dimensions: 768,
       apiKey: "fake",
     };
     await expect(generateEmbedding("hi", cfg)).rejects.toThrow(/dimension mismatch/);
+  });
+
+  it("L2-normaliza o vetor do Google (MRL truncado vem não-normalizado)", async () => {
+    // Vetor não-normalizado: 768 × 0.5 → norma = sqrt(768)·0.5 ≈ 13.86, longe de 1.
+    const unnormalized = new Array<number>(768).fill(0.5);
+    globalThis.fetch = vi.fn(async () =>
+      new Response(JSON.stringify({ embedding: { values: unnormalized } }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    ) as unknown as typeof fetch;
+
+    const cfg: EmbeddingConfig = {
+      provider: "google",
+      model: "gemini-embedding-001",
+      dimensions: 768,
+      apiKey: "fake",
+    };
+    const vec = await generateEmbedding("normalize me", cfg);
+    const norm = Math.sqrt(vec.reduce((acc, v) => acc + v * v, 0));
+    expect(norm).toBeCloseTo(1, 6);
+  });
+});
+
+describe("normalizeL2", () => {
+  it("retorna ||v|| ≈ 1 para vetor não-nulo", () => {
+    const out = normalizeL2([3, 4]); // norma 5 → [0.6, 0.8]
+    expect(Math.sqrt(out[0]! ** 2 + out[1]! ** 2)).toBeCloseTo(1, 6);
+    expect(out[0]).toBeCloseTo(0.6, 6);
+    expect(out[1]).toBeCloseTo(0.8, 6);
+  });
+
+  it("vetor nulo retorna como está (sem divisão por zero)", () => {
+    expect(normalizeL2([0, 0, 0])).toEqual([0, 0, 0]);
   });
 });
