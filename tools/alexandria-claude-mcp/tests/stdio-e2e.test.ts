@@ -164,4 +164,43 @@ describe("E2E stdio — MCP smoke", () => {
     const parsed = JSON.parse(contents?.[0]?.text ?? "{}") as { total_agents: number };
     expect(parsed.total_agents).toBe(57);
   });
+
+  // Regressão M118: metadata/workflows e metadata/health falhavam em runtime
+  // (ZodError) sem nenhum teste exercitar o read. Este teste lê TODOS os
+  // resources estáticos de metadata e exige read OK (sem error JSON-RPC).
+  it("resources/read de TODOS os metadata estáticos não retorna erro (regressão M118)", async () => {
+    const uris = [
+      "alexandria://metadata/agents",
+      "alexandria://metadata/workflows",
+      "alexandria://metadata/health",
+    ];
+    const responses = await rpcRound([
+      {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: {
+          protocolVersion: "2024-11-05",
+          capabilities: {},
+          clientInfo: { name: "vitest-smoke", version: "0.0.0" },
+        },
+      },
+      ...uris.map((uri, i) => ({
+        jsonrpc: "2.0" as const,
+        id: i + 2,
+        method: "resources/read",
+        params: { uri },
+      })),
+    ]);
+
+    uris.forEach((uri, i) => {
+      const r = responses.find((x) => x.id === i + 2);
+      expect(r, `sem resposta para ${uri}`).toBeDefined();
+      expect(r?.error, `${uri} retornou erro: ${JSON.stringify(r?.error)}`).toBeUndefined();
+      const contents = (r?.result as { contents?: Array<{ text: string }> } | undefined)?.contents;
+      expect(contents?.length, `${uri} sem contents`).toBe(1);
+      // Garante JSON parseável (o bug devolvia 0 bytes / nenhum content).
+      expect(() => JSON.parse(contents?.[0]?.text ?? "")).not.toThrow();
+    });
+  });
 });

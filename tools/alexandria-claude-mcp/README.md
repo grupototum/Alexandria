@@ -9,6 +9,11 @@ Construído com `@modelcontextprotocol/sdk` oficial. Não é plugin — é servi
 - **Persistência:** Supabase (`cgpkfhrqprqptvehatad`). Embeddings pgvector via RPC `match_documents`.
 - **Tipagem:** TypeScript estrito (`strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`).
 
+> **⚙️ Build target: Node 22 LTS.** Incompatibilidade conhecida com **Node 26** — o `esbuild` atual
+> falha (`Host version "0.27.7" does not match binary version "0.25.12"`), quebrando `npm run build`.
+> Workaround dev: rodar via `tsx` (`npm run dev` / testes não precisam de build). Se virar problema
+> operacional: fazer upgrade do `esbuild` ou pinar Node 22.
+
 ---
 
 ## RESOURCES

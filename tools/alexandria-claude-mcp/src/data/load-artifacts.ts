@@ -68,11 +68,13 @@ const WorkflowSchema = z
     workflow_name: z.string(),
     trigger: z.string(),
     agents: z.array(WorkflowStepSchema),
-    total_duration_s: z.number(),
+    // Workflows de backup ad-hoc (18/19/20) não têm SLA/duração/retry legítimos.
+    // Opcionais para não quebrar o resource metadata/workflows em runtime (M118).
+    total_duration_s: z.number().optional(),
     parallel_duration_s: z.number().optional(),
     expected_daily_executions: z.number().optional(),
-    retry_policy: z.string(),
-    sla_target: z.number(),
+    retry_policy: z.string().optional(),
+    sla_target: z.number().optional(),
   })
   .passthrough();
 
