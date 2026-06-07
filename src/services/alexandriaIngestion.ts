@@ -4,6 +4,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { geminiEmbed } from './embeddingModel';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models';
@@ -166,31 +167,11 @@ function inferDomainFromFilename(filename: string): string {
 }
 
 /**
- * Generate a 768-dim embedding vector using Gemini text-embedding-004.
+ * Generate a 768-dim embedding vector using Gemini (gemini-embedding-001 @ 768d, M134).
  * Returns null if API key is missing or request fails.
  */
 export async function generateEmbedding(text: string): Promise<number[] | null> {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
-  if (!apiKey) return null;
-
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/text-embedding-004:embedContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'models/text-embedding-004',
-          content: { parts: [{ text: text.substring(0, 2000) }] },
-        }),
-      }
-    );
-    if (!response.ok) return null;
-    const data = await response.json();
-    return data?.embedding?.values ?? null;
-  } catch {
-    return null;
-  }
+  return geminiEmbed(text, { maxChars: 2000 });
 }
 
 function getTopKeywords(text: string): string[] {

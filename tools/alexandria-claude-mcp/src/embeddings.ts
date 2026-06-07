@@ -8,10 +8,9 @@ import { z } from "zod";
  * Geração tem que ser aqui no servidor MCP.
  *
  * Dimensão: 768 (giles_knowledge / alexandria_documents / hermione base).
- * Modelo default: text-embedding-004 (Google Gemini, 768d).
- *
- * TODO(M79): confirmar com o app Alexandria qual encoder 768d popula o
- * `giles_knowledge` HOJE — se mudar, ajustar `EMBEDDING_MODEL` default.
+ * Modelo default: gemini-embedding-001 @ outputDimensionality=768 (M134).
+ * `text-embedding-004` foi deprecado pelo Google (404). MRL truncado <3072
+ * vem NÃO-normalizado → L2-norm aplicada antes de devolver (cosine).
  */
 
 export interface EmbeddingConfig {
@@ -23,7 +22,7 @@ export interface EmbeddingConfig {
 
 export function loadEmbeddingConfig(): EmbeddingConfig {
   const provider = (process.env.EMBEDDING_PROVIDER ?? "google") as "google" | "stub";
-  const model = process.env.EMBEDDING_MODEL ?? "text-embedding-004";
+  const model = process.env.EMBEDDING_MODEL ?? "gemini-embedding-001";
   const dimensions = Number(process.env.EMBEDDING_DIMENSIONS ?? 768);
   return {
     provider,
@@ -62,14 +61,15 @@ export async function generateEmbedding(
     );
   }
 
-  // Google Gemini: text-embedding-004 → 768 dims.
-  // https://ai.google.dev/gemini-api/docs/embeddings
+  // Google Gemini: gemini-embedding-001 com outputDimensionality=768 (MRL).
+  // text-embedding-004 foi deprecado (M134). https://ai.google.dev/gemini-api/docs/embeddings
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(cfg.model)}:embedContent?key=${cfg.apiKey}`;
   const response = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       content: { parts: [{ text }] },
+      outputDimensionality: cfg.dimensions,
     }),
   });
   if (!response.ok) {
