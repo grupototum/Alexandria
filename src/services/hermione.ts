@@ -249,7 +249,7 @@ export async function searchHermioneSemantic(
 
   try {
     // Generate query embedding (gemini-embedding-001 @ 768d, M134)
-    const embedding = await geminiEmbed(query, { maxChars: 500 });
+    const embedding = await geminiEmbed(query, { taskType: 'RETRIEVAL_QUERY', maxChars: 500 });
     if (!embedding) return [];
 
     // Call RPC

@@ -15,6 +15,13 @@ export const EMBEDDING_MODEL = 'gemini-embedding-001';
 export const EMBEDDING_DIM = 768;
 
 /**
+ * Tipo de tarefa do embedding (Gemini). Documentos indexados usam
+ * `RETRIEVAL_DOCUMENT`; queries de busca usam `RETRIEVAL_QUERY`. Usar o par
+ * correto melhora a relevância (assimetria query/doc do modelo).
+ */
+export type EmbeddingTaskType = 'RETRIEVAL_DOCUMENT' | 'RETRIEVAL_QUERY';
+
+/**
  * L2-normaliza um vetor (||v|| = 1), tornando cosine ≡ produto interno.
  * `gemini-embedding-001` com `outputDimensionality < 3072` (MRL truncado)
  * retorna vetores NÃO-normalizados — sem isto a similaridade cosseno fica
@@ -35,12 +42,12 @@ export function normalizeL2(vec: number[]): number[] {
  */
 export async function geminiEmbed(
   text: string,
-  opts?: { maxChars?: number },
+  opts: { taskType: EmbeddingTaskType; maxChars?: number },
 ): Promise<number[] | null> {
   const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
   if (!apiKey) return null;
 
-  const input = opts?.maxChars ? text.substring(0, opts.maxChars) : text;
+  const input = opts.maxChars ? text.substring(0, opts.maxChars) : text;
 
   try {
     const response = await fetch(
@@ -51,6 +58,7 @@ export async function geminiEmbed(
         body: JSON.stringify({
           model: `models/${EMBEDDING_MODEL}`,
           content: { parts: [{ text: input }] },
+          taskType: opts.taskType,
           outputDimensionality: EMBEDDING_DIM,
         }),
       },

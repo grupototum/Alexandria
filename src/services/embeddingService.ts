@@ -5,15 +5,19 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { RagDocument, RagContext } from '@/types/alexandria';
-import { geminiEmbed } from './embeddingModel';
+import { geminiEmbed, type EmbeddingTaskType } from './embeddingModel';
 
 /**
  * Gera embedding real via Gemini (gemini-embedding-001 @ 768d, M134).
- * Se não tiver API key / falhar, retorna array vazio e a busca cai
- * automaticamente no fallback textual (ver searchSimilarDocuments).
+ * `taskType` default `RETRIEVAL_QUERY` (busca); use `RETRIEVAL_DOCUMENT` ao
+ * indexar conteúdo. Se não tiver API key / falhar, retorna array vazio e a
+ * busca cai no fallback textual (ver searchSimilarDocuments).
  */
-export async function generateEmbedding(text: string): Promise<number[]> {
-  return (await geminiEmbed(text)) ?? [];
+export async function generateEmbedding(
+  text: string,
+  taskType: EmbeddingTaskType = 'RETRIEVAL_QUERY',
+): Promise<number[]> {
+  return (await geminiEmbed(text, { taskType })) ?? [];
 }
 
 /**
@@ -195,7 +199,7 @@ export async function addDocument(
     // Gerar embedding (opcional - pode ser feito async depois)
     let embedding = null;
     try {
-      embedding = await generateEmbedding(content);
+      embedding = await generateEmbedding(content, 'RETRIEVAL_DOCUMENT');
     } catch (e) {
       console.log('Embedding generation failed, storing without vector');
     }

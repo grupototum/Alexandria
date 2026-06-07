@@ -171,7 +171,7 @@ function inferDomainFromFilename(filename: string): string {
  * Returns null if API key is missing or request fails.
  */
 export async function generateEmbedding(text: string): Promise<number[] | null> {
-  return geminiEmbed(text, { maxChars: 2000 });
+  return geminiEmbed(text, { taskType: 'RETRIEVAL_DOCUMENT', maxChars: 2000 });
 }
 
 function getTopKeywords(text: string): string[] {

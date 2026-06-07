@@ -43,9 +43,13 @@ const GoogleEmbedResponseSchema = z.object({
  * configurada (default 768). Em modo `stub` (testes), retorna um vetor
  * pseudo-determinístico — útil para asserts mas inútil semanticamente.
  */
+export type EmbeddingTaskType = "RETRIEVAL_DOCUMENT" | "RETRIEVAL_QUERY";
+
 export async function generateEmbedding(
   text: string,
   cfg: EmbeddingConfig,
+  // O MCP só embeda QUERIES de busca (ingestão é no app frontend) → default QUERY.
+  taskType: EmbeddingTaskType = "RETRIEVAL_QUERY",
 ): Promise<number[]> {
   if (!text.trim()) {
     throw new Error("generateEmbedding: input vazio");
@@ -69,6 +73,7 @@ export async function generateEmbedding(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       content: { parts: [{ text }] },
+      taskType,
       outputDimensionality: cfg.dimensions,
     }),
   });
