@@ -13,21 +13,28 @@ import { z } from "zod";
  * vem NÃO-normalizado → L2-norm aplicada antes de devolver (cosine).
  */
 
+export type EmbeddingProvider = "google" | "ollama" | "stub";
+
 export interface EmbeddingConfig {
-  provider: "google" | "stub";
+  provider: EmbeddingProvider;
   model: string;
   apiKey?: string;
   dimensions: number;
+  // Endpoint do Ollama local (loopback na VPS) quando provider='ollama'.
+  ollamaUrl?: string;
 }
 
 export function loadEmbeddingConfig(): EmbeddingConfig {
-  const provider = (process.env.EMBEDDING_PROVIDER ?? "google") as "google" | "stub";
-  const model = process.env.EMBEDDING_MODEL ?? "gemini-embedding-001";
+  const provider = (process.env.EMBEDDING_PROVIDER ?? "google") as EmbeddingProvider;
+  // Default de modelo é provider-aware: nomic no Ollama, gemini no Google.
+  const defaultModel = provider === "ollama" ? "nomic-embed-text" : "gemini-embedding-001";
+  const model = process.env.EMBEDDING_MODEL ?? defaultModel;
   const dimensions = Number(process.env.EMBEDDING_DIMENSIONS ?? 768);
   return {
     provider,
     model,
     dimensions,
+    ollamaUrl: process.env.OLLAMA_URL ?? "http://127.0.0.1:11434",
     ...(process.env.EMBEDDING_API_KEY ? { apiKey: process.env.EMBEDDING_API_KEY } : {}),
   };
 }
@@ -36,6 +43,11 @@ const GoogleEmbedResponseSchema = z.object({
   embedding: z.object({
     values: z.array(z.number()),
   }),
+});
+
+// Ollama /api/embed devolve { embeddings: [[...]] } (array de vetores, 1 por input).
+const OllamaEmbedResponseSchema = z.object({
+  embeddings: z.array(z.array(z.number())).min(1),
 });
 
 /**
@@ -57,6 +69,31 @@ export async function generateEmbedding(
 
   if (cfg.provider === "stub") {
     return deterministicStub(text, cfg.dimensions);
+  }
+
+  if (cfg.provider === "ollama") {
+    // Ollama local (loopback VPS) — nomic-embed-text @ 768d, sem API key.
+    // taskType é ignorado (nomic não distingue document/query).
+    const base = cfg.ollamaUrl ?? "http://127.0.0.1:11434";
+    const response = await fetch(`${base}/api/embed`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: cfg.model, input: text }),
+    });
+    if (!response.ok) {
+      const body = await response.text().catch(() => "");
+      throw new Error(`embedding provider http ${response.status}: ${body.slice(0, 200)}`);
+    }
+    const raw: unknown = await response.json();
+    const parsed = OllamaEmbedResponseSchema.parse(raw);
+    const values = parsed.embeddings[0];
+    if (!values || values.length !== cfg.dimensions) {
+      throw new Error(
+        `embedding dimension mismatch: got ${values?.length ?? 0}, expected ${cfg.dimensions}`,
+      );
+    }
+    // nomic já devolve normalizado; re-normalizamos por garantia (idempotente).
+    return normalizeL2(values);
   }
 
   if (!cfg.apiKey) {
