@@ -7,6 +7,22 @@ Formato: `[tipo] descrição — arquivo(s) afetado(s)`
 
 ## [Unreleased]
 
+## [feat] 2026-06-10 — M54 PR-2→PR-5: grid de agentes, Console adaptativo e Hierarquia
+
+### Added
+- Tipo de agente D-052 (`pesquisador|criativo|consultivo|execucao|orquestrador`) — `src/types/agent-type.ts` (+ testes) com `resolveAgentType`: `agents_config.metadata.type` do DB vence, heurística client-side como fallback
+- Migration de backfill idempotente de `agents_config.metadata.type` — `supabase/migrations/20260610050000_backfill_agents_config_metadata_type.sql` (**não aplicada** — No-Fly Zone; ver PENDENCIAS_RAEL.md)
+- Hook `useAgentsGrid` juntando `agents` (mirror display) + `agents_config` (bio, model_override, tier, metadata) — `src/hooks/useAgentsGrid.ts`
+- Tab **Console** na página de detalhe do agente (PR-3) — `src/pages/agents/components/AgentTabs.tsx`
+- Console adaptativo por tipo (PR-4): `ConsoleAdaptativo` + `Console{Pesquisador,Criativo,Consultivo,Execucao,Orquestrador}` + `ConsoleShell` + `useAgentExecutions`, fiéis ao contract v3 (`status pending|running|success|error`, jsonb `context`, colunas dedicadas `duration_ms/total_tokens/total_cost`) — `src/pages/agents/components/console/`
+- Visão **Hierarquia** (PR-5): orquestradores → departamentos — `src/pages/agents/components/HierarchyView.tsx`
+
+### Changed
+- Grid de agentes (PR-2): 4 colunas (era 3), card condensado com meta em 2 colunas internas (tipo, departamento, modelo, tier), filtro por tipo D-052, busca também em role/descrição, toggle Grid/Hierarquia — `src/pages/agents/AgentsDashboard.tsx`
+
+### Notes
+- Pendências que dependem do Rael (aplicar migration, regenerar gen types, merges PR #13/#24, decisões M54 self-hosted): ver `PENDENCIAS_RAEL.md`
+
 ## [ops] 2026-05-13 — Totum Chat + Fase 5 capture validation
 
 ### Fixed

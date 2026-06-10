@@ -1,15 +1,25 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePageTransition } from "@/hooks/usePageTransition";
 import { PageSkeleton } from "@/components/loading";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { EmptyState, PageHeader, Toolbar } from "@/components/ui/patterns";
+import { Icon } from "@iconify/react";
 import { Bot, Search, Plus } from "lucide-react";
-import type { Agent } from "@/hooks/useAgents";
+import { useAgentsGrid, type GridAgent } from "@/hooks/useAgentsGrid";
+import { AGENT_TYPES, AGENT_TYPE_ICONS, AGENT_TYPE_LABELS, type AgentType } from "@/types/agent-type";
+import { HierarchyView } from "./components/HierarchyView";
 
 const CATEGORIES = ["Todos", "ADM", "Comercial", "Criação", "Técnico"];
+
+const STATUS_DOT: Record<string, string> = {
+  online: "bg-emerald-500",
+  idle: "bg-amber-500",
+  maintenance: "bg-red-500",
+  error: "bg-red-500",
+  offline: "bg-stone-500",
+};
 
 const anim = (i: number) => ({
   initial: { opacity: 0, y: 16 },
@@ -20,102 +30,27 @@ const anim = (i: number) => ({
 export default function AgentsDashboard() {
   const navigate = useNavigate();
   const pageTransition = usePageTransition();
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { agents, isLoading, error } = useAgentsGrid();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("Todos");
-
-  useEffect(() => {
-    let isMounted = true;
-    let channel: ReturnType<typeof supabase.channel> | null = null;
-
-    async function load() {
-      try {
-        const { data } = await supabase.from("agents").select("*");
-        if (!isMounted) return;
-
-        if (data) {
-          const typedAgents = data.map(agent => ({
-            id: agent.id,
-            name: agent.name,
-            role: agent.role,
-            status: (agent.status as Agent['status']) || 'offline',
-            type: inferType(agent.category),
-            category: agent.category || 'geral',
-            emoji: agent.emoji || '🤖',
-            created_at: agent.created_at || new Date().toISOString(),
-            tasks: agent.tasks || 0,
-            tasks_completed: agent.tasks || 0,
-            success_rate: agent.success_rate || 0,
-            daily_tasks: agent.daily_tasks || 0,
-            credits_used: 0,
-            parent_id: undefined,
-            hierarchy_level: 0,
-            is_orchestrator: false,
-          }));
-          setAgents(typedAgents as Agent[]);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar dados dos agentes:", error);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    }
-
-    load();
-
-    channel = supabase
-      .channel("agents-dash")
-      .on("postgres_changes" as never, { event: "*", schema: "public", table: "agents" }, () => {
-        if (!isMounted) return;
-        supabase.from("agents").select("*").then(({ data }) => {
-          if (data && isMounted) {
-            const typedAgents = data.map(agent => ({
-              id: agent.id,
-              name: agent.name,
-              role: agent.role,
-              status: (agent.status as Agent['status']) || 'offline',
-              type: inferType(agent.category),
-              category: agent.category || 'geral',
-              emoji: agent.emoji || '🤖',
-              created_at: agent.created_at || new Date().toISOString(),
-              tasks: agent.tasks || 0,
-              tasks_completed: agent.tasks || 0,
-              success_rate: agent.success_rate || 0,
-              daily_tasks: agent.daily_tasks || 0,
-              credits_used: 0,
-              parent_id: undefined,
-              hierarchy_level: 0,
-              is_orchestrator: false,
-            }));
-            setAgents(typedAgents as Agent[]);
-          }
-        });
-      });
-    channel.subscribe();
-
-    return () => {
-      isMounted = false;
-      if (channel) supabase.removeChannel(channel);
-    };
-  }, []);
-
-  function inferType(category: string | null): 'conversational' | 'processing' {
-    const conversationalCategories = ['atendimento', 'chat', 'sdr', 'comercial'];
-    return conversationalCategories.some(c => (category || '').toLowerCase().includes(c))
-      ? 'conversational'
-      : 'processing';
-  }
+  const [typeFilter, setTypeFilter] = useState<AgentType | "todos">("todos");
+  const [view, setView] = useState<"grid" | "hierarquia">("grid");
 
   const filtered = useMemo(() => {
+    const term = search.toLowerCase();
     return agents.filter((a) => {
-      const matchSearch = a.name.toLowerCase().includes(search.toLowerCase());
+      const matchSearch =
+        !term ||
+        a.name.toLowerCase().includes(term) ||
+        (a.role || "").toLowerCase().includes(term) ||
+        (a.description || "").toLowerCase().includes(term);
       const matchCat = category === "Todos" || a.category === category;
-      return matchSearch && matchCat;
+      const matchType = typeFilter === "todos" || a.type === typeFilter;
+      return matchSearch && matchCat && matchType;
     });
-  }, [agents, search, category]);
+  }, [agents, search, category, typeFilter]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <AppLayout>
         <motion.div {...pageTransition}>
@@ -128,7 +63,7 @@ export default function AgentsDashboard() {
   return (
     <AppLayout>
       <motion.main {...pageTransition} className="min-h-screen bg-background" aria-label="Agents dashboard">
-        <div className="max-w-[920px] mx-auto p-4 sm:p-6 space-y-12">
+        <div className="max-w-[1200px] mx-auto p-4 sm:p-6 space-y-10">
 
           {/* ─── Header ─── */}
           <motion.div {...anim(0)}>
@@ -138,10 +73,7 @@ export default function AgentsDashboard() {
               description="Sua equipe de inteligência artificial. Gerencie as personalidades, skills e DNA de cada agente do seu ecossistema."
               icon={Bot}
               actions={
-                <button
-                  onClick={() => navigate('/agents/new')}
-                  className="button-primary"
-                >
+                <button onClick={() => navigate("/agents/new")} className="button-primary">
                   <Plus className="w-4 h-4 mr-2" />
                   Novo Agente
                 </button>
@@ -150,7 +82,7 @@ export default function AgentsDashboard() {
           </motion.div>
 
           {/* ─── Filters ─── */}
-          <motion.div {...anim(1)}>
+          <motion.div {...anim(1)} className="space-y-4">
             <Toolbar>
               <div className="flex gap-2 flex-wrap">
                 {CATEGORIES.map((cat) => (
@@ -180,13 +112,66 @@ export default function AgentsDashboard() {
                     className="input-krea pl-9 h-10 w-full"
                   />
                 </div>
+
+                <div className="flex rounded-lg border border-[#ffffff14] overflow-hidden shrink-0">
+                  {(["grid", "hierarquia"] as const).map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => setView(v)}
+                      aria-pressed={view === v}
+                      className={`px-3 h-10 text-xs flex items-center gap-1.5 transition-colors ${
+                        view === v ? "bg-white text-black" : "text-[#a3a3a3] hover:text-[#fafafa]"
+                      }`}
+                    >
+                      <Icon
+                        icon={v === "grid" ? "solar:widget-4-linear" : "solar:diagram-up-linear"}
+                        className="w-4 h-4"
+                      />
+                      {v === "grid" ? "Grid" : "Hierarquia"}
+                    </button>
+                  ))}
+                </div>
               </div>
             </Toolbar>
+
+            {/* Filtro por tipo (D-052) */}
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => setTypeFilter("todos")}
+                className={`badge-krea px-3 py-1.5 text-[11px] transition-all ${
+                  typeFilter === "todos"
+                    ? "bg-white text-black opacity-100"
+                    : "opacity-70 hover:opacity-100 cursor-pointer"
+                }`}
+              >
+                Todos os tipos
+              </button>
+              {AGENT_TYPES.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTypeFilter(t)}
+                  className={`badge-krea px-3 py-1.5 text-[11px] flex items-center gap-1.5 transition-all ${
+                    typeFilter === t
+                      ? "bg-white text-black opacity-100"
+                      : "opacity-70 hover:opacity-100 cursor-pointer"
+                  }`}
+                >
+                  <Icon icon={AGENT_TYPE_ICONS[t]} className="w-3.5 h-3.5" />
+                  {AGENT_TYPE_LABELS[t]}
+                </button>
+              ))}
+            </div>
           </motion.div>
 
-          {/* ─── Agent Tree / Cards ─── */}
+          {/* ─── Conteúdo ─── */}
           <motion.div {...anim(2)}>
-            {filtered.length === 0 ? (
+            {error ? (
+              <EmptyState
+                icon={Bot}
+                title="Erro ao carregar agentes"
+                description={error.message}
+              />
+            ) : filtered.length === 0 ? (
               <EmptyState
                 icon={Bot}
                 title="Nenhum agente encontrado"
@@ -194,48 +179,12 @@ export default function AgentsDashboard() {
                 actionLabel="Novo Agente"
                 onAction={() => navigate("/agents/new")}
               />
+            ) : view === "hierarquia" ? (
+              <HierarchyView agents={filtered} onSelect={(a) => navigate(`/agents/${a.id}`)} />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filtered.map((agent) => (
-                  <div
-                    key={agent.id}
-                    className="card-krea flex flex-col justify-between hover:-translate-y-1 transition-transform duration-300"
-                  >
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
-                          <span className="text-3xl" role="img" aria-label={agent.name}>
-                            {agent.emoji}
-                          </span>
-                          <div>
-                            <h3 className="text-[#fafafa] font-medium text-[15px]">{agent.name}</h3>
-                            <span className="text-[#a3a3a3] text-[12px] capitalize tracking-wide">{agent.category}</span>
-                          </div>
-                        </div>
-                        <div className={`w-2 h-2 rounded-full ${agent.status === 'online' ? 'bg-[#10b981]' : 'bg-[#f87171]'}`} />
-                      </div>
-
-                      <div className="text-[#a3a3a3] text-[13px] leading-relaxed line-clamp-3">
-                        {agent.role || "Nenhum DNA ou descrição configurada para este agente ainda. Adicione uma persona para otimizar suas interações."}
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 pt-2 border-t border-[#ffffff0f]">
-                        <span className="badge-krea text-[10px]">Linguagem</span>
-                        {agent.category.toLowerCase().includes("adm") && <span className="badge-krea text-[10px]">Dados</span>}
-                        {agent.category.toLowerCase().includes("comercial") && <span className="badge-krea text-[10px]">CRM</span>}
-                        {agent.category.toLowerCase().includes("criação") && <span className="badge-krea text-[10px]">Visão</span>}
-                      </div>
-                    </div>
-
-                    <div className="mt-6">
-                      <button
-                        onClick={() => handleAgentClick(agent)}
-                        className="button-secondary w-full text-xs"
-                      >
-                        Acessar Agente
-                      </button>
-                    </div>
-                  </div>
+                  <AgentCard key={agent.id} agent={agent} onClick={() => navigate(`/agents/${agent.id}`)} />
                 ))}
               </div>
             )}
@@ -245,8 +194,62 @@ export default function AgentsDashboard() {
       </motion.main>
     </AppLayout>
   );
+}
 
-  function handleAgentClick(agent: Agent) {
-    navigate(`/agents/${agent.id}`);
-  }
+/** Card condensado (M54 PR-2): header + meta em 2 colunas internas + descrição curta. */
+function AgentCard({ agent, onClick }: { agent: GridAgent; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="card-krea text-left flex flex-col gap-3 p-4 hover:-translate-y-1 transition-transform duration-300 cursor-pointer"
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="text-2xl shrink-0" role="img" aria-label={agent.name}>
+            {agent.emoji}
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-[#fafafa] font-medium text-[14px] truncate">{agent.name}</h3>
+            <span className="text-[#a3a3a3] text-[11px] capitalize tracking-wide truncate block">
+              {agent.role || agent.category}
+            </span>
+          </div>
+        </div>
+        <div
+          className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${STATUS_DOT[agent.status] || STATUS_DOT.offline}`}
+          title={agent.status}
+        />
+      </div>
+
+      {/* Meta condensada em 2 colunas internas */}
+      <div className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px] pt-2 border-t border-[#ffffff0f]">
+        <div className="flex items-center gap-1.5 text-[#a3a3a3] min-w-0">
+          <Icon icon={AGENT_TYPE_ICONS[agent.type]} className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">{AGENT_TYPE_LABELS[agent.type]}</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-[#a3a3a3] min-w-0">
+          <Icon icon="solar:buildings-2-linear" className="w-3.5 h-3.5 shrink-0" />
+          <span className="capitalize truncate">{agent.category}</span>
+        </div>
+        {agent.model && (
+          <div className="flex items-center gap-1.5 text-[#a3a3a3] min-w-0">
+            <Icon icon="solar:cpu-linear" className="w-3.5 h-3.5 shrink-0" />
+            <span className="truncate font-mono text-[10px]">{agent.model}</span>
+          </div>
+        )}
+        {agent.tier != null && (
+          <div className="flex items-center gap-1.5 text-[#a3a3a3] min-w-0">
+            <Icon icon="solar:layers-minimalistic-linear" className="w-3.5 h-3.5 shrink-0" />
+            <span>Tier {agent.tier}</span>
+          </div>
+        )}
+      </div>
+
+      {(agent.description || agent.bio) && (
+        <p className="text-[#a3a3a3] text-[12px] leading-relaxed line-clamp-2">
+          {agent.description || agent.bio}
+        </p>
+      )}
+    </button>
+  );
 }

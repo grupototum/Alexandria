@@ -11,6 +11,7 @@ import type { Agent } from '@/hooks/useAgents';
 import { classifyAgent } from '@/hooks/useAgentClassification';
 import { AgentChat } from '@/components/agents/AgentChat';
 import { N8NWorkflow } from './N8NWorkflow';
+import { ConsoleAdaptativo } from './console/ConsoleAdaptativo';
 import { useNavigate } from 'react-router-dom';
 import {
   PieChart,
@@ -69,6 +70,7 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
 
   const tabs = [
     { id: 'overview', label: 'Overview', icon: 'solar:chart-2-linear' },
+    { id: 'console', label: 'Console', icon: 'solar:monitor-linear' },
     { id: 'credits', label: 'Créditos', icon: 'solar:wallet-money-linear' },
     { id: 'effectiveness', label: 'Efetividade', icon: 'solar:trend-up-linear' },
     { id: 'hierarchy', label: 'Hierarquia', icon: 'solar:diagram-up-linear' },
@@ -225,6 +227,11 @@ export function AgentTabs({ agent, agents, parentAgent, childAgents }: AgentTabs
               </Card>
             </div>
           </div>
+        </TabsContent>
+
+        {/* Console Tab — adaptativo por tipo D-052 (M54 PR-3/PR-4) */}
+        <TabsContent value="console" className="m-0 mt-0">
+          <ConsoleAdaptativo agent={agent} />
         </TabsContent>
 
         {/* Credits Tab */}
