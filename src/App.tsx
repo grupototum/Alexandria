@@ -38,7 +38,6 @@ const DicasPage         = lazy(() => import("./pages/DicasPage"));
 const RecursosPage      = lazy(() => import("./pages/RecursosPage"));
 const NewClient         = lazy(() => import("./pages/NewClient"));
 const GoogleDriveCallback = lazy(() => import("./pages/workspace/GoogleDriveCallback"));
-const DeploymentChecklist = lazy(() => import("./pages/workspace/DeploymentChecklist"));
 const Operadores        = lazy(() => import("./pages/settings/Operadores"));
 const HermioneChat      = lazy(() => import("./pages/HermioneChat"));
 const ContextHubPage    = lazy(() => import("./pages/alexandria/ContextHubPage"));
@@ -121,7 +120,6 @@ const AppWithRouter = () => {
           <Route path="/edit-client/:clientId" element={<Page><EditClient /></Page>} />
 
           {/* Workspace / IA Tools */}
-          <Route path="/deployment" element={<Page><DeploymentChecklist /></Page>} />
           <Route path="/operadores" element={<Page><Operadores /></Page>} />
           <Route path="/admin/approvals" element={<Page><UserApprovals /></Page>} />
 
