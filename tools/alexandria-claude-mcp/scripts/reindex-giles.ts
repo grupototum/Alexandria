@@ -52,10 +52,13 @@ async function main(): Promise<void> {
   if (!url || !key) fail("SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY ausentes.");
 
   const cfg = loadEmbeddingConfig();
-  if (!DRY_RUN && cfg.provider !== "google") {
-    fail(`EMBEDDING_PROVIDER=${cfg.provider}; re-index real exige 'google'.`);
+  if (!DRY_RUN && cfg.provider === "stub") {
+    fail("EMBEDDING_PROVIDER=stub; re-index real exige 'google' ou 'ollama'.");
   }
-  if (!DRY_RUN && !cfg.apiKey) fail("EMBEDDING_API_KEY ausente.");
+  // Só o provider 'google' precisa de API key; 'ollama' é loopback local.
+  if (!DRY_RUN && cfg.provider === "google" && !cfg.apiKey) {
+    fail("EMBEDDING_API_KEY ausente (provider google).");
+  }
 
   const sb = createClient(url, key, { auth: { persistSession: false } });
 
@@ -112,7 +115,7 @@ async function main(): Promise<void> {
           .from("giles_knowledge")
           .update({
             embedding_new: vec,
-            embedding_model: "gemini-embedding-001",
+            embedding_model: cfg.model, // gemini-embedding-001 ou nomic-embed-text
             embedding_dim: vec.length,
             embedded_at: new Date().toISOString(),
           })
