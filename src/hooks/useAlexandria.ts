@@ -14,7 +14,10 @@ interface DashboardAgentRow {
 }
 
 type AlexandriaAgentConfigRow = Agent;
-type ListResult<T> = { data: T[] | null; error: { message?: string } | null };
+type ListResult<T> = {
+  data: T[] | null;
+  error: { message?: string } | null;
+};
 
 function tierFromGroup(group: string | null): number {
   if (!group) return 2;
@@ -55,10 +58,15 @@ export const useAlexandria = () => {
       setError(null);
 
       const [documentsRes, skillsRes, configRes, dashRes] = await Promise.all([
-        (supabase as any).from('rag_documents').select('*').order('created_at', { ascending: false }),
-        (supabase as any).from('skills').select('*').eq('status', 'active').order('name'),
-        (supabase as any).from('agents_config').select('*').order('name'),
-        (supabase as any).from('agents').select('id,name,emoji,role,description,status,category,agent_group,slug,created_at').order('name'),
+        supabase.from('giles_knowledge').select('*').order('created_at', { ascending: false }),
+        supabase.from('skills').select('*').eq('status', 'active').order('name'),
+        supabase.from('agents_config').select('*').order('name'),
+        supabase
+          .from('agents')
+          .select(
+            'id,name,emoji,role,description,status,category,agent_group,slug,created_at',
+          )
+          .order('name'),
       ]) as [
         ListResult<RagDocument>,
         ListResult<Skill>,

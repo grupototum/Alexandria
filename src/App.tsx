@@ -120,6 +120,7 @@ const AppWithRouter = () => {
           <Route path="/edit-client/:clientId" element={<Page><EditClient /></Page>} />
 
           {/* Workspace / IA Tools */}
+          <Route path="/deployment" element={<Navigate to="/alexandria" replace />} />
           <Route path="/operadores" element={<Page><Operadores /></Page>} />
           <Route path="/admin/approvals" element={<Page><UserApprovals /></Page>} />
 
